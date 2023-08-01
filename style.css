@@ -1,0 +1,165 @@
+body {
+    background-color: #708ca6;
+}
+
+/* ---HEADER CSS--- */
+
+#header {
+    margin-bottom: 10px;
+}
+
+/* ---LOGIN, REGISTER, NEW ITEM, EDIT ITEM CSS--- */
+
+#login-container,
+.item-form-container {
+    display: flex;
+    justify-content: center;
+}
+
+#login,
+.item-form {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 500px;
+}
+
+#login-field,
+.item-field {
+    min-width: 350px;
+    max-width: 500px;
+    margin-bottom: 15px;
+}
+
+#login-buttons {
+    width: 100px;
+}
+
+.item-form-button {
+    width: 150px;
+}
+
+#login-buttons:first-of-type {
+    margin-right: 5px;
+}
+
+.admin-warning {
+    text-align: center;
+}
+
+.admin-warning>h2 {
+    color: red;
+    font-size: 3em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: .125em;
+}
+
+/* ---ORDER HISTORY & CART CSS--- */
+
+.product-thumbnail {
+    max-width: 200px;
+    max-height: 200px;
+    margin: auto 0;
+}
+
+.previous-order-card,
+.cart-item-card {
+    width: 80vw;
+    height: 225px;
+    margin: 0 auto;
+    padding: 1em;
+}
+
+.previous-order-details,
+.cart-item-details {
+    height: 100%;
+}
+
+.oh-title {
+    margin-left: 10vw;
+}
+
+.no-previous-orders {
+    text-align: center;
+}
+
+.quantity-selection {
+    max-width: 5em;
+}
+
+/* ---ITEM DETAILS--- */
+
+.item-detail-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.item-detail-child {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.item-detail-image-container {
+    justify-content: start;
+}
+
+.item-detail-image {
+    width: 450px;
+    height: auto;
+}
+
+.item-detail-description {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 20px;
+    max-height: 100px;
+    justify-content: center;
+
+}
+
+.item-detail-buttons {
+    justify-content: end;
+    margin-right: 30px;
+}
+
+ul {
+    list-style-type: none;
+}
+
+/* ---PRODUCTS PAGE CSS--- */
+
+.product-display-image {
+    max-width: 500px;
+    max-height: 500px;
+}
+
+.product-image-container {
+    height: 500px;
+}
+
+.product-card {
+    min-width: 500px;
+    margin: 1em;
+}
+
+.category-filter {
+    max-width: 200px;
+}
+
+.new-category-button {
+    width: 200px;
+}
+
+.product-page-tool {
+    flex: 1 1 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
