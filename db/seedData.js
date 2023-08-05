@@ -196,63 +196,42 @@ const createInitialCategories = async () => {
 //     };
 // };
 
-// const createInitialItems = async () => {
-//     try {
-//         console.log('Creating initial items...');
+const createInitialItems = async () => {
+    try {
+        console.log('Creating initial items...');
 
-//         const itemOne = await createItem({
-//             name: 'Red SoCaTaCa Tee',
-//             price: '500',
-//             size: 'S',
-//             categoryId: 1,
-//             description: 'Red dyed cotton blend tee-shirt with the SoCaTaCa team logo',
-//             imageURL: './images/red_socataca_tee.png'
-//         });
+        const itemOne = await createItem({
+            name: 'Red SoCaTaCa Tee',
+            price: '500',
+            categoryId: 1,
+            description: 'Red dyed cotton blend tee-shirt with the SoCaTaCa team logo',
+            imageURL: './images/red_socataca_tee.png'
+        });
 
-//         const itemTwo = await createItem({
-//             name: 'Red SoCaTaCa Tee',
-//             price: '500',
-//             size: 'M',
-//             categoryId: 1,
-//             description: 'Red dyed cotton blend tee-shirt with the SoCaTaCa team logo',
-//             imageURL: './images/red_socataca_tee.png'
-//         });
+        const itemTwo = await createItem({
+            name: 'Blue Tank',
+            price: '300',
+            categoryId: 2,
+            description: 'Blue dyed cotton blend tank-top',
+            imageURL: './images/default_shirt.png'
+        });
 
-//         const itemThree = await createItem({
-//             name: 'Red SoCaTaCa Tee',
-//             price: '500',
-//             size: 'L',
-//             categoryId: 1,
-//             description: 'Red dyed cotton blend tee-shirt with the SoCaTaCa team logo',
-//             imageURL: './images/red_socataca_tee.png'
-//         });
+        const itemThree = await createItem({
+            name: 'Rainbow Long-sleeve',
+            price: '500',
+            categoryId: 3,
+            description: 'Multicolored cotton blend long-sleeve shirt, perfect for cool weather!',
+            imageURL: './images/default_shirt.png'
+        });
 
-//         const itemFour = await createItem({
-//             name: 'Blue Tank',
-//             price: '300',
-//             size: 'M',
-//             categoryId: 2,
-//             description: 'Blue dyed cotton blend tank-top',
-//             imageURL: './images/default_shirt.png'
-//         });
+        console.log([itemOne, itemTwo, itemThree ]);
 
-//         const itemFive = await createItem({
-//             name: 'Rainbow Long-sleeve',
-//             price: '500',
-//             size: 'L',
-//             categoryId: 3,
-//             description: 'Multicolored cotton blend long-sleeve shirt, perfect for cool weather!',
-//             imageURL: './images/default_shirt.png'
-//         });
-
-//         console.log([itemOne, itemTwo, itemThree, itemFour, itemFive]);
-
-//         console.log('Finished creating items!');
-//     } catch (err) {
-//         console.log('Error creating initial items!');
-//         console.log(err);
-//     };
-// };
+        console.log('Finished creating items!');
+    } catch (err) {
+        console.log('Error creating initial items!');
+        console.log(err);
+    };
+};
 
 // const createInitialCartItems = async () => {
 //     try {
@@ -341,7 +320,7 @@ const seedDB = async () => {
         await createInitialUsers();
         // await createInitialCarts();
         // await updateInitialCarts();
-        // await createInitialItems();
+        await createInitialItems();
         // await createInitialCartItems();
         console.log('Finished seeding database!');
     } catch (error) {

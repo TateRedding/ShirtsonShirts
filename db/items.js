@@ -1,9 +1,15 @@
 const client = require("./client");
 
-const createItem = async ({ name, price, size, categoryId, description, imageURL }) => {
+const createItem = async ({
+  name,
+  price,
+  categoryId,
+  description,
+  imageURL
+}) => {
   const query = {
-    text: 'INSERT INTO items(name, price, size, "categoryId", description, "imageURL") VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
-    values: [name, price, size, categoryId, description, imageURL],
+    text: 'INSERT INTO items(name, price, "categoryId", description, "imageURL") VALUES($1, $2, $3, $4, $5) RETURNING *',
+    values: [name, price, categoryId, description, imageURL],
   };
 
   const { rows } = await client.query(query);
