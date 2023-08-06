@@ -21,11 +21,11 @@ const createItem = async ({
 
 const getAllItems = async () => {
     try {
-        const { rows } = await client.query(`
+        const { rows: items } = await client.query(`
             SELECT * 
             FROM items;`
         );
-        return rows;
+        return items;
     } catch (error) {
         console.error(error);
     };
@@ -46,12 +46,12 @@ const getItemById = async (id) => {
 
 const getItemsByCategoryId = async (categoryId) => {
     try {
-        const { rows } = await client.query(`
+        const { rows: items } = await client.query(`
             SELECT *
             FROM items
             WHERE "categoryId"=${categoryId};
         `);
-        return rows;
+        return items;
     } catch (error) {
         console.error(error);
     };

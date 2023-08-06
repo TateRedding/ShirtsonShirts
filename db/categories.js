@@ -1,4 +1,5 @@
 const client = require('../db/client');
+
 const createCategory = async (name) => {
     try {
         const { rows: [category] } = await client.query(`
@@ -7,10 +8,11 @@ const createCategory = async (name) => {
             RETURNING *;
         `, [name]);
         return category;
-    } catch (err) {
-        console.log('createCategory error', err);
+    } catch (error) {
+        console.error(error);
     };
 };
+
 const getAllCategories = async () => {
     try {
         const { rows: categories } = await client.query(`
@@ -18,20 +20,19 @@ const getAllCategories = async () => {
             FROM categories
         `);
         return categories;
-    } catch (err) {
-        console.log('getAllCategories error', err);
+    } catch (error) {
+        console.error(error);
     };
 };
 
 const getCategoryByName = async (name) => {
     try {
-        const query = {
-            text: 'SELECT * FROM categories WHERE name = $1',
-            values: [name]
-        };
-
-        const { rows } = await client.query(query);
-        return rows[0];
+        const { rows: [category] } = await client.query(`
+            SELECT *
+            FROM categories
+            WHERE name=${name};
+        `);
+        return category;
     } catch (error) {
         console.error(error);
     };
