@@ -1,13 +1,14 @@
-const client = require('./client');
-const { createCategory } = require('./categories');
-const { createUser } = require('./users');
-const { createCart, purchaseCart } = require('./carts');
-const { createItem } = require('./items');
-const { createCartItem } = require('./cartItems');
+const client = require("./client");
+const { createUser } = require("./users");
+const { createCategory } = require("./categories");
+const { createStyle } = require("./styles.js");
+const { createCart, purchaseCart } = require("./carts");
+const { createItem } = require("./items");
+const { createCartItem } = require("./cartItems");
 
 const dropTables = async () => {
     try {
-        console.log('Dropping tables...');
+        console.log("Dropping tables...");
         await client.query(`
             DROP TABLE IF EXISTS cart_item_styles;
             DROP TABLE IF EXISTS item_styles;
@@ -18,16 +19,16 @@ const dropTables = async () => {
             DROP TABLE IF EXISTS users;
             DROP TYPE IF EXISTS size;
         `);
-        console.log('Finished dropping tables.');
+        console.log("Finished dropping tables.");
     } catch (error) {
-        console.log('Error dropping tables!');
+        console.log("Error dropping tables!");
         console.error(error);
     };
 };
 
 const createTables = async () => {
     try {
-        console.log('Creating tables...');
+        console.log("Creating tables...");
         await client.query(`
             CREATE TYPE size AS ENUM (
                 'extraSmall',
@@ -100,71 +101,88 @@ const createTables = async () => {
                 quantity INTEGER DEFAULT 0,
                 size size NOT NULL
             );
-        `)
-        console.log('Finished creating tables!');
+        `);
+        console.log("Finished creating tables!");
     } catch (error) {
-        console.log('Error creating tables!');
+        console.log("Error creating tables!");
         console.error(error);
     };
-
 };
 
 const createInitialUsers = async () => {
     try {
-        console.log('Creating initial users...');
+        console.log("Creating initial users...");
+        const users = [];
 
-        const tate = await createUser({
-            username: 'tredding',
-            password: 'slushies89',
+        users.push(await createUser({
+            username: "tredding",
+            password: "slushies89",
             isAdmin: false
-        });
+        }));
 
-        const cass = await createUser({
-            username: 'cdoussan',
-            password: 'apples45',
+        users.push(await createUser({
+            username: "cdoussan",
+            password: "apples45",
             isAdmin: true
-        });
+        }));
 
-        const soren = await createUser({
-            username: 'saxelson',
-            password: 'saxman33',
+        users.push(await createUser({
+            username: "saxelson",
+            password: "saxman33",
             isAdmin: false
-        });
+        }));
 
-        const caro = await createUser({
-            username: 'cpruna',
-            password: 'shirtsarethefuture',
+        users.push(await createUser({
+            username: "cpruna",
+            password: "shirtsarethefuture",
             isAdmin: true
-        });
+        }));
 
-        console.log([tate, cass, soren, caro])
-        console.log('Finished creating users!');
-    } catch (err) {
-        console.log('Error creating users!');
-        console.log(err);
-    }
-}
+        console.log(users);
+        console.log("Finished creating users!");
+    } catch (error) {
+        console.log("Error creating users!");
+        console.error(error);
+    };
+};
 
 const createInitialCategories = async () => {
     try {
-        console.log('Creating initial categoreis...');
+        console.log("Creating initial categoreis...");
+        const categories = [];
 
-        const categoryOne = await createCategory('tee-shirt');
-        const categoryTwo = await createCategory('tank-top');
-        const categoryThree = await createCategory('long-sleeve');
+        categories.push(await createCategory("tee-shirt"));
+        categories.push(await createCategory("tank-top"));
+        categories.push(await createCategory("long-sleeve"));
 
-        console.log([categoryOne, categoryTwo, categoryThree]);
+        console.log(categories);
+        console.log("Finsihed creating categories!");
+    } catch (error) {
+        console.log("Error creating initial categories!");
+        console.error(error);
+    };
+};
 
-        console.log('Finsihed creating categories!');
-    } catch (err) {
-        console.log('Error creating initial categories!');
-        console.log(err);
+const createInitialStyles = async () => {
+    try {
+        console.log("Creating initial styles...");
+        const styles = [];
+
+        styles.push(await createStyle("red"));
+        styles.push(await createStyle("blue"));
+        styles.push(await createStyle("green"));
+
+        console.log(styles);
+        console.log("Finished creating styles!");
+    } catch (error) {
+        console.log("Error creating initial styles!");
+        console.error(error);
     };
 };
 
 // const createInitialCarts = async () => {
 //     try {
-//         console.log('Creating initial carts...');
+//         console.log("Creating initial carts...");
 
 //         const cartOne = await createCart({ userId: 1 });
 //         const cartTwo = await createCart({ userId: 2 });
@@ -173,135 +191,65 @@ const createInitialCategories = async () => {
 
 //         console.log([cartOne, cartTwo, cartThree, cartFour]);
 
-//         console.log('Finsihed creating carts!');
-//     } catch (err) {
-//         console.log('Error creating initial carts!');
-//         console.log(err);
+//         console.log("Finsihed creating carts!");
+//     } catch (error) {
+//         console.log("Error creating initial carts!");
+//         console.error(error);
 //     };
 // };
 
 // const updateInitialCarts = async () => {
 //     try {
-//         console.log('Setting some carts to purchased...');
+//         console.log("Setting some carts to purchased...");
 
 //         const updatedCartOne = await purchaseCart(1);
 //         const updatedCartTwo = await purchaseCart(3);
 
 //         console.log([updatedCartOne, updatedCartTwo]);
 
-//         console.log('Finished updating carts!');
-//     } catch (err) {
-//         console.log('Error updating carts!');
-//         console.log(err);
+//         console.log("Finished updating carts!");
+//     } catch (error) {
+//         console.log("Error updating carts!");
+//         console.error(error);
 //     };
 // };
 
 const createInitialItems = async () => {
     try {
-        console.log('Creating initial items...');
+        console.log("Creating initial items...");
+        const items = [];
 
-        const itemOne = await createItem({
-            name: 'Red SoCaTaCa Tee',
-            price: '500',
+        items.push(await createItem({
+            name: "SoCaTaCa Tee",
+            price: "500",
             categoryId: 1,
-            description: 'Red dyed cotton blend tee-shirt with the SoCaTaCa team logo',
-            imageURL: './images/red_socataca_tee.png'
-        });
+            description: "Cotton blend tee-shirt with the SoCaTaCa team logo",
+            imageURL: "./images/red_socataca_tee.png"
+        }));
 
-        const itemTwo = await createItem({
-            name: 'Blue Tank',
-            price: '300',
+        items.push(await createItem({
+            name: "Plain Tank",
+            price: "300",
             categoryId: 2,
-            description: 'Blue dyed cotton blend tank-top',
-            imageURL: './images/default_shirt.png'
-        });
+            description: "Cotton blend tank-top",
+            imageURL: "./images/default_shirt.png"
+        }));
 
-        const itemThree = await createItem({
-            name: 'Rainbow Long-sleeve',
-            price: '500',
+        items.push(await createItem({
+            name: "Plain Long-sleeve",
+            price: "500",
             categoryId: 3,
-            description: 'Multicolored cotton blend long-sleeve shirt, perfect for cool weather!',
-            imageURL: './images/default_shirt.png'
-        });
+            description: "Cotton blend long-sleeve shirt, perfect for cool weather!",
+            imageURL: "./images/default_shirt.png"
+        }));
 
-        console.log([itemOne, itemTwo, itemThree ]);
-
-        console.log('Finished creating items!');
+        console.log(items);
+        console.log("Finished creating items!");
     } catch (err) {
-        console.log('Error creating initial items!');
+        console.log("Error creating initial items!");
         console.log(err);
     };
 };
-
-// const createInitialCartItems = async () => {
-//     try {
-//         console.log('Creating initial cart_items...');
-
-//         const cartItemOne = await createCartItem({
-//             cartId: 1,
-//             itemId: 3,
-//             quantity: 4
-//         });
-
-//         const cartItemTwo = await createCartItem({
-//             cartId: 1,
-//             itemId: 4,
-//             quantity: 2
-//         });
-
-//         const cartItemThree = await createCartItem({
-//             cartId: 2,
-//             itemId: 2,
-//             quantity: 2
-//         });
-
-//         const cartItemFour = await createCartItem({
-//             cartId: 2,
-//             itemId: 5,
-//             quantity: 1
-//         });
-
-//         const cartItemFive = await createCartItem({
-//             cartId: 3,
-//             itemId: 4,
-//             quantity: 18
-//         });
-
-//         const cartItemSix = await createCartItem({
-//             cartId: 3,
-//             itemId: 1,
-//             quantity: 7
-//         });
-
-//         const cartItemSeven = await createCartItem({
-//             cartId: 4,
-//             itemId: 5,
-//             quantity: 3
-//         });
-
-//         const cartItemEight = await createCartItem({
-//             cartId: 4,
-//             itemId: 2,
-//             quantity: 3
-//         });
-
-//         console.log([
-//             cartItemOne,
-//             cartItemTwo,
-//             cartItemThree,
-//             cartItemFour,
-//             cartItemFive,
-//             cartItemSix,
-//             cartItemSeven,
-//             cartItemEight
-//         ]);
-
-//         console.log('Finished creating cart_items!');
-//     } catch (err) {
-//         console.log('Error creating cart_items!');
-//         console.log(err);
-//     };
-// };
 
 const rebuildDB = async () => {
     try {
@@ -315,16 +263,16 @@ const rebuildDB = async () => {
 
 const seedDB = async () => {
     try {
-        console.log('Seeding databse...');
-        await createInitialCategories();
+        console.log("Seeding databse...");
         await createInitialUsers();
+        await createInitialCategories();
+        await createInitialStyles();
         // await createInitialCarts();
         // await updateInitialCarts();
         await createInitialItems();
-        // await createInitialCartItems();
-        console.log('Finished seeding database!');
+        console.log("Finished seeding database!");
     } catch (error) {
-        console.log('Error seeding databse!');
+        console.log("Error seeding databse!");
         console.error(error);
     };
 };

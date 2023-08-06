@@ -10,7 +10,7 @@ const {
     updateItem,
     destroyItem,
 } = require("../db/items");
-const { requireUser, requireAdmin } = require('./utils');
+const { requireUser, requireAdmin } = require("./utils");
 
 // GET /api/items
 router.get("/", async (req, res) => {
@@ -32,7 +32,7 @@ router.get("/", async (req, res) => {
 // POST/api/items
 router.post("/", requireUser, requireAdmin, async (req, res) => {
     if (!req.body.imageURL) {
-        req.body.imageURL = './images/default_shirt.png'
+        req.body.imageURL = "./images/default_shirt.png"
     };
 
     try {

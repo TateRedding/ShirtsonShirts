@@ -71,7 +71,7 @@ const getItemByName = async (name) => {
 };
 
 const updateItem = async (id, fields) => {
-    const setString = Object.keys(fields).map((key, index) => `"${key}"=$${index + 1}`).join(', ');
+    const setString = Object.keys(fields).map((key, index) => `"${key}"=$${index + 1}`).join(", ");
     if (!setString.length) {
         return;
     };
