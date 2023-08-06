@@ -36,7 +36,7 @@ const getItemById = async (id) => {
         const { rows: [item] } = await client.query(`
             SELECT * 
             FROM items 
-            WHERE id = ${id};
+            WHERE id=${id};
         `);
         return item;
     } catch (error) {
@@ -49,7 +49,7 @@ const getItemsByCategoryId = async (categoryId) => {
         const { rows } = await client.query(`
             SELECT *
             FROM items
-            WHERE "categoryId" = ${categoryId};
+            WHERE "categoryId"=${categoryId};
         `);
         return rows;
     } catch (error) {
@@ -62,7 +62,7 @@ const getItemByName = async (name) => {
         const { rows: [item] } = await client.query(`
             SELECT *
             FROM items
-            WHERE name = '${name}';
+            WHERE name='${name}';
         `);
         return item;
     } catch (error) {
@@ -92,7 +92,7 @@ const destroyItem = async (id) => {
     try {
         const { rows: [item] } = await client.query(`
             DELETE FROM items
-            WHERE id = ${id}
+            WHERE id=${id}
             RETURNING *;
         `);
         return item;
@@ -108,5 +108,5 @@ module.exports = {
     getItemsByCategoryId,
     getItemByName,
     updateItem,
-    destroyItem,
+    destroyItem
 };
