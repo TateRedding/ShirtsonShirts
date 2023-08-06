@@ -1,7 +1,7 @@
 const client = require("./client");
 const { createUser } = require("./users");
 const { createCategory } = require("./categories");
-const { createStyle } = require("./styles.js");
+const { createStyle } = require("./styles");
 const { createCart, purchaseCart } = require("./carts");
 const { createItem } = require("./items");
 const { createCartItem } = require("./cartItems");
@@ -180,40 +180,6 @@ const createInitialStyles = async () => {
     };
 };
 
-// const createInitialCarts = async () => {
-//     try {
-//         console.log("Creating initial carts...");
-
-//         const cartOne = await createCart({ userId: 1 });
-//         const cartTwo = await createCart({ userId: 2 });
-//         const cartThree = await createCart({ userId: 3 });
-//         const cartFour = await createCart({ userId: 4 });
-
-//         console.log([cartOne, cartTwo, cartThree, cartFour]);
-
-//         console.log("Finsihed creating carts!");
-//     } catch (error) {
-//         console.log("Error creating initial carts!");
-//         console.error(error);
-//     };
-// };
-
-// const updateInitialCarts = async () => {
-//     try {
-//         console.log("Setting some carts to purchased...");
-
-//         const updatedCartOne = await purchaseCart(1);
-//         const updatedCartTwo = await purchaseCart(3);
-
-//         console.log([updatedCartOne, updatedCartTwo]);
-
-//         console.log("Finished updating carts!");
-//     } catch (error) {
-//         console.log("Error updating carts!");
-//         console.error(error);
-//     };
-// };
-
 const createInitialItems = async () => {
     try {
         console.log("Creating initial items...");
@@ -251,6 +217,26 @@ const createInitialItems = async () => {
     };
 };
 
+const createInitialCarts = async () => {
+    try {
+        console.log("Creating initial carts...");
+        const carts = [];
+
+        await createCart(1);
+        carts.push(await purchaseCart(1));
+        carts.push(await createCart(2));
+        await createCart(3);
+        carts.push(await purchaseCart(3));
+        carts.push(await createCart(4));
+
+        console.log(carts);
+        console.log("Finsihed creating carts!");
+    } catch (error) {
+        console.log("Error creating initial carts!");
+        console.error(error);
+    };
+};
+
 const rebuildDB = async () => {
     try {
         client.connect();
@@ -267,9 +253,8 @@ const seedDB = async () => {
         await createInitialUsers();
         await createInitialCategories();
         await createInitialStyles();
-        // await createInitialCarts();
-        // await updateInitialCarts();
         await createInitialItems();
+        await createInitialCarts();
         console.log("Finished seeding database!");
     } catch (error) {
         console.log("Error seeding databse!");
