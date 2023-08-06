@@ -2,8 +2,9 @@ const client = require("./client");
 const { createUser } = require("./users");
 const { createCategory } = require("./categories");
 const { createStyle } = require("./styles");
-const { createCart, purchaseCart } = require("./carts");
 const { createItem } = require("./items");
+const { createItemStyle } = require("./itemStyles");
+const { createCart, purchaseCart } = require("./carts");
 const { createCartItem } = require("./cartItems");
 
 const dropTables = async () => {
@@ -211,9 +212,73 @@ const createInitialItems = async () => {
 
         console.log(items);
         console.log("Finished creating items!");
-    } catch (err) {
+    } catch (error) {
         console.log("Error creating initial items!");
-        console.log(err);
+        console.error(error);
+    };
+};
+
+const createInitialItemStyles = async () => {
+    try {
+        console.log("Creating initial item_styles...");
+        const itemStyles = [];
+
+        itemStyles.push(await createItemStyle({
+            itemId: 1,
+            styleId: 1,
+            small: 5,
+            medium: 15,
+            large: 10
+        }));
+
+        itemStyles.push(await createItemStyle({
+            itemId: 1,
+            styleId: 2,
+            extraSmall: 3,
+            small: 6,
+            medium: 10,
+            large: 12
+        }));
+
+        itemStyles.push(await createItemStyle({
+            itemId: 2,
+            styleId: 1,
+            extraSmall: 2,
+            small: 3,
+            medium: 13,
+            large: 6,
+            extraLarge: 7,
+            doubleExtraLarge: 2
+        }));
+
+        itemStyles.push(await createItemStyle({
+            itemId: 2,
+            styleId: 3,
+            extraSmall: 4,
+            small: 1,
+            medium: 9,
+            large: 5,
+            extraLarge: 8
+        }));
+
+        itemStyles.push(await createItemStyle({
+            itemId: 3,
+            styleId: 2,
+            medium: 16,
+            large: 16,
+            extraLarge: 11
+        }));
+
+        itemStyles.push(await createItemStyle({
+            itemId: 3,
+            styleId: 3
+        }));
+
+        console.log(itemStyles);
+        console.log("Finished creating item_styles!");
+    } catch (error) {
+        console.log("Error creating initail item_styles!")
+        console.error(error);
     };
 };
 
@@ -254,6 +319,7 @@ const seedDB = async () => {
         await createInitialCategories();
         await createInitialStyles();
         await createInitialItems();
+        await createInitialItemStyles();
         await createInitialCarts();
         console.log("Finished seeding database!");
     } catch (error) {
