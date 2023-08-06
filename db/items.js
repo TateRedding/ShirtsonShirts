@@ -1,94 +1,112 @@
 const client = require("./client");
 
 const createItem = async ({
-  name,
-  price,
-  categoryId,
-  description,
-  imageURL
+    name,
+    price,
+    categoryId,
+    description,
+    imageURL
 }) => {
-  const query = {
-    text: 'INSERT INTO items(name, price, "categoryId", description, "imageURL") VALUES($1, $2, $3, $4, $5) RETURNING *',
-    values: [name, price, categoryId, description, imageURL],
-  };
-
-  const { rows } = await client.query(query);
-  return rows[0];
+    try {
+        const { rows: [item] } = await client.query(`
+            INSERT INTO items(name, price, "categoryId", description, "imageURL")
+            VALUES($1, $2, $3, $4, $5)
+            RETURNING *;
+        `, [name, price, categoryId, description, imageURL]);
+        return item;
+    } catch (error) {
+        console.error(error);
+    };
 };
 
 const getAllItems = async () => {
-  const query = {
-    text: "SELECT * FROM items",
-  };
-
-  const { rows } = await client.query(query);
-  return rows;
+    try {
+        const { rows } = await client.query(`
+            SELECT * 
+            FROM items;`
+        );
+        return rows;
+    } catch (error) {
+        console.error(error);
+    };
 };
 
 const getItemById = async (id) => {
-  const query = {
-    text: "SELECT * FROM items WHERE id = $1",
-    values: [id],
-  };
-
-  const { rows } = await client.query(query);
-  return rows[0];
+    try {
+        const { rows: [item] } = await client.query(`
+            SELECT * 
+            FROM items 
+            WHERE id = ${id};
+        `);
+        return item;
+    } catch (error) {
+        console.error(error);
+    };
 };
 
-const getItemsByCategory = async (categoryId) => {
-  const query = {
-    text: 'SELECT * FROM items WHERE "categoryId" = $1',
-    values: [categoryId],
-  };
-
-  const { rows } = await client.query(query);
-  return rows;
+const getItemsByCategoryId = async (categoryId) => {
+    try {
+        const { rows } = await client.query(`
+            SELECT *
+            FROM items
+            WHERE "categoryId" = ${categoryId};
+        `);
+        return rows;
+    } catch (error) {
+        console.error(error);
+    };
 };
 
-const getItemsByName = async (name) => {
-  const query = {
-    text: "SELECT * FROM items WHERE name ILIKE $1",
-    values: [`%${name}%`],
-  };
-
-  const { rows } = await client.query(query);
-  return rows;
+const getItemByName = async (name) => {
+    try {
+        const { rows: [item] } = await client.query(`
+            SELECT *
+            FROM items
+            WHERE name = '${name}';
+        `);
+        return item;
+    } catch (error) {
+        console.error(error);
+    };
 };
 
-const updateItem = async ({
-  id,
-  name,
-  price,
-  size,
-  categoryId,
-  description,
-  imageURL
-}) => {
-  const query = {
-    text: 'UPDATE items SET name = $2, price = $3, size = $4, "categoryId" = $5, description = $6, "imageURL" = $7 WHERE id = $1 RETURNING *',
-    values: [id, name, price, size, categoryId, description, imageURL],
-  };
-
-  const { rows } = await client.query(query);
-  return rows[0];
+const updateItem = async (id, fields) => {
+    const setString = Object.keys(fields).map((key, index) => `"${key}"=$${index + 1}`).join(', ');
+    if (!setString.length) {
+        return;
+    };
+    try {
+        const { rows: [item] } = await client.query(`
+            UPDATE items
+            SET ${setString}
+            WHERE id=${id}
+            RETURNING *;
+        `, Object.values(fields));
+        return item;
+    } catch (error) {
+        console.error(error);
+    };
 };
 
 const destroyItem = async (id) => {
-  const query = {
-    text: "DELETE FROM items WHERE id = $1 RETURNING *",
-    values: [id],
-  };
-
-  const { rows } = await client.query(query);
-  return rows[0];
+    try {
+        const { rows: [item] } = await client.query(`
+            DELETE FROM items
+            WHERE id = ${id}
+            RETURNING *;
+        `);
+        return item;
+    } catch (error) {
+        console.error(error);
+    };
 };
 
 module.exports = {
-  createItem,
-  getAllItems,
-  getItemById,
-  getItemsByCategory,
-  getItemsByName,
-  updateItem,
-  destroyItem,
+    createItem,
+    getAllItems,
+    getItemById,
+    getItemsByCategoryId,
+    getItemByName,
+    updateItem,
+    destroyItem,
 };
