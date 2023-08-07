@@ -5,7 +5,7 @@ const { createStyle } = require("./styles");
 const { createItem } = require("./items");
 const { createItemStyle } = require("./itemStyles");
 const { createCart, purchaseCart } = require("./carts");
-const { createCartItem } = require("./cartItems");
+const { createCartItemStyle } = require("./cartItemStyles");
 
 const dropTables = async () => {
     try {
@@ -306,6 +306,75 @@ const createInitialCarts = async () => {
     };
 };
 
+const createInitialCartItemStyles = async () => {
+    try {
+        console.log("creating intial cart_item_styles...");
+        const cartItemStyles = [];
+
+        cartItemStyles.push(await createCartItemStyle({
+            cartId: 1,
+            itemStyleId: 1,
+            quantity: 5,
+            size: "medium"
+        }));
+
+        cartItemStyles.push(await createCartItemStyle({
+            cartId: 1,
+            itemStyleId: 4,
+            quantity: 3,
+            size: "large"
+        }));
+
+        cartItemStyles.push(await createCartItemStyle({
+            cartId: 2,
+            itemStyleId: 2,
+            quantity: 2,
+            size: "small"
+        }));
+
+        cartItemStyles.push(await createCartItemStyle({
+            cartId: 2,
+            itemStyleId: 3,
+            quantity: 1,
+            size: "doubleExtraLarge"
+        }));
+
+        cartItemStyles.push(await createCartItemStyle({
+            cartId: 3,
+            itemStyleId: 5,
+            quantity: 1,
+            size: "extraLarge"
+        }));
+
+        cartItemStyles.push(await createCartItemStyle({
+            cartId: 3,
+            itemStyleId: 6,
+            quantity: 3,
+            size: "large"
+        }));
+
+        cartItemStyles.push(await createCartItemStyle({
+            cartId: 4,
+            itemStyleId: 2,
+            quantity: 4,
+            size: "extraSmall"
+        }));
+
+        cartItemStyles.push(await createCartItemStyle({
+            cartId: 4,
+            itemStyleId: 1,
+            quantity: 7,
+            size: "small"
+        }));
+
+        console.log(cartItemStyles);
+        console.log("Finished creating initail cart_item_styles!");
+    } catch (error) {
+        console.log("Error creating iinitial cart_item_styles");
+        console.error(error);
+    };
+};
+
 const rebuildDB = async () => {
     try {
         client.connect();
@@ -325,6 +394,7 @@ const seedDB = async () => {
         await createInitialItems();
         await createInitialItemStyles();
         await createInitialCarts();
+        await createInitialCartItemStyles();
         console.log("Finished seeding database!");
     } catch (error) {
         console.log("Error seeding databse!");
