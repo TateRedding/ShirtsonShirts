@@ -57,8 +57,8 @@ const createTables = async () => {
                 name VARCHAR(255) UNIQUE NOT NULL,
                 "categoryId" INTEGER REFERENCES categories(id),
                 description TEXT NOT NULL,
-                "imageURL" TEXT NOT NULL,
-                price INTEGER NOT NULL
+                price INTEGER NOT NULL,
+                isUnique BOOLEAN DEFAULT false
             );
 
             CREATE TABLE carts (
@@ -81,7 +81,8 @@ const createTables = async () => {
                         CREATE TABLE item_styles (
                             id SERIAL PRIMARY KEY,
                             "itemId" INTEGER REFERENCES items(id),
-                            "styleId" INTEGER REFERENCES styles(id), 
+                            "styleId" INTEGER REFERENCES styles(id),
+                            "imageURL" TEXT NOT NULL,
                     ';
                 BEGIN
                     SELECT enum_range(NULL::size) INTO size_values;
@@ -190,24 +191,22 @@ const createInitialItems = async () => {
             name: "SoCaTaCa Tee",
             price: "500",
             categoryId: 1,
-            description: "Cotton blend tee-shirt with the SoCaTaCa team logo",
-            imageURL: "./images/red_socataca_tee.png"
+            description: "Cotton blend tee-shirt with the SoCaTaCa team logo"
         }));
 
         items.push(await createItem({
             name: "Plain Tank",
             price: "300",
             categoryId: 2,
-            description: "Cotton blend tank-top",
-            imageURL: "./images/default_shirt.png"
+            description: "Cotton blend tank-top"
         }));
 
         items.push(await createItem({
-            name: "Plain Long-sleeve",
+            name: "Rainbow Long-sleeve",
             price: "500",
             categoryId: 3,
             description: "Cotton blend long-sleeve shirt, perfect for cool weather!",
-            imageURL: "./images/default_shirt.png"
+            isUnigue: true
         }));
 
         console.log(items);
@@ -226,6 +225,7 @@ const createInitialItemStyles = async () => {
         itemStyles.push(await createItemStyle({
             itemId: 1,
             styleId: 1,
+            imageURL: "./images/red_socataca_tee.png",
             small: 5,
             medium: 15,
             large: 10
@@ -234,6 +234,7 @@ const createInitialItemStyles = async () => {
         itemStyles.push(await createItemStyle({
             itemId: 1,
             styleId: 2,
+            imageURL: "./images/blue_socataca_tee.png",
             extraSmall: 3,
             small: 6,
             medium: 10,
@@ -243,6 +244,7 @@ const createInitialItemStyles = async () => {
         itemStyles.push(await createItemStyle({
             itemId: 2,
             styleId: 1,
+            imageURL: "./images/default_shirt.png",
             extraSmall: 2,
             small: 3,
             medium: 13,
@@ -254,6 +256,7 @@ const createInitialItemStyles = async () => {
         itemStyles.push(await createItemStyle({
             itemId: 2,
             styleId: 3,
+            imageURL: "./images/default_shirt.png",
             extraSmall: 4,
             small: 1,
             medium: 9,
@@ -264,6 +267,7 @@ const createInitialItemStyles = async () => {
         itemStyles.push(await createItemStyle({
             itemId: 3,
             styleId: 2,
+            imageURL: "./images/default_shirt.png",
             medium: 16,
             large: 16,
             extraLarge: 11
@@ -271,7 +275,7 @@ const createInitialItemStyles = async () => {
 
         itemStyles.push(await createItemStyle({
             itemId: 3,
-            styleId: 3
+            imageURL: "./images/default_shirt.png"
         }));
 
         console.log(itemStyles);

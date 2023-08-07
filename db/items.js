@@ -5,14 +5,13 @@ const createItem = async ({
     price,
     categoryId,
     description,
-    imageURL
 }) => {
     try {
         const { rows: [item] } = await client.query(`
-            INSERT INTO items(name, price, "categoryId", description, "imageURL")
-            VALUES($1, $2, $3, $4, $5)
+            INSERT INTO items(name, price, "categoryId", description)
+            VALUES($1, $2, $3, $4)
             RETURNING *;
-        `, [name, price, categoryId, description, imageURL]);
+        `, [name, price, categoryId, description]);
         return item;
     } catch (error) {
         console.error(error);
