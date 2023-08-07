@@ -127,9 +127,9 @@ router.get("/:id", async (req, res) => {
 router.delete("/:id", requireUser, requireAdmin, async (req, res) => {
     const { id } = req.params;
     try {
-        const cartitems = await getCartItemsByItemId(id);
-        for (let i = 0; i < cartitems.length; i++) {
-            await destroyCartItem(cartitems[i].id);
+        const cartItems = await getCartItemsByItemId(id);
+        for (let i = 0; i < cartItems.length; i++) {
+            await destroyCartItem(cartItems[i].id);
         };
         const item = await destroyItem(id);
         if (item) {
