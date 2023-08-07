@@ -1,5 +1,5 @@
 const client = require("./client");
-const { getCartItemsByCartId } = require("./cartItemStyles");
+const { getCartItemStylesByCartId } = require("./cartItemStyles");
 
 const createCart = async (userId) => {
     try {
@@ -50,7 +50,7 @@ const getCurrentCart = async (userId) => {
             AND "isPurchased"=false;
         `);
         if (cart) {
-            cart.items = await getCartItemsByCartId(cart.id);
+            cart.items = await getCartItemStylesByCartId(cart.id);
             return cart;
         };
     } catch (error) {
@@ -68,7 +68,7 @@ const getPreviousCarts = async (userId) => {
         `);
         if (carts) {
             for (let i = 0; i < carts.length; i++) {
-                if (carts[i]) carts[i].items = await getCartItemsByCartId(carts[i].id);
+                if (carts[i]) carts[i].items = await getCartItemStylesByCartId(carts[i].id);
             };
             return carts;
         };

@@ -1,5 +1,5 @@
 const express = require("express");
-const { destroyCartItem, getCartItemsByItemId } = require("../db/cartItems");
+const { destroyCartItem, getCartItemsByItemId } = require("../db/cartItemStyles");
 const router = express.Router();
 const {
     createItem,
@@ -123,6 +123,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // DELETE /api/items/:id
+// NEED TO UPDATE TO MATCH NEW ITEM STYLES AND CART ITEM STYLES STRUCTURE
 router.delete("/:id", requireUser, requireAdmin, async (req, res) => {
     const { id } = req.params;
     try {

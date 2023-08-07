@@ -13,85 +13,75 @@ const createCartItemStyle = async ({ cartId, itemStyleId, quantity, size }) => {
     };
 };
 
-const getCartItem = async ({ cartId, itemId }) => {
+const getCartItemStyleByCartIdAndItemStyleId = async (cartId, itemStyleId) => {
     try {
-        const query = {
-            text: 'SELECT * FROM cart_items WHERE "cartId" = $1 AND "itemId" = $2',
-            values: [cartId, itemId]
-        };
-
-        const { rows } = await client.query(query);
-        return rows[0];
+        const { rows: [cartItemStyle] } = await client.query(`
+            SELECT *
+            FROM cart_item_styles
+            WHERE "cartId"=${cartId}
+            AND "itemStyleId"=${itemStyleId};
+        `);
+        return cartItemStyle;
     } catch (error) {
         console.error(error);
     };
 };
 
-const getCartItemById = async (id) => {
+const getCartItemStyleById = async (id) => {
     try {
-        const query = {
-            text: 'SELECT * FROM cart_items WHERE id = $1',
-            values: [id]
-        };
-
-        const { rows } = await client.query(query);
-        return rows[0];
+        const { rows: [cartItemStyle] } = await client.query(`
+            SELECT *
+            FROM cart_item_styles
+            WHERE id=${id}
+        `);
+        return cartItemStyle;
     } catch (error) {
         console.error(error);
     };
 };
 
-const getCartItemsByCartId = async (cartId) => {
+const getCartItemStylesByCartId = async (cartId) => {
     try {
         const { rows: cartItems } = await client.query(`
-      SELECT cart_items.id AS "cartItemId", cart_items."cartId", cart_items."itemId", cart_items.quantity, items.name, items.size, items."imageURL", items.price
-      FROM cart_items
-      JOIN items
-        ON cart_items."itemId"=items.id
-      WHERE cart_items."cartId"=${cartId};
-    `);
+            SELECT cart_item_styles.id AS "cartItemStyleId",
+                cart_item_styles."cartId", cart_item_styles."itemId", cart_item_styles.quantity, cart_item_styles.size,
+                items.name, items.price,
+                item_styles."imageURL"
+            FROM cart_items
+            JOIN items
+                ON cart_item_styles."itemId"=items.id
+            JOIN item_styles
+                ON cart_item_styles."itemStyleId"=item_styles.id
+            WHERE cart_item_styles."cartId"=${cartId};
+        `);
         return cartItems;
     } catch (error) {
         console.error(error);
     };
 };
 
-const getCartItemsByItemId = async (itemId) => {
+const updateCartItemStyle = async (id, quantity) => {
     try {
-        const query = {
-            text: `SELECT * FROM cart_items WHERE "itemId" = $1`,
-            values: [itemId]
-        };
-        const { rows } = await client.query(query);
-        return rows;
-    } catch (error) {
-        console.log(error);
-    };
-};
-
-const updateCartItem = async (id, quantity) => {
-    try {
-        const query = {
-            text: 'UPDATE cart_items SET quantity=($1) WHERE id=($2) RETURNING *;',
-            values: [quantity, id]
-        };
-
-        const { rows } = await client.query(query);
-        return rows[0];
+        const { rows: [cartItemStyle] } = await client.query(`
+            UPDATE cart_item_styles
+            SET quantity=${quantity}
+            WHERE id=${id}
+            RETURNING *;
+        `);
+        return cartItemStyle;
     } catch (error) {
         console.error(error);
     };
 };
 
-const destroyCartItem = async (id) => {
+const destroyCartItemStyle = async (id) => {
     try {
-        const query = {
-            text: 'DELETE FROM cart_items WHERE id=($1) RETURNING *;',
-            values: [id]
-        };
-
-        const { rows } = await client.query(query);
-        return rows[0];
+        const { rows: [cartItemStyle] } = await client.query(`
+            DELETE FROM cart_item_styles
+            WHERE id=${id}
+            RETURNING *;
+        `);
+        return cartItemStyle;
     } catch (error) {
         console.error(error);
     };
@@ -99,10 +89,9 @@ const destroyCartItem = async (id) => {
 
 module.exports = {
     createCartItemStyle,
-    getCartItem,
-    getCartItemById,
-    getCartItemsByCartId,
-    getCartItemsByItemId,
-    updateCartItem,
-    destroyCartItem
+    getCartItemStyleByCartIdAndItemStyleId,
+    getCartItemStyleById,
+    getCartItemStylesByCartId,
+    updateCartItemStyle,
+    destroyCartItemStyle
 };
