@@ -42,19 +42,35 @@ const getCartItemStyleById = async (id) => {
 
 const getCartItemStylesByCartId = async (cartId) => {
     try {
-        const { rows: cartItems } = await client.query(`
+        const { rows: cartItemStyles } = await client.query(`
             SELECT cart_item_styles.id AS "cartItemStyleId",
                 cart_item_styles."cartId", cart_item_styles."itemId", cart_item_styles.quantity, cart_item_styles.size,
                 items.name, items.price,
                 item_styles."imageURL"
-            FROM cart_items
+            FROM cart_item_styles
             JOIN items
                 ON cart_item_styles."itemId"=items.id
             JOIN item_styles
                 ON cart_item_styles."itemStyleId"=item_styles.id
             WHERE cart_item_styles."cartId"=${cartId};
         `);
-        return cartItems;
+        return cartItemStyles;
+    } catch (error) {
+        console.error(error);
+    };
+};
+
+const getCartItemStylesByItemStyleId = async (itemStyleId) => {
+    try {
+        const { rows: cartItemStyles } = await client.query(`
+            SELECT cart_item_styles.id, cart_item_styles."cartId", cart_item_styles."itemStyleId",
+                carts."isPurchased"
+            FROM cart_item_styles
+            JOIN carts
+                ON cart_item_styles."cartId"=carts.id
+            WHERE cart_item_styles."itemStyleId"=${itemStyleId}
+        `);
+        return cartItemStyles;
     } catch (error) {
         console.error(error);
     };
@@ -92,6 +108,7 @@ module.exports = {
     getCartItemStyleByCartIdAndItemStyleId,
     getCartItemStyleById,
     getCartItemStylesByCartId,
+    getCartItemStylesByItemStyleId,
     updateCartItemStyle,
     destroyCartItemStyle
 };

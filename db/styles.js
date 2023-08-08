@@ -13,6 +13,20 @@ const createStyle = async (name) => {
     };
 };
 
+const getStyleByName = async (name) => {
+    try {
+        const { rows: [style] } = await client.query(`
+            SELECT *
+            FROM styles
+            WHERE name=${name};
+        `, [name]);
+        return style;
+    } catch (error) {
+        console.error(error);
+    };
+};
+
 module.exports = {
-    createStyle
+    createStyle,
+    getStyleByName
 };

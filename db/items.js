@@ -1,17 +1,15 @@
 const client = require("./client");
 
-const createItem = async ({
-    name,
-    price,
-    categoryId,
-    description,
-}) => {
+const createItem = async (fields) => {
+    const keys = Object.keys(fields);
+    const valuesString = keys.map((key, index) => `$${index + 1}`).join(", ");
+    const columnNames = keys.map((key) => `"${key}"`).join(", ");
     try {
         const { rows: [item] } = await client.query(`
-            INSERT INTO items(name, price, "categoryId", description)
-            VALUES($1, $2, $3, $4)
+            INSERT INTO items(${columnNames})
+            VALUES (${valuesString})
             RETURNING *;
-        `, [name, price, categoryId, description]);
+        `, Object.keys(fields));
         return item;
     } catch (error) {
         console.error(error);
@@ -87,10 +85,11 @@ const updateItem = async (id, fields) => {
     };
 };
 
-const destroyItem = async (id) => {
+const deactivateItem = async (id) => {
     try {
         const { rows: [item] } = await client.query(`
-            DELETE FROM items
+            UPDATE items
+            SET "isActive"=false
             WHERE id=${id}
             RETURNING *;
         `);
@@ -107,5 +106,5 @@ module.exports = {
     getItemsByCategoryId,
     getItemByName,
     updateItem,
-    destroyItem
+    deactivateItem
 };

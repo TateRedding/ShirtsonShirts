@@ -16,6 +16,35 @@ const createItemStyle = async (fields) => {
     };
 };
 
+const getItemStylesByItemId = async (itemId) => {
+    try {
+        const { rows: itemStyles } = await client.query(`
+            SELECT *
+            FROM item_styles
+            WHERE "itemId"=${itemId};
+        `);
+        return itemStyles;
+    } catch (error) {
+        console.error(error);
+    };
+};
+
+const deactivateItemStyle = async (id) => {
+    try {
+        const { rows: [itemStyle] } = await client.query(`
+            UPDATE item_styles
+            SET "isActive"=false
+            WHERE id=${id}
+            RETURNING *;
+        `);
+        return itemStyle;
+    } catch (error) {
+        console.error(error);
+    };
+};
+
 module.exports = {
-    createItemStyle
+    createItemStyle,
+    getItemStylesByItemId,
+    deactivateItemStyle
 };

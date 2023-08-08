@@ -1,6 +1,8 @@
 const express = require("express");
-const { destroyCartItem, getCartItemsByItemId } = require("../db/cartItemStyles");
 const router = express.Router();
+const { getStyleByName } = require("../db/styles");
+const { getCartItemStylesByItemStyleId, destroyCartItemStyle } = require("../db/cartItemStyles");
+const { getItemStylesByItemId, deactivateItemStyle, createItemStyle } = require("../db/itemStyles");
 const {
     createItem,
     getAllItems,
@@ -8,18 +10,54 @@ const {
     getItemByName,
     getItemsByCategoryId,
     updateItem,
-    destroyItem,
+    deactivateItem,
 } = require("../db/items");
 const { requireUser, requireAdmin } = require("./utils");
 
-// GET /api/items
-router.get("/", async (req, res) => {
+// POST/api/items
+router.post("/", requireUser, requireAdmin, async (req, res) => {
+    "./images/default_shirt.png"
     try {
-        const items = await getAllItems();
-        if (items) {
+        const styles = [];
+        if (req.body.styles) {
+            styles = [...req.body.styles];
+            delete req.body.styles;
+        };
+
+        const item = await createItem(req.body);
+        if (item) {
+            const styleErrors = [];
+            const itemStyleErrors = [];
+            let message = "";
+            if (!item.isUnique && styles.length) {
+                for (let i = 0; i < styles.length; i++) {
+                    const { name } = styles[i];
+                    delete styles[i].name;
+                    let currentStyle = await getStyleByName(name);
+                    if (!currentStyle) currentStyle = await createStyle(name);
+                    if (currentStyle) {
+                        styles[i].itemId = item.id;
+                        styles[i].styleId = currentStyle.id;
+                        const currentItemStyle = await createItemStyle(styles[i]);
+                        if (!currentItemStyle) itemStyleErrors.push(name);
+                    } else {
+                        styleErrors.push(name);
+                    };
+                };
+                if (styleErrors.length) {
+                    message += `Error creating styles ${styleErrors.join(", ")}! `
+                } else if (itemStyleErrors.length) {
+                    message += `Error adding styles ${itemStyleErrors.join(", ")} to new item!`
+                } else {
+                    message = "No errors creating and adding styles to item!"
+                };
+            } else {
+                message = "No styles created or added to item."
+            };
             res.send({
                 success: true,
-                items,
+                message,
+                item
             });
         } else {
             res.send({ success: false });
@@ -29,18 +67,14 @@ router.get("/", async (req, res) => {
     };
 });
 
-// POST/api/items
-router.post("/", requireUser, requireAdmin, async (req, res) => {
-    if (!req.body.imageURL) {
-        req.body.imageURL = "./images/default_shirt.png"
-    };
-
+// GET /api/items
+router.get("/", async (req, res) => {
     try {
-        const item = await createItem(req.body);
-        if (item) {
+        const items = await getAllItems();
+        if (items) {
             res.send({
                 success: true,
-                item,
+                items,
             });
         } else {
             res.send({ success: false });
@@ -123,19 +157,23 @@ router.get("/:id", async (req, res) => {
 });
 
 // DELETE /api/items/:id
-// NEED TO UPDATE TO MATCH NEW ITEM STYLES AND CART ITEM STYLES STRUCTURE
 router.delete("/:id", requireUser, requireAdmin, async (req, res) => {
     const { id } = req.params;
     try {
-        const cartItems = await getCartItemsByItemId(id);
-        for (let i = 0; i < cartItems.length; i++) {
-            await destroyCartItem(cartItems[i].id);
+        const itemStyles = await getItemStylesByItemId(id);
+        for (let i = 0; i < itemStyles.length; i++) {
+            const cartItemStyles = await getCartItemStylesByItemStyleId(itemStyles[i].id);
+            for (let j = 0; j < cartItemStyles.length; j++) {
+                if (!cartItemStyles[j].isPurchased) await destroyCartItemStyle(cartItemStyles[j].id)
+            };
+            await deactivateItemStyle(itemStyles[i]);
         };
-        const item = await destroyItem(id);
-        if (item) {
+
+        const deactivatedItem = await deactivateItem(id);
+        if (deactivatedItem) {
             res.send({
                 success: true,
-                item,
+                deactivatedItem,
             });
         } else {
             res.send({ success: false });

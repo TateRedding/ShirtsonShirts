@@ -58,7 +58,8 @@ const createTables = async () => {
                 "categoryId" INTEGER REFERENCES categories(id),
                 description TEXT NOT NULL,
                 price INTEGER NOT NULL,
-                "isUnique" BOOLEAN DEFAULT false
+                "isUnique" BOOLEAN DEFAULT false,
+                "isActive" BOOLEAN DEFAULT true
             );
 
             CREATE TABLE carts (
@@ -83,6 +84,7 @@ const createTables = async () => {
                             "itemId" INTEGER REFERENCES items(id),
                             "styleId" INTEGER REFERENCES styles(id),
                             "imageURL" TEXT NOT NULL,
+                            "isActive" BOOLEAN DEFAULT true,
                     ';
                 BEGIN
                     SELECT enum_range(NULL::size) INTO size_values;
