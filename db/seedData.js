@@ -58,7 +58,7 @@ const createTables = async () => {
                 "categoryId" INTEGER REFERENCES categories(id),
                 description TEXT NOT NULL,
                 price INTEGER NOT NULL,
-                isUnique BOOLEAN DEFAULT false
+                "isUnique" BOOLEAN DEFAULT false
             );
 
             CREATE TABLE carts (
