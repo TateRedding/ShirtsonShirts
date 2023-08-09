@@ -1,135 +1,135 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const ItemDetails = ({ userToken, user, isLoggedIn }) => {
-  const { itemname } = useParams();
-  const [items, setItems] = useState([]);
-  const [selectedItem, setSelectedItem] = useState({});
-  const [quantity, setQuantity] = useState("");
+    const { itemname } = useParams();
+    const [item, setItem] = useState([]);
+    const [selectedItemStyle, setSelectedItemStyle] = useState({});
+    const [quantity, setQuantity] = useState("");
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const getItems = async () => {
-    try {
-      const response = await axios.get(`/api/items/name/${itemname}`);
-      setItems(response.data.items);
-      setSelectedItem(response.data.items[0]);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  useEffect(() => {
-    getItems();
-  }, []);
+    const getItems = async () => {
+        try {
+            const response = await axios.get(`/api/items/name/${itemname}`);
+            console.log(response.data);
+            setItem(response.data.item);
+            setSelectedItemStyle(response.data.item.styles[0]);
+        } catch (err) {
+            console.error(err);
+        };
+    };
+    useEffect(() => {
+        getItems();
+    }, []);
 
-  const addToCart = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await axios.post(
-        `/api/cartItems/`,
-        {
-          itemId: selectedItem.id,
-          quantity: quantity,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${userToken}`,
-          },
-        }
-      );
-      if (response.data.success) {
-        navigate('/cart')
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const onChange = (event) => {
-    if (event.target.name === "quantity-name") {
-      setQuantity(event.target.value);
-    }
-  };
-
-  return (
-    <>
-      <ul classname="item-detail-list">
-
-        <div className="item-detail-container">
-          <h1>{selectedItem.name}</h1>
-          <div className="item-detail-child">
-
-            <div className="item-detail-image-container">
-              <img className="item-detail-image" src={selectedItem.imageURL} alt={selectedItem.name} />
-            </div>
-
-            <div className="item-detail-description">
-              <li>{selectedItem.price}$</li>
-              <li>{selectedItem.description}</li>
-            </div>
-
-            <div className="item-detail-buttons">
-              {
-                isLoggedIn ?
-                  <button
-                    type="add-to-cart"
-                    className="btn btn-primary"
-                    id="add-to-cart-button"
-                    onClick={addToCart}
-                  >
-                    Add To Cart
-                  </button> :
-                  null
-              }
-              {
-                (user.isAdmin) ?
-                  <Link to={`/products/edit/${selectedItem.id}`}><button className='btn btn-primary'>Edit Item</button></Link> :
-                  null
-              }
-              <select
-                className="form-select"
-                aria-label="size-select"
-                defaultValue={selectedItem.id}
-                onChange={(event) => {
-                  for (let i = 0; i < items.length; i++) {
-                    if (items[i].id.toString() === event.target.value) {
-                      setSelectedItem(items[i]);
-                      break;
-                    }
-                  }
-                }}>
+    const addToCart = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await axios.post(
+                `/api/cartItems/`,
                 {
-                  items.map((item) => {
-                    return <option value={item.id} key={item.id}>{item.size}</option>
-                  })
+                    itemId: selectedItem.id,
+                    quantity: quantity,
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${userToken}`,
+                    },
                 }
-              </select>
-              {
-                isLoggedIn ?
-                  <div className="form-floating mb-3" id="quantity-input">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="floatingInput"
-                      onChange={onChange}
-                      placeholder="1"
-                      name="quantity-name"
-                      value={quantity}
-                    />
+            );
+            if (response.data.success) {
+                navigate("/cart")
+            }
+        } catch (error) {
+            console.error(error);
+        };
+    };
 
-                    <label htmlFor="floatingInput">Quantity</label>
-                  </div> :
-                  null
-              }
+    const onChange = (event) => {
+        if (event.target.name === "quantity-name") {
+            setQuantity(event.target.value);
+        };
+    };
+
+    return (
+        <div className="item-detail-container">
+            <h1>{item.name}</h1>
+            <div className="item-detail-child">
+
+                <div className="item-detail-image-container">
+                    <img className="item-detail-image" src={selectedItemStyle.imageURL} alt={`${item.name} in style ${selectedItemStyle.name}`} />
+                </div>
+
+                <div className="item-detail-description">
+                    <li>{item.price}$</li>
+                    <li>{item.description}</li>
+                </div>
+
+                <div className="item-detail-buttons">
+                    {
+                        isLoggedIn ?
+                            <button
+                                type="add-to-cart"
+                                className="btn btn-primary"
+                                id="add-to-cart-button"
+                                onClick={addToCart}
+                            >
+                                Add To Cart
+                            </button> :
+                            null
+                    }
+                    {
+                        (user.isAdmin) ?
+                            <Link to={`/products/edit/${item.id}`}><button className="btn btn-primary">Edit Item</button></Link> :
+                            null
+                    }
+                    {
+                        item.styles ?
+                            <select
+                                className="form-select"
+                                aria-label="style-select"
+                                defaultValue={selectedItemStyle.id}
+                                onChange={(event) => {
+                                    for (let i = 0; i < item.styles.length; i++) {
+                                        if (item.styles[i].id.toString() === event.target.value) {
+                                            setSelectedItemStyle(item.styles[i]);
+                                            break;
+                                        };
+                                    };
+                                }}>
+                                {
+                                    item.styles.map((style) => {
+                                        return <option value={style.id} key={style.id}>{style.name}</option>
+                                    })
+                                }
+                            </select> :
+                            null
+                    }
+                    {
+                        isLoggedIn ?
+                            <div className="form-floating mb-3" id="quantity-input">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="floatingInput"
+                                    onChange={onChange}
+                                    placeholder="1"
+                                    name="quantity-name"
+                                    value={quantity}
+                                />
+
+                                <label htmlFor="floatingInput">Quantity</label>
+                            </div> :
+                            null
+                    }
+                </div>
             </div>
-          </div>
         </div>
-      </ul>
-    </>
-  );
+    );
 };
 
 export default ItemDetails;

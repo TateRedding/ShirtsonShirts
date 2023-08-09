@@ -19,8 +19,10 @@ const createItemStyle = async (fields) => {
 const getItemStylesByItemId = async (itemId) => {
     try {
         const { rows: itemStyles } = await client.query(`
-            SELECT *
+            SELECT item_styles.*, styles.name
             FROM item_styles
+            JOIN styles
+                ON item_styles."styleId"=styles.id
             WHERE "itemId"=${itemId};
         `);
         return itemStyles;

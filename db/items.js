@@ -1,7 +1,8 @@
 const client = require("./client");
+const { getItemStylesByItemId } = require("./itemStyles");
 
 const createItem = async (fields) => {
-    const keys = Object.keys(fields);    const valuesString = keys.map((key, index) => `$${index + 1}`).join(", ");
+    const keys = Object.keys(fields); const valuesString = keys.map((key, index) => `$${index + 1}`).join(", ");
     const columnNames = keys.map((key) => `"${key}"`).join(", ");
     try {
         const { rows: [item] } = await client.query(`
@@ -41,7 +42,10 @@ const getItemById = async (id) => {
             FROM items 
             WHERE id=${id};
         `);
-        return item;
+        if (item) {
+            item.styles = await getItemStylesByItemId(id);
+            return item;
+        };
     } catch (error) {
         console.error(error);
     };
@@ -67,7 +71,10 @@ const getItemByName = async (name) => {
             FROM items
             WHERE name='${name}';
         `);
-        return item;
+        if (item) {
+            item.styles = await getItemStylesByItemId(item.id);
+            return item;
+        };
     } catch (error) {
         console.error(error);
     };
