@@ -2,7 +2,6 @@ import React from "react";
 import ProductCard from "./ProductCard";
 
 const AllItems = ({ filteredItems }) => {
-    console.log(filteredItems);
     return (
         <div className="d-flex flex-wrap justify-content-around">
             {
