@@ -1,20 +1,20 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-const SelectCategory = ({ categories, setItems, getItems, groupItems, setSearchTerm }) => {
-    const [categoryId, setCategoryId] = useState('0');
+const SelectCategory = ({ categories, setItems, getItems, setSearchTerm }) => {
+    const [categoryId, setCategoryId] = useState("0");
 
     const filterByCategory = async () => {
         try {
-            if (categoryId !== '0') {
-                const items = await axios.get(`/api/items/category/${categoryId}`);
-                if (items.data.success) {
-                    setItems(await groupItems(items.data.items));
+            if (categoryId !== "0") {
+                const response = await axios.get(`/api/items/category/${categoryId}`);
+                if (response.data.success) {
+                    setItems(response.data.items);
                 };
             } else {
                 getItems();
-            }
-            setSearchTerm('');
+            };
+            setSearchTerm("");
         } catch (error) {
             console.error(error);
         };
