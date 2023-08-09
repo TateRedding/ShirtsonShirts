@@ -191,24 +191,24 @@ const createInitialItems = async () => {
 
         items.push(await createItem({
             name: "SoCaTaCa Tee",
-            price: "500",
+            price: 500,
             categoryId: 1,
             description: "Cotton blend tee-shirt with the SoCaTaCa team logo"
         }));
 
         items.push(await createItem({
             name: "Plain Tank",
-            price: "300",
+            price: 300,
             categoryId: 2,
             description: "Cotton blend tank-top"
         }));
 
         items.push(await createItem({
             name: "Rainbow Long-sleeve",
-            price: "500",
+            price: 500,
             categoryId: 3,
             description: "Cotton blend long-sleeve shirt, perfect for cool weather!",
-            isUnigue: true
+            isUnique: true
         }));
 
         console.log(items);

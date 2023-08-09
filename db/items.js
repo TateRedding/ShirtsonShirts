@@ -1,15 +1,14 @@
 const client = require("./client");
 
 const createItem = async (fields) => {
-    const keys = Object.keys(fields);
-    const valuesString = keys.map((key, index) => `$${index + 1}`).join(", ");
+    const keys = Object.keys(fields);    const valuesString = keys.map((key, index) => `$${index + 1}`).join(", ");
     const columnNames = keys.map((key) => `"${key}"`).join(", ");
     try {
         const { rows: [item] } = await client.query(`
             INSERT INTO items(${columnNames})
             VALUES (${valuesString})
             RETURNING *;
-        `, Object.keys(fields));
+        `, Object.values(fields));
         return item;
     } catch (error) {
         console.error(error);

@@ -16,7 +16,6 @@ const { requireUser, requireAdmin } = require("./utils");
 
 // POST/api/items
 router.post("/", requireUser, requireAdmin, async (req, res) => {
-    "./images/default_shirt.png"
     try {
         const styles = [];
         if (req.body.styles) {
@@ -38,6 +37,7 @@ router.post("/", requireUser, requireAdmin, async (req, res) => {
                     if (currentStyle) {
                         styles[i].itemId = item.id;
                         styles[i].styleId = currentStyle.id;
+                        if (!styles[i].imageURL) styles[i].imageURL = "./images/default_shirt.png";
                         const currentItemStyle = await createItemStyle(styles[i]);
                         if (!currentItemStyle) itemStyleErrors.push(name);
                     } else {
