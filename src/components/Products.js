@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import AllItems from "./AllItems";
-import Search from "./Search";
-import SelectCategory from "./SelectCategory";
+import ProductCard from "./ProductCard";
+import Search from "./tools/Search";
+import SelectCategory from "./tools/SelectCategory";
 import { Link } from "react-router-dom";
-import NewCategoryForm from "./NewCategoryForm"
+import NewCategoryForm from "./forms/NewCategoryForm"
 
 const Products = ({ items, setItems, getItems, categories, user, userToken }) => {
     const [filteredItems, setFilteredItems] = useState([]);
@@ -44,7 +44,13 @@ const Products = ({ items, setItems, getItems, categories, user, userToken }) =>
                         null
                 }
             </div>
-            <AllItems filteredItems={filteredItems} />
+            <div className="d-flex flex-wrap justify-content-around">
+                {
+                    filteredItems.map((item, index) => {
+                        return <ProductCard item={item} key={index} />
+                    })
+                }
+            </div>
         </div>
     )
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import SizeSelect from "./tools/SizeSelect"
 import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
@@ -7,6 +8,7 @@ const ItemDetails = ({ userToken, user, isLoggedIn }) => {
     const { itemname } = useParams();
     const [item, setItem] = useState([]);
     const [selectedItemStyle, setSelectedItemStyle] = useState({});
+    const [selectedSize, setSelectedSize] = useState("");
     const [quantity, setQuantity] = useState("");
 
     const navigate = useNavigate();
@@ -14,7 +16,6 @@ const ItemDetails = ({ userToken, user, isLoggedIn }) => {
     const getItems = async () => {
         try {
             const response = await axios.get(`/api/items/name/${itemname}`);
-            console.log(response.data);
             setItem(response.data.item);
             setSelectedItemStyle(response.data.item.styles[0]);
         } catch (err) {
@@ -68,38 +69,21 @@ const ItemDetails = ({ userToken, user, isLoggedIn }) => {
                     <li>{item.price}$</li>
                     <li>{item.description}</li>
                 </div>
-
-                <div className="item-detail-buttons">
+                {
+                    (user.isAdmin) ?
+                        <Link to={`/products/edit/${item.id}`}><button className="btn btn-primary">Edit Item</button></Link> :
+                        null
+                }
+                <form className="item-selection-form" onSubmit={addToCart}>
                     {
-                        isLoggedIn ?
-                            <button
-                                type="add-to-cart"
-                                className="btn btn-primary"
-                                id="add-to-cart-button"
-                                onClick={addToCart}
-                            >
-                                Add To Cart
-                            </button> :
-                            null
-                    }
-                    {
-                        (user.isAdmin) ?
-                            <Link to={`/products/edit/${item.id}`}><button className="btn btn-primary">Edit Item</button></Link> :
-                            null
-                    }
-                    {
-                        item.styles ?
+                        item.styles && item.styles.length > 1 ?
                             <select
                                 className="form-select"
                                 aria-label="style-select"
                                 defaultValue={selectedItemStyle.id}
                                 onChange={(event) => {
-                                    for (let i = 0; i < item.styles.length; i++) {
-                                        if (item.styles[i].id.toString() === event.target.value) {
-                                            setSelectedItemStyle(item.styles[i]);
-                                            break;
-                                        };
-                                    };
+                                    setSelectedSize("");
+                                    setSelectedItemStyle(item.styles.find(style => style.id.toString() === event.target.value))
                                 }}>
                                 {
                                     item.styles.map((style) => {
@@ -109,6 +93,11 @@ const ItemDetails = ({ userToken, user, isLoggedIn }) => {
                             </select> :
                             null
                     }
+                    <SizeSelect
+                        itemStyle={selectedItemStyle}
+                        selectedSize={selectedSize}
+                        setSelectedSize={setSelectedSize}
+                    />
                     {
                         isLoggedIn ?
                             <div className="form-floating mb-3" id="quantity-input">
@@ -121,12 +110,23 @@ const ItemDetails = ({ userToken, user, isLoggedIn }) => {
                                     name="quantity-name"
                                     value={quantity}
                                 />
-
                                 <label htmlFor="floatingInput">Quantity</label>
                             </div> :
                             null
                     }
-                </div>
+                    {
+                        isLoggedIn ?
+                            <button
+                                type="add-to-cart"
+                                className="btn btn-primary"
+                                id="add-to-cart-button"
+                                onClick={addToCart}
+                            >
+                                Add To Cart
+                            </button> :
+                            null
+                    }
+                </form>
             </div>
         </div>
     );

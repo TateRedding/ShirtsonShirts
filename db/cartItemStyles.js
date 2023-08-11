@@ -8,7 +8,7 @@ const createCartItemStyle = async ({ cartId, itemStyleId, quantity, size }) => {
             RETURNING *;
         `, [cartId, itemStyleId, quantity, size]);
         return cartItemStyle;
-    } catch {
+    } catch (error) {
         console.error(error);
     };
 };

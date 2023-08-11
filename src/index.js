@@ -9,8 +9,8 @@ import Register from "./components/Register.js";
 import Products from "./components/Products.js";
 import Cart from "./components/Cart.js";
 import ItemDetails from "./components/ItemDetails.js";
-import NewItemForm from "./components/NewItemForm.js";
-import EditItemForm from "./components/EditItemForm.js";
+import NewItemForm from "./components/forms/NewItemForm.js";
+import EditItemForm from "./components/forms/EditItemForm.js";
 import Orders from "./components/Orders.js";
 
 const App = () => {
@@ -46,23 +46,6 @@ const App = () => {
             console.error(err)
         };
     };
-
-    // const groupItems = async (items) => {
-    //     const names = [];
-    //     const groupedItems = [];
-    //     items.map((item) => {
-    //         if (!names.includes(item.name)) {
-    //             names.push(item.name);
-    //         };
-    //     });
-    //     for (let i = 0; i < names.length; i++) {
-    //         const response = await axios.get(`/api/items/name/${names[i]}`);
-    //         if (response.data.success) {
-    //             groupedItems.push(response.data.items);
-    //         };
-    //     };
-    //     return groupedItems;
-    // };
 
     const getCategories = async () => {
         try {

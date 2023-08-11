@@ -58,7 +58,6 @@ const createTables = async () => {
                 "categoryId" INTEGER REFERENCES categories(id),
                 description TEXT NOT NULL,
                 price INTEGER NOT NULL,
-                "isUnique" BOOLEAN DEFAULT false,
                 "isActive" BOOLEAN DEFAULT true
             );
 
@@ -175,6 +174,7 @@ const createInitialStyles = async () => {
         styles.push(await createStyle("red"));
         styles.push(await createStyle("blue"));
         styles.push(await createStyle("green"));
+        styles.push(await createStyle("rainbow"));
 
         console.log(styles);
         console.log("Finished creating styles!");
@@ -208,7 +208,6 @@ const createInitialItems = async () => {
             price: 500,
             categoryId: 3,
             description: "Cotton blend long-sleeve shirt, perfect for cool weather!",
-            isUnique: true
         }));
 
         console.log(items);
@@ -268,15 +267,7 @@ const createInitialItemStyles = async () => {
 
         itemStyles.push(await createItemStyle({
             itemId: 3,
-            styleId: 2,
-            imageURL: "./images/default_shirt.png",
-            medium: 16,
-            large: 16,
-            extraLarge: 11
-        }));
-
-        itemStyles.push(await createItemStyle({
-            itemId: 3,
+            styleId: 4,
             imageURL: "./images/default_shirt.png"
         }));
 
@@ -350,7 +341,7 @@ const createInitialCartItemStyles = async () => {
 
         cartItemStyles.push(await createCartItemStyle({
             cartId: 3,
-            itemStyleId: 6,
+            itemStyleId: 5,
             quantity: 3,
             size: "large"
         }));
@@ -372,7 +363,7 @@ const createInitialCartItemStyles = async () => {
         console.log(cartItemStyles);
         console.log("Finished creating initail cart_item_styles!");
     } catch (error) {
-        console.log("Error creating iinitial cart_item_styles");
+        console.log("Error creating initial cart_item_styles");
         console.error(error);
     };
 };

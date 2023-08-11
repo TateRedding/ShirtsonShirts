@@ -56,6 +56,13 @@ const getItemsByCategoryId = async (categoryId) => {
         const { rows: items } = await client.query(`
             SELECT *
             FROM items
+            LEFT JOIN item_styles
+                ON item_styles."itemId"=items.id
+                AND item_styles."styleId"=(
+                    SELECT MIN(item_styles."styleId")
+                    FROM item_styles
+                    WHERE item_styles."itemId"=items.id
+                );
             WHERE "categoryId"=${categoryId};
         `);
         return items;
