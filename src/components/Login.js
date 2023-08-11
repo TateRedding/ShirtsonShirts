@@ -1,96 +1,79 @@
-import React, { useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const Login = (props) => {
-    const [loginUsername, setLoginUsername] = useState('');
-    const [loginPassword, setLoginPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
+const Login = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
-    const onChange = (event) => {
-        if (event.target.name === 'loginUsername') {
-            setLoginUsername(event.target.value);
-        } else if (event.target.name === 'loginPassword') {
-            setLoginPassword(event.target.value);
-        }
-    }
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isLoggedIn) navigate("/products");
+    }, []);
 
     const accountLogin = async (event) => {
         event.preventDefault();
-        let username = loginUsername;
-        let password = loginPassword;
-
         try {
-            const response = await axios.post('/api/users/login', {
+            const response = await axios.post("/api/users/login", {
                 username,
                 password
-            })
-
+            });
             if (!response.data.success) {
-                return setErrorMessage(response.data.message);
+                setErrorMessage(response.data.message);
             } else {
-                props.setUserToken(response.data.token);
-                window.localStorage.setItem('token', `${response.data.token}`);
-                return props.setIsLoggedIn(true);
-            }
-
+                setUserToken(response.data.token);
+                window.localStorage.setItem("token", `${response.data.token}`);
+                setIsLoggedIn(true);
+                navigate("/products");
+            };
         } catch (err) {
             console.error(err);
-        }
-    }
+        };
+    };
 
     return (
         <div className="container" id="loginform">
-            <div id='login-container'>
-                <div id='login'>
+            <div id="login-container">
+                <div id="login">
                     <h1>Login</h1>
-                    <form>
-
-                        <div className="form-floating mb-3" id='login-field'>
+                    <div className="text-danger">{errorMessage}</div>
+                    <form onSubmit={accountLogin}>
+                        <div className="form-floating mb-3 login-field">
                             <input
-                                type="text"
                                 className="form-control"
-                                id="floatingInput"
-                                value={loginUsername}
-                                onChange={onChange}
-                                name='loginUsername'
+                                id="login-username"
+                                value={username}
+                                required
+                                onChange={(event) => setUsername(event.target.value)}
+                                name="loginUsername"
                                 placeholder="Username" />
 
-                            <label htmlFor="floatingInput">Username</label>
+                            <label htmlFor="login-username">Username</label>
                         </div>
-
-                        <div className="form-floating" id='login-field'>
+                        <div className="form-floating login-field">
                             <input
                                 type="password"
                                 className="form-control"
-                                id="floatingPassword"
-                                value={loginPassword}
-                                onChange={onChange}
-                                name='loginPassword'
+                                id="login-password"
+                                value={password}
+                                required
+                                onChange={(event) => setPassword(event.target.value)}
+                                name="loginPassword"
                                 placeholder="Password"></input>
 
-                            <label htmlFor="floatingPassword">Password</label>
+                            <label htmlFor="login-password">Password</label>
                         </div>
-
-                        {props.isLoggedIn ? <Navigate to='/products' /> : <div className='text-danger'>{errorMessage}</div>}
-
                         <button
-                            type="Login"
-                            id='login-buttons'
-                            className="btn btn-primary"
-                            onClick={accountLogin}>
+                            type="submit"
+                            className="btn btn-primary login-buttons"
+                        >
                             Login
                         </button>
-
-                        <Link to='/register'>
-                            <button
-                                type="Login"
-                                id='login-buttons'
-                                className="btn btn-primary">
-                                Register
-                            </button>
+                        <Link to="/register">
+                            <button className="btn btn-primary login-buttons">Register</button>
                         </Link>
-
                     </form>
                 </div>
             </div>

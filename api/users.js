@@ -2,6 +2,7 @@ const express = require("express");
 const { requireUser, requireAdmin } = require("./utils");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const {
     getUser,

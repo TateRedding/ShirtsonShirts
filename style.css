@@ -24,14 +24,14 @@ body {
     width: 500px;
 }
 
-#login-field,
+.login-field,
 .item-field {
     min-width: 350px;
     max-width: 500px;
     margin-bottom: 15px;
 }
 
-#login-buttons {
+.login-buttons {
     width: 100px;
 }
 
@@ -39,7 +39,7 @@ body {
     width: 150px;
 }
 
-#login-buttons:first-of-type {
+.login-buttons:first-of-type {
     margin-right: 5px;
 }
 
