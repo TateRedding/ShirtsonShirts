@@ -13,13 +13,14 @@ const createCartItemStyle = async ({ cartId, itemStyleId, quantity, size }) => {
     };
 };
 
-const getCartItemStyleByCartIdAndItemStyleId = async (cartId, itemStyleId) => {
+const getCartItemStyleByCartIdAndItemStyleIdAndSize = async (cartId, itemStyleId, size) => {
     try {
         const { rows: [cartItemStyle] } = await client.query(`
             SELECT *
             FROM cart_item_styles
             WHERE "cartId"=${cartId}
-            AND "itemStyleId"=${itemStyleId};
+            AND "itemStyleId"=${itemStyleId}
+            AND size='${size}';
         `);
         return cartItemStyle;
     } catch (error) {
@@ -105,7 +106,7 @@ const destroyCartItemStyle = async (id) => {
 
 module.exports = {
     createCartItemStyle,
-    getCartItemStyleByCartIdAndItemStyleId,
+    getCartItemStyleByCartIdAndItemStyleIdAndSize,
     getCartItemStyleById,
     getCartItemStylesByCartId,
     getCartItemStylesByItemStyleId,

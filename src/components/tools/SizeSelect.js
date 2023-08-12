@@ -18,7 +18,7 @@ const SizeSelect = ({ itemStyle, selectedSize, setSelectedSize }) => {
             required
             onChange={(event) => setSelectedSize(event.target.value)}
         >
-            <option value={""}>Select Size</option>
+            <option value="">Select Size</option>
             {
                 Object.keys(sizes).map(size => {
                     return itemStyle[size] ?

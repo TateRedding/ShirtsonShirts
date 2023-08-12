@@ -102,7 +102,8 @@ const createTables = async () => {
                 "cartId" INTEGER REFERENCES carts(id),
                 "itemStyleId" INTEGER REFERENCES item_styles(id),
                 quantity INTEGER DEFAULT 0,
-                size size NOT NULL
+                size size NOT NULL,
+                UNIQUE ("cartId", "itemStyleId", size)
             );
         `);
         console.log("Finished creating tables!");

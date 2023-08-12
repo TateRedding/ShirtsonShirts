@@ -3,7 +3,7 @@ const router = express.Router();
 const { requireUser } = require('./utils');
 const {
     createCartItemStyle,
-    getCartItemStyleByCartIdAndItemStyleId,
+    getCartItemStyleByCartIdAndItemStyleIdAndSize,
     getCartItemStyleById,
     updateCartItemStyle,
     destroyCartItemStyle } = require("../db/cartItemStyles");
@@ -15,14 +15,14 @@ router.post('/', requireUser, async (req, res) => {
     try {
         let currentCart = await getCurrentCart(req.user.id);
         if (!currentCart) {
-            currentCart = await createCart({ userId: req.user.id });
+            currentCart = await createCart(req.user.id);
         };
 
-        const _cartItemStyle = await getCartItemStyleByCartIdAndItemStyleId(currentCart.id, itemStyleId);
+        const _cartItemStyle = await getCartItemStyleByCartIdAndItemStyleIdAndSize(currentCart.id, itemStyleId, size);
         if (_cartItemStyle) {
             res.send({
                 success: false,
-                error: "CartItemStyleAlreadyExists",
+                error: "ItemAlreadyInCart",
                 message: "That item is already in your cart!"
             });
         } else {

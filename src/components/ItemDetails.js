@@ -10,6 +10,8 @@ const ItemDetails = ({ userToken, user, isLoggedIn }) => {
     const [selectedItemStyle, setSelectedItemStyle] = useState({});
     const [selectedSize, setSelectedSize] = useState("");
     const [quantity, setQuantity] = useState("");
+    const [showQuantityError, setShowQuantityError] = useState(false);
+    const [showItemInCartError, setShowItemInCartError] = useState(false);
 
     const navigate = useNavigate();
 
@@ -28,31 +30,34 @@ const ItemDetails = ({ userToken, user, isLoggedIn }) => {
 
     const addToCart = async (event) => {
         event.preventDefault();
-        try {
-            const response = await axios.post(
-                `/api/cartItems/`,
-                {
-                    itemId: selectedItem.id,
-                    quantity: quantity,
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${userToken}`,
+        setShowQuantityError(false);
+        setShowItemInCartError(false);
+        if (selectedItemStyle[selectedSize] < quantity) {
+            setShowQuantityError(true);
+        } else {
+            try {
+                const response = await axios.post(
+                    `/api/cartItemStyles/`,
+                    {
+                        itemStyleId: selectedItemStyle.id,
+                        quantity,
+                        size: selectedSize
                     },
-                }
-            );
-            if (response.data.success) {
-                navigate("/cart")
-            }
-        } catch (error) {
-            console.error(error);
-        };
-    };
-
-    const onChange = (event) => {
-        if (event.target.name === "quantity-name") {
-            setQuantity(event.target.value);
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${userToken}`,
+                        },
+                    }
+                );
+                if (response.data.success) {
+                    navigate("/cart");
+                } else {
+                    if (response.data.error && response.data.error === "ItemAlreadyInCart") setShowItemInCartError(true);
+                };
+            } catch (error) {
+                console.error(error);
+            };
         };
     };
 
@@ -60,7 +65,6 @@ const ItemDetails = ({ userToken, user, isLoggedIn }) => {
         <div className="item-detail-container">
             <h1>{item.name}</h1>
             <div className="item-detail-child">
-
                 <div className="item-detail-image-container">
                     <img className="item-detail-image" src={selectedItemStyle.imageURL} alt={`${item.name} in style ${selectedItemStyle.name}`} />
                 </div>
@@ -71,7 +75,8 @@ const ItemDetails = ({ userToken, user, isLoggedIn }) => {
                 </div>
                 {
                     (user.isAdmin) ?
-                        <Link to={`/products/edit/${item.id}`}><button className="btn btn-primary">Edit Item</button></Link> :
+                        <Link to={`/products/edit/${item.id}`}><button className="btn btn-primary">Edit Item</button></Link>
+                        :
                         null
                 }
                 <form className="item-selection-form" onSubmit={addToCart}>
@@ -81,6 +86,7 @@ const ItemDetails = ({ userToken, user, isLoggedIn }) => {
                                 className="form-select"
                                 aria-label="style-select"
                                 defaultValue={selectedItemStyle.id}
+                                required
                                 onChange={(event) => {
                                     setSelectedSize("");
                                     setSelectedItemStyle(item.styles.find(style => style.id.toString() === event.target.value))
@@ -90,7 +96,8 @@ const ItemDetails = ({ userToken, user, isLoggedIn }) => {
                                         return <option value={style.id} key={style.id}>{style.name}</option>
                                     })
                                 }
-                            </select> :
+                            </select>
+                            :
                             null
                     }
                     <SizeSelect
@@ -100,30 +107,45 @@ const ItemDetails = ({ userToken, user, isLoggedIn }) => {
                     />
                     {
                         isLoggedIn ?
-                            <div className="form-floating mb-3" id="quantity-input">
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    id="floatingInput"
-                                    onChange={onChange}
-                                    placeholder="1"
-                                    name="quantity-name"
-                                    value={quantity}
-                                />
-                                <label htmlFor="floatingInput">Quantity</label>
-                            </div> :
+                            <>
+                                <div className="form-floating mb-3" id="quantity-input">
+                                    <input
+                                        type="number"
+                                        className="form-control"
+                                        id="floatingInput"
+                                        onChange={(event) => setQuantity(event.target.value)}
+                                        required
+                                        placeholder="0"
+                                        name="quantity"
+                                        value={quantity}
+                                    />
+                                    <label htmlFor="floatingInput">Quantity</label>
+                                    {
+                                        showQuantityError ?
+                                            <div id="quantity-error-message" className="form-text">
+                                                Sorry, there are only {selectedItemStyle[selectedSize]} left in stock.
+                                            </div>
+                                            :
+                                            null
+                                    }
+                                </div>
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary"
+                                >
+                                    Add To Cart
+                                </button>
+                            </>
+                            :
                             null
                     }
                     {
-                        isLoggedIn ?
-                            <button
-                                type="add-to-cart"
-                                className="btn btn-primary"
-                                id="add-to-cart-button"
-                                onClick={addToCart}
-                            >
-                                Add To Cart
-                            </button> :
+                        showItemInCartError ?
+                            <>
+                                <p>That shirt is already in your cart!</p>
+                                <p>Edit the quantity from your cart if you wish to buy more</p>
+                            </>
+                            :
                             null
                     }
                 </form>
