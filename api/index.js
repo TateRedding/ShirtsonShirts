@@ -37,6 +37,8 @@ apiRouter.use("/carts", require("./carts"));
 apiRouter.use("/cartItemStyles", require("./cartItemStyles"));
 apiRouter.use("/categories", require("./categories"));
 apiRouter.use("/items", require("./items"));
+apiRouter.use("/itemStyles", require("./itemStyles.js"));
+apiRouter.use("/itemStyleSizes", require("./itemStyleSizes.js"));
 apiRouter.use("/sizes", require("./sizes"));
 apiRouter.use("/users", require("./users"));
 

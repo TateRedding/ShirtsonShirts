@@ -1,14 +1,17 @@
 const client = require("./client");
 const bcrypt = require("bcrypt");
 
-const createUser = async ({ username, password, isAdmin }) => {
+const createUser = async (fields) => {
+    if (fields.password) fields.password = await bcrypt.hash(fields.password, 10);
+    const keys = Object.keys(fields);
+    const valuesString = keys.map((key, index) => `$${index + 1}`).join(', ');
+    const columnNames = keys.map((key) => `"${key}"`).join(', ');
     try {
-        password = await bcrypt.hash(password, 10);
         const { rows: [user] } = await client.query(`
-            INSERT INTO users(username, password, "isAdmin")
-            VALUES ($1, $2, $3)
+            INSERT INTO users(${columnNames})
+            VALUES (${valuesString})
             RETURNING *;
-        `, [username, password, isAdmin]);
+        `, Object.values(fields));
         if (user) {
             delete user.password;
             return user;

@@ -112,8 +112,7 @@ const createInitialUsers = async () => {
 
         users.push(await createUser({
             username: "tredding",
-            password: "slushies89",
-            isAdmin: false
+            password: "slushies89"
         }));
 
         users.push(await createUser({
@@ -124,8 +123,7 @@ const createInitialUsers = async () => {
 
         users.push(await createUser({
             username: "saxelson",
-            password: "saxman33",
-            isAdmin: false
+            password: "saxman33"
         }));
 
         users.push(await createUser({
@@ -279,6 +277,66 @@ const createInitialItemStyleSizes = async () => {
         console.log("Creating initial item_style_sizes...");
         const itemStyleSizes = [];
 
+        itemStyleSizes.push({
+            itemStyleId: 1,
+            sizeId: 3,
+            stock: 4
+        });
+
+        itemStyleSizes.push({
+            itemStyleId: 1,
+            sizeId: 4,
+            stock: 3
+        });
+
+        itemStyleSizes.push({
+            itemStyleId: 2,
+            sizeId: 1,
+            stock: 6
+        });
+
+        itemStyleSizes.push({
+            itemStyleId: 2,
+            sizeId: 2,
+            stock: 5
+        });
+
+        itemStyleSizes.push({
+            itemStyleId: 3,
+            sizeId: 3,
+            stock: 8
+        });
+
+        itemStyleSizes.push({
+            itemStyleId: 3,
+            sizeId: 6,
+            stock: 2
+        });
+
+        itemStyleSizes.push({
+            itemStyleId: 4,
+            sizeId: 4,
+            stock: 9
+        });
+
+        itemStyleSizes.push({
+            itemStyleId: 4,
+            sizeId: 5,
+            stock: 1
+        });
+
+        itemStyleSizes.push({
+            itemStyleId: 5,
+            sizeId: 2,
+            stock: 8
+        });
+
+        itemStyleSizes.push({
+            itemStyleId: 5,
+            sizeId: 4,
+            stock: 3
+        });
+        
         console.log(itemStyleSizes);
         console.log("Finished creating item_style_sizes!");
     } catch (error) {
