@@ -93,7 +93,8 @@ const App = () => {
                     />}
                 />
                 <Route path="/cart" element={
-                    <Cart userToken={userToken}
+                    <Cart
+                        userToken={userToken}
                         user={user}
                     />}
                 />

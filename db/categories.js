@@ -36,7 +36,8 @@ const getCategoryByName = async (name) => {
     } catch (error) {
         console.error(error);
     };
-}
+};
+
 module.exports = {
     createCategory,
     getAllCategories,

@@ -1,9 +1,10 @@
 const client = require("./client");
 const { createUser } = require("./users");
 const { createCategory } = require("./categories");
-const { createStyle } = require("./styles");
 const { createItem } = require("./items");
+const { createStyle } = require("./styles");
 const { createItemStyle } = require("./itemStyles");
+const { createSize } = require("./sizes");
 const { createCart, purchaseCart } = require("./carts");
 const { createCartItemStyle } = require("./cartItemStyles");
 
@@ -12,6 +13,7 @@ const dropTables = async () => {
         console.log("Dropping tables...");
         await client.query(`
             DROP TABLE IF EXISTS cart_item_style_sizes;
+            DROP TABLE IF EXISTS cart_item_styles;
             DROP TABLE IF EXISTS carts;
             DROP TABLE IF EXISTS item_style_sizes;
             DROP TABLE IF EXISTS sizes;
@@ -157,24 +159,6 @@ const createInitialCategories = async () => {
     };
 };
 
-const createInitialStyles = async () => {
-    try {
-        console.log("Creating initial styles...");
-        const styles = [];
-
-        styles.push(await createStyle("red"));
-        styles.push(await createStyle("blue"));
-        styles.push(await createStyle("green"));
-        styles.push(await createStyle("rainbow"));
-
-        console.log(styles);
-        console.log("Finished creating styles!");
-    } catch (error) {
-        console.log("Error creating initial styles!");
-        console.error(error);
-    };
-};
-
 const createInitialItems = async () => {
     try {
         console.log("Creating initial items...");
@@ -209,6 +193,24 @@ const createInitialItems = async () => {
     };
 };
 
+const createInitialStyles = async () => {
+    try {
+        console.log("Creating initial styles...");
+        const styles = [];
+
+        styles.push(await createStyle("red"));
+        styles.push(await createStyle("blue"));
+        styles.push(await createStyle("green"));
+        styles.push(await createStyle("rainbow"));
+
+        console.log(styles);
+        console.log("Finished creating styles!");
+    } catch (error) {
+        console.log("Error creating initial styles!");
+        console.error(error);
+    };
+};
+
 const createInitialItemStyles = async () => {
     try {
         console.log("Creating initial item_styles...");
@@ -217,43 +219,25 @@ const createInitialItemStyles = async () => {
         itemStyles.push(await createItemStyle({
             itemId: 1,
             styleId: 1,
-            imageURL: "./images/red_socataca_tee.png",
-            small: 5,
-            medium: 15,
-            large: 10
+            imageURL: "./images/red_socataca_tee.png"
         }));
 
         itemStyles.push(await createItemStyle({
             itemId: 1,
             styleId: 2,
-            imageURL: "./images/blue_socataca_tee.png",
-            extraSmall: 3,
-            small: 6,
-            medium: 10,
-            large: 12
+            imageURL: "./images/blue_socataca_tee.png"
         }));
 
         itemStyles.push(await createItemStyle({
             itemId: 2,
             styleId: 1,
-            imageURL: "./images/default_shirt.png",
-            extraSmall: 2,
-            small: 3,
-            medium: 13,
-            large: 6,
-            extraLarge: 7,
-            doubleExtraLarge: 2
+            imageURL: "./images/default_shirt.png"
         }));
 
         itemStyles.push(await createItemStyle({
             itemId: 2,
             styleId: 3,
-            imageURL: "./images/default_shirt.png",
-            extraSmall: 4,
-            small: 1,
-            medium: 9,
-            large: 5,
-            extraLarge: 8
+            imageURL: "./images/default_shirt.png"
         }));
 
         itemStyles.push(await createItemStyle({
@@ -266,6 +250,26 @@ const createInitialItemStyles = async () => {
         console.log("Finished creating item_styles!");
     } catch (error) {
         console.log("Error creating initail item_styles!")
+        console.error(error);
+    };
+};
+
+const createInitialSizes = async () => {
+    try {
+        console.log("Creating initial sizes...");
+        const sizes = [];
+
+        sizes.push(await createSize("extraSmall", "xs"));
+        sizes.push(await createSize("small", "s"));
+        sizes.push(await createSize("medium", "m"));
+        sizes.push(await createSize("large", "l"));
+        sizes.push(await createSize("extraLarge", "xl"));
+        sizes.push(await createSize("doubleExtraLarge", "xxl"));
+
+        console.log(sizes);
+        console.log("Finished creating sizes!");
+    } catch (error) {
+        console.log("Error creating initial sizes!");
         console.error(error);
     };
 };
@@ -372,11 +376,12 @@ const rebuildDB = async () => {
 const seedDB = async () => {
     try {
         console.log("Seeding databse...");
-        // await createInitialUsers();
-        // await createInitialCategories();
-        // await createInitialStyles();
-        // await createInitialItems();
-        // await createInitialItemStyles();
+        await createInitialUsers();
+        await createInitialCategories();
+        await createInitialItems();
+        await createInitialStyles();
+        await createInitialItemStyles();
+        await createInitialSizes();
         // await createInitialCarts();
         // await createInitialCartItemStyles();
         console.log("Finished seeding database!");
