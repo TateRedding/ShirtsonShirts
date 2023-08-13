@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { getStyleByName } = require("../db/styles");
-const { getCartItemStylesByItemStyleId, destroyCartItemStyle } = require("../db/cartItemStyles");
+const { getItemStyleSizesByItemStyleId } = require("../db/itemStyleSizes");
+const { getCartItemStyleSizesByItemStyleSizeId, destroyCartItemStyleSize } = require("../db/cartItemStyleSizes");
 const { getItemStylesByItemId, deactivateItemStyle, createItemStyle } = require("../db/itemStyles");
 const {
     createItem,
@@ -162,9 +163,12 @@ router.delete("/:id", requireUser, requireAdmin, async (req, res) => {
     try {
         const itemStyles = await getItemStylesByItemId(id);
         for (let i = 0; i < itemStyles.length; i++) {
-            const cartItemStyles = await getCartItemStylesByItemStyleId(itemStyles[i].id);
-            for (let j = 0; j < cartItemStyles.length; j++) {
-                if (!cartItemStyles[j].isPurchased) await destroyCartItemStyle(cartItemStyles[j].id)
+            const itemStyleSizes = await getItemStyleSizesByItemStyleId(itemStyles[i].id);
+            for (let j = 0; j < itemStyleSizes.length; j++) {
+                const cartItemStyleSizes = await getCartItemStyleSizesByItemStyleSizeId(itemStyleSizes[j].id);
+                for (let k = 0; k < cartItemStyleSizes.length; k++) {
+                    if (!cartItemStyleSizes[k].isPurchased) destroyCartItemStyleSize(cartItemStyleSizes[k].id);
+                };
             };
             await deactivateItemStyle(itemStyles[i]);
         };
