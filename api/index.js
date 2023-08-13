@@ -34,7 +34,7 @@ apiRouter.use(async (req, res, next) => {
 });
 
 apiRouter.use("/carts", require("./carts"));
-apiRouter.use("/cartItemStyles", require("./cartItemStyles"));
+apiRouter.use("/cartItemStyleSizes", require("./cartItemStyleSizes"));
 apiRouter.use("/categories", require("./categories"));
 apiRouter.use("/items", require("./items"));
 apiRouter.use("/itemStyles", require("./itemStyles.js"));

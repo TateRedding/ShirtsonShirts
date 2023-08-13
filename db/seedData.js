@@ -5,8 +5,9 @@ const { createItem } = require("./items");
 const { createStyle } = require("./styles");
 const { createItemStyle } = require("./itemStyles");
 const { createSize } = require("./sizes");
+const { createItemStyleSize } = require("./itemStyleSizes");
 const { createCart, purchaseCart } = require("./carts");
-const { createCartItemStyle } = require("./cartItemStyles");
+const { createCartItemStyleSize } = require("./cartItemStyleSizes");
 
 const dropTables = async () => {
     try {
@@ -277,65 +278,65 @@ const createInitialItemStyleSizes = async () => {
         console.log("Creating initial item_style_sizes...");
         const itemStyleSizes = [];
 
-        itemStyleSizes.push({
+        itemStyleSizes.push(await createItemStyleSize({
             itemStyleId: 1,
             sizeId: 3,
             stock: 4
-        });
+        }));
 
-        itemStyleSizes.push({
+        itemStyleSizes.push(await createItemStyleSize({
             itemStyleId: 1,
             sizeId: 4,
             stock: 3
-        });
+        }));
 
-        itemStyleSizes.push({
+        itemStyleSizes.push(await createItemStyleSize({
             itemStyleId: 2,
             sizeId: 1,
             stock: 6
-        });
+        }));
 
-        itemStyleSizes.push({
+        itemStyleSizes.push(await createItemStyleSize({
             itemStyleId: 2,
             sizeId: 2,
             stock: 5
-        });
+        }));
 
-        itemStyleSizes.push({
+        itemStyleSizes.push(await createItemStyleSize({
             itemStyleId: 3,
             sizeId: 3,
             stock: 8
-        });
+        }));
 
-        itemStyleSizes.push({
+        itemStyleSizes.push(await createItemStyleSize({
             itemStyleId: 3,
             sizeId: 6,
             stock: 2
-        });
+        }));
 
-        itemStyleSizes.push({
+        itemStyleSizes.push(await createItemStyleSize({
             itemStyleId: 4,
             sizeId: 4,
             stock: 9
-        });
+        }));
 
-        itemStyleSizes.push({
+        itemStyleSizes.push(await createItemStyleSize({
             itemStyleId: 4,
             sizeId: 5,
             stock: 1
-        });
+        }));
 
-        itemStyleSizes.push({
+        itemStyleSizes.push(await createItemStyleSize({
             itemStyleId: 5,
             sizeId: 2,
             stock: 8
-        });
+        }));
 
-        itemStyleSizes.push({
+        itemStyleSizes.push(await createItemStyleSize({
             itemStyleId: 5,
             sizeId: 4,
             stock: 3
-        });
+        }));
         
         console.log(itemStyleSizes);
         console.log("Finished creating item_style_sizes!");
@@ -454,7 +455,7 @@ const seedDB = async () => {
         await createInitialItemStyles();
         await createInitialSizes();
         await createInitialItemStyleSizes();
-        // await createInitialCarts();
+        await createInitialCarts();
         // await createInitialCartItemStyles();
         console.log("Finished seeding database!");
     } catch (error) {

@@ -1,5 +1,5 @@
 const client = require("./client");
-const { getCartItemStylesByCartId } = require("./cartItemStyles");
+const { getCartItemStyleSizesByCartId } = require("./cartItemStyleSizes");
 
 const createCart = async (userId) => {
     try {

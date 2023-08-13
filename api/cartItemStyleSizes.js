@@ -2,40 +2,39 @@ const express = require("express");
 const router = express.Router();
 const { requireUser } = require('./utils');
 const {
-    createCartItemStyle,
-    getCartItemStyleByCartIdAndItemStyleIdAndSize,
-    getCartItemStyleById,
-    updateCartItemStyle,
-    destroyCartItemStyle } = require("../db/cartItemStyles");
+    createCartItemStyleSize,
+    getCartItemStyleSizeByCartIdAndItemStyleSizeId,
+    getCartItemStyleSizeById,
+    updateCartItemStyleSize,
+    destroyCartItemStyleSize } = require("../db/cartItemStyleSizes");
 const { getCartById, getCurrentCart, createCart } = require('../db/carts');
 
-// POST /api/cartItemStyles
+// POST /api/cartItemStyleSizes
 router.post('/', requireUser, async (req, res) => {
-    const { itemStyleId, quantity, size } = req.body;
+    const { itemStyleSizeId, quantity } = req.body;
     try {
         let currentCart = await getCurrentCart(req.user.id);
         if (!currentCart) {
             currentCart = await createCart(req.user.id);
         };
 
-        const _cartItemStyle = await getCartItemStyleByCartIdAndItemStyleIdAndSize(currentCart.id, itemStyleId, size);
-        if (_cartItemStyle) {
+        const _cartItemStyleSize = await getCartItemStyleSizeByCartIdAndItemStyleSizeId(currentCart.id, itemStyleSizeId);
+        if (_cartItemStyleSize) {
             res.send({
                 success: false,
                 error: "ItemAlreadyInCart",
                 message: "That item is already in your cart!"
             });
         } else {
-            const cartItemStyle = await createCartItemStyle({
+            const cartItemStyleSize = await createCartItemStyleSize({
                 cartId: currentCart.id,
-                itemStyleId,
-                quantity,
-                size
+                itemStyleSizeId,
+                quantity
             });
-            if (cartItemStyle) {
+            if (cartItemStyleSize) {
                 res.send({
                     success: true,
-                    cartItemStyle
+                    cartItemStyleSize
                 });
             };
         };
@@ -44,14 +43,14 @@ router.post('/', requireUser, async (req, res) => {
     };
 });
 
-// PATCH /api/cartItemStyles/:cartItemStyleId
-router.patch('/:cartItemStyleId', requireUser, async (req, res) => {
-    const { cartItemStyleId } = req.params;
+// PATCH /api/cartItemStyleSizes/:cartItemStyleSizeId
+router.patch('/:cartItemStyleSizeId', requireUser, async (req, res) => {
+    const { cartItemStyleSizeId } = req.params;
     const { quantity } = req.body;
     try {
-        const _cartItemStyle = await getCartItemStyleById(cartItemStyleId);
-        if (_cartItemStyle) {
-            const cart = await getCartById(_cartItemStyle.cartId);
+        const cartItemStyleSize = await getCartItemStyleSizeById(cartItemStyleSizeId);
+        if (cartItemStyleSize) {
+            const cart = await getCartById(cartItemStyleSize.cartId);
             if (cart.userId === req.user.id) {
                 if (cart.isPurchased) {
                     res.send({
@@ -60,11 +59,11 @@ router.patch('/:cartItemStyleId', requireUser, async (req, res) => {
                         message: "You can not update an item from a previous order!"
                     });
                 } else {
-                    const cartItemStyle = await updateCartItemStyle(cartItemStyleId, quantity);
-                    if (cartItemStyle) {
+                    const updatedCartItemStyleSize = await updateCartItemStyleSize(cartItemStyleSizeId, quantity);
+                    if (updatedCartItemStyleSize) {
                         res.send({
                             success: true,
-                            cartItemStyle
+                            updatedCartItemStyleSize
                         });
                     }
                 }
@@ -78,23 +77,23 @@ router.patch('/:cartItemStyleId', requireUser, async (req, res) => {
         } else {
             res.send({
                 success: false,
-                error: "InvalidCartItemId",
-                message: `Can not find a cart item with id ${cartItemId}`
-            })
-        }
+                error: "InvalidCartItemStyleSizeId",
+                message: `Can not find a cart_item_style_size with id ${cartItemStyleSizeId}`
+            });
+        };
 
     } catch (error) {
         console.error(error);
     };
 });
 
-// DELETE /api/cartItemStyles/:cartItemStyleId
-router.delete('/:cartItemStyleId', requireUser, async (req, res) => {
-    const { cartItemStyleId } = req.params;
+// DELETE /api/cartItemStyleSizes/:cartItemStyleSizeId
+router.delete('/:cartItemStyleSizeId', requireUser, async (req, res) => {
+    const { cartItemStyleSizeId } = req.params;
     try {
-        const cartItemStyle = await getCartItemById(cartItemStyleId);
-        if (cartItemStyle) {
-            const cart = await getCartById(cartItemStyle.cartId);
+        const cartItemStyleSize = await getCartItemStyleSizeById(cartItemStyleSizeId);
+        if (cartItemStyleSize) {
+            const cart = await getCartById(cartItemStyleSize.cartId);
             if (cart.userId === req.user.id) {
                 if (cart.isPurchased) {
                     res.send({
@@ -103,12 +102,12 @@ router.delete('/:cartItemStyleId', requireUser, async (req, res) => {
                         message: "You can not remove an item from a previous order!"
                     });
                 } else {
-                    const deletedCartItemStyle = await destroyCartItemStyle(cartItemStyleId);
+                    const deletedCartItemStyleSize = await destroyCartItemStyleSize(cartItemStyleSizeId);
                     res.send({
                         success: true,
-                        deletedCartItemStyle
+                        deletedCartItemStyleSize
                     });
-                }
+                };
             } else {
                 res.send({
                     success: false,
@@ -119,10 +118,10 @@ router.delete('/:cartItemStyleId', requireUser, async (req, res) => {
         } else {
             res.send({
                 success: false,
-                error: "InvalidCartItemStyleId",
-                message: `Can not find a cart_item_style with id ${cartItemStyleId}`
+                error: "InvalidCartItemStyleSizeId",
+                message: `Can not find a cart_item_style_size with id ${cartItemStyleSizeId}`
             });
-        }
+        };
     } catch (error) {
         console.error(error);
     };

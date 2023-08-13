@@ -124,11 +124,11 @@ router.get("/name/:name", async (req, res) => {
 router.patch("/:id", requireUser, requireAdmin, async (req, res) => {
     const { id } = req.params;
     try {
-        const item = await updateItem(id, req.body);
-        if (item) {
+        const updatedItem = await updateItem(id, req.body);
+        if (updatedItem) {
             res.send({
                 success: true,
-                item,
+                updatedItem,
             });
         } else {
             res.send({ success: false });
