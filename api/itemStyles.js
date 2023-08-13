@@ -47,3 +47,5 @@ router.delete("/:id", requireUser, requireAdmin, async (req, res) => {
         console.error(error);
     };
 });
+
+module.exports = router;

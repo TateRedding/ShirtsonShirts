@@ -1,30 +1,24 @@
 import React from "react";
 
-const SizeSelect = ({ itemStyle, selectedSize, setSelectedSize }) => {
-    const sizes = {
-        "extraSmall": "XS",
-        "small": "S",
-        "medium": "M",
-        "large": "L",
-        "extraLarge": "XL",
-        "doubleExtraLarge": "XXL"
-    };
-
+const SizeSelect = ({ itemStyle, sizes, selectedSizeId, setSelectedSizeId }) => {
     return (
         <select
             className="form-select"
             aria-label="size-select"
-            value={selectedSize}
+            value={selectedSizeId}
             required
-            onChange={(event) => setSelectedSize(event.target.value)}
+            onChange={(event) => setSelectedSizeId(event.target.value)}
         >
             <option value="">Select Size</option>
             {
-                Object.keys(sizes).map(size => {
-                    return itemStyle[size] ?
-                        <option value={size} key={size}>{sizes[size]}</option> :
-                        <option value={size} key={size} disabled>{sizes[size]} Out of Stock</option>
-                })
+                sizes.length && itemStyle.sizes ?
+                    sizes.map(size => {
+                        return itemStyle.sizes.find(itemStyleSize => itemStyleSize.sizeId === size.id && itemStyleSize.stock) ?
+                            <option value={size.id} key={size.id}>{size.symbol.toUpperCase()}</option> :
+                            <option value={size.id} key={size.id} disabled>{size.symbol.toUpperCase()} Out of Stock</option>
+                    })
+                    :
+                    null
             }
         </select>
     );

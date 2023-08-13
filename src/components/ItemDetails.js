@@ -4,18 +4,19 @@ import SizeSelect from "./tools/SizeSelect"
 import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-const ItemDetails = ({ userToken, user, isLoggedIn }) => {
+const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
     const { itemname } = useParams();
     const [item, setItem] = useState([]);
     const [selectedItemStyle, setSelectedItemStyle] = useState({});
-    const [selectedSize, setSelectedSize] = useState("");
+    const [selectedSizeId, setSelectedSizeId] = useState("");
+    const [selectedItemStyleSize, setSelectedItemStyleSize] = useState({});
     const [quantity, setQuantity] = useState("");
     const [showQuantityError, setShowQuantityError] = useState(false);
     const [showItemInCartError, setShowItemInCartError] = useState(false);
 
     const navigate = useNavigate();
 
-    const getItems = async () => {
+    const getItem = async () => {
         try {
             const response = await axios.get(`/api/items/name/${itemname}`);
             setItem(response.data.item);
@@ -24,15 +25,22 @@ const ItemDetails = ({ userToken, user, isLoggedIn }) => {
             console.error(err);
         };
     };
+
     useEffect(() => {
-        getItems();
+        getItem();
     }, []);
+
+    useEffect(() => {
+        if (selectedItemStyle.sizes && selectedSizeId) {
+            setSelectedItemStyleSize(selectedItemStyle.sizes.find(itemStyleSize => itemStyleSize.sizeId === Number(selectedSizeId)))
+        };
+    }, [selectedItemStyle, selectedSizeId])
 
     const addToCart = async (event) => {
         event.preventDefault();
         setShowQuantityError(false);
         setShowItemInCartError(false);
-        if (selectedItemStyle[selectedSize] < quantity) {
+        if (selectedItemStyleSize.stock < quantity) {
             setShowQuantityError(true);
         } else {
             try {
@@ -88,7 +96,7 @@ const ItemDetails = ({ userToken, user, isLoggedIn }) => {
                                 defaultValue={selectedItemStyle.id}
                                 required
                                 onChange={(event) => {
-                                    setSelectedSize("");
+                                    setSelectedSizeId("");
                                     setSelectedItemStyle(item.styles.find(style => style.id.toString() === event.target.value))
                                 }}>
                                 {
@@ -102,8 +110,9 @@ const ItemDetails = ({ userToken, user, isLoggedIn }) => {
                     }
                     <SizeSelect
                         itemStyle={selectedItemStyle}
-                        selectedSize={selectedSize}
-                        setSelectedSize={setSelectedSize}
+                        sizes={sizes}
+                        selectedSizeId={selectedSizeId}
+                        setSelectedSizeId={setSelectedSizeId}
                     />
                     {
                         isLoggedIn ?
@@ -123,7 +132,7 @@ const ItemDetails = ({ userToken, user, isLoggedIn }) => {
                                     {
                                         showQuantityError ?
                                             <div id="quantity-error-message" className="form-text">
-                                                Sorry, there are only {selectedItemStyle[selectedSize]} left in stock.
+                                                Sorry, there are only {selectedItemStyleSize.stock} left in stock.
                                             </div>
                                             :
                                             null

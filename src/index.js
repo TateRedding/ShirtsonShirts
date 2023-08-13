@@ -16,9 +16,10 @@ import Orders from "./components/Orders.js";
 const App = () => {
     const [user, setUser] = useState({});
     const [userToken, setUserToken] = useState(window.localStorage.getItem("token"));
-    const [isLoggedIn, setIsLoggedIn] = useState(window.localStorage.getItem("token"));
+    const [isLoggedIn, setIsLoggedIn] = useState(Boolean(window.localStorage.getItem("token")));
     const [categories, setCategories] = useState([]);
     const [items, setItems] = useState([]);
+    const [sizes, setSizes] = useState([]);
 
     const getUserData = async () => {
         if (userToken) {
@@ -56,9 +57,19 @@ const App = () => {
         };
     };
 
+    const getSizes = async () => {
+        try {
+            const response = await axios.get("/api/sizes");
+            if (response.data.success) setSizes(response.data.sizes);
+        } catch (error) {
+            console.error(error);
+        };
+    };
+
     useEffect(() => {
         getItems();
         getCategories();
+        getSizes();
     }, []);
 
     useEffect(() => {
@@ -84,7 +95,8 @@ const App = () => {
                     />}
                 />
                 <Route path="/products" element={
-                    <Products items={items}
+                    <Products
+                        items={items}
                         setItems={setItems}
                         getItems={getItems}
                         categories={categories}
@@ -103,6 +115,7 @@ const App = () => {
                         userToken={userToken}
                         user={user}
                         isLoggedIn={isLoggedIn}
+                        sizes={sizes}
                     />}
                 />
                 <Route path="/products/new" element={

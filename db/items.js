@@ -1,5 +1,6 @@
 const client = require("./client");
 const { getItemStylesByItemId } = require("./itemStyles");
+const { getItemStyleSizesByItemStyleId } = require("./itemStyleSizes");
 
 const createItem = async ({ name, categoryId, description, price }) => {
     try {
@@ -42,6 +43,11 @@ const getItemById = async (id) => {
         `);
         if (item) {
             item.styles = await getItemStylesByItemId(id);
+            if (item.styles) {
+                for (let i = 0; i < item.styles.length; i++) {
+                    item.styles[i].sizes = await getItemStyleSizesByItemStyleId(item.styles[i].id);
+                };
+            };
             return item;
         };
     } catch (error) {
@@ -78,6 +84,11 @@ const getItemByName = async (name) => {
         `);
         if (item) {
             item.styles = await getItemStylesByItemId(item.id);
+            if (item.styles) {
+                for (let i = 0; i < item.styles.length; i++) {
+                    item.styles[i].sizes = await getItemStyleSizesByItemStyleId(item.styles[i].id);
+                };
+            };
             return item;
         };
     } catch (error) {
