@@ -11,14 +11,15 @@ const dropTables = async () => {
     try {
         console.log("Dropping tables...");
         await client.query(`
-            DROP TABLE IF EXISTS cart_item_styles;
-            DROP TABLE IF EXISTS item_styles;
+            DROP TABLE IF EXISTS cart_item_style_sizes;
             DROP TABLE IF EXISTS carts;
-            DROP TABLE IF EXISTS items;
+            DROP TABLE IF EXISTS item_style_sizes;
+            DROP TABLE IF EXISTS sizes;
+            DROP TABLE IF EXISTS item_styles;
             DROP TABLE IF EXISTS styles;
+            DROP TABLE IF EXISTS items;
             DROP TABLE IF EXISTS categories;
             DROP TABLE IF EXISTS users;
-            DROP TYPE IF EXISTS size;
         `);
         console.log("Finished dropping tables.");
     } catch (error) {
@@ -31,15 +32,6 @@ const createTables = async () => {
     try {
         console.log("Creating tables...");
         await client.query(`
-            CREATE TYPE size AS ENUM (
-                'extraSmall',
-                'small',
-                'medium',
-                'large',
-                'extraLarge',
-                'doubleExtraLarge'
-            );
-
             CREATE TABLE users (
                 id SERIAL PRIMARY KEY,
                 username VARCHAR(100) UNIQUE NOT NULL,
@@ -61,6 +53,34 @@ const createTables = async () => {
                 "isActive" BOOLEAN DEFAULT true
             );
 
+            CREATE TABLE styles (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(100) UNIQUE NOT NULL
+            );
+
+            CREATE TABLE item_styles (
+                id SERIAL PRIMARY KEY,
+                "itemId" INTEGER REFERENCES items(id),
+                "styleId" INTEGER REFERENCES styles(id),
+                "imageURL" TEXT NOT NULL,
+                "isActive" BOOLEAN DEFAULT true,
+                UNIQUE ("itemId", "styleId")
+            );
+
+            CREATE TABLE sizes (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(32) UNIQUE NOT NULL,
+                symbol VARCHAR(4)
+            );
+
+            CREATE TABLE item_style_sizes (
+                id SERIAL PRIMARY KEY,
+                "itemStyleId" INTEGER REFERENCES item_styles(id),
+                "sizeId" INTEGER REFERENCES sizes(id),
+                stock INTEGER DEFAULT 0,
+                UNIQUE ("itemStyleId", "sizeId")
+            );
+
             CREATE TABLE carts (
                 id SERIAL PRIMARY KEY,
                 "userId" INTEGER REFERENCES users(id),
@@ -68,42 +88,12 @@ const createTables = async () => {
                 "purchaseTime" TIMESTAMPTZ
             );
 
-            CREATE TABLE styles (
-                id SERIAL PRIMARY KEY,
-                name VARCHAR(100) UNIQUE NOT NULL
-            );
-            
-            CREATE OR REPLACE FUNCTION create_item_styles_table() RETURNS VOID AS $$
-                DECLARE
-                    size_values TEXT[];
-                    size TEXT;
-                    create_table_sql TEXT :='
-                        CREATE TABLE item_styles (
-                            id SERIAL PRIMARY KEY,
-                            "itemId" INTEGER REFERENCES items(id),
-                            "styleId" INTEGER REFERENCES styles(id),
-                            "imageURL" TEXT NOT NULL,
-                            "isActive" BOOLEAN DEFAULT true,
-                    ';
-                BEGIN
-                    SELECT enum_range(NULL::size) INTO size_values;
-                    FOREACH size IN ARRAY size_values LOOP
-                        create_table_sql := create_table_sql || '"' || size || '"' || ' INTEGER DEFAULT 0, ';
-                    END LOOP;
-                    create_table_sql := create_table_sql || ' UNIQUE ("itemId", "styleId"));';
-                    EXECUTE create_table_sql;
-                END;
-            $$ LANGUAGE plpgsql;
-
-            SELECT create_item_styles_table();
-
-            CREATE TABLE cart_item_styles (
+            CREATE TABLE cart_item_style_sizes (
                 id SERIAL PRIMARY KEY,
                 "cartId" INTEGER REFERENCES carts(id),
-                "itemStyleId" INTEGER REFERENCES item_styles(id),
+                "itemStyleSizeId" INTEGER REFERENCES item_style_sizes(id),
                 quantity INTEGER DEFAULT 0,
-                size size NOT NULL,
-                UNIQUE ("cartId", "itemStyleId", size)
+                UNIQUE ("cartId", "itemStyleSizeId")
             );
         `);
         console.log("Finished creating tables!");
@@ -382,13 +372,13 @@ const rebuildDB = async () => {
 const seedDB = async () => {
     try {
         console.log("Seeding databse...");
-        await createInitialUsers();
-        await createInitialCategories();
-        await createInitialStyles();
-        await createInitialItems();
-        await createInitialItemStyles();
-        await createInitialCarts();
-        await createInitialCartItemStyles();
+        // await createInitialUsers();
+        // await createInitialCategories();
+        // await createInitialStyles();
+        // await createInitialItems();
+        // await createInitialItemStyles();
+        // await createInitialCarts();
+        // await createInitialCartItemStyles();
         console.log("Finished seeding database!");
     } catch (error) {
         console.log("Error seeding databse!");
