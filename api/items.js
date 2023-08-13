@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { getStyleByName } = require("../db/styles");
-const { getItemStyleSizesByItemStyleId } = require("../db/itemStyleSizes");
+const { getStyleByName, createStyle } = require("../db/styles");
+const { getSizeByName } = require("../db/sizes");
+const { getItemStyleSizesByItemStyleId, createItemStyleSize } = require("../db/itemStyleSizes");
 const { getCartItemStyleSizesByItemStyleSizeId, destroyCartItemStyleSize } = require("../db/cartItemStyleSizes");
 const { getItemStylesByItemId, deactivateItemStyle, createItemStyle } = require("../db/itemStyles");
 const {
@@ -17,48 +18,63 @@ const { requireUser, requireAdmin } = require("./utils");
 
 // POST/api/items
 router.post("/", requireUser, requireAdmin, async (req, res) => {
+    const { name, categoryId, description, price } = req.body;
+    const { styles } = req.body.styles;
     try {
-        const styles = [];
-        if (req.body.styles) {
-            styles = [...req.body.styles];
-            delete req.body.styles;
-        };
-
-        const item = await createItem(req.body);
+        const item = await createItem({ name, categoryId, description, price });
         if (item) {
             const styleErrors = [];
             const itemStyleErrors = [];
-            let message = "";
-            if (!item.isUnique && styles.length) {
-                for (let i = 0; i < styles.length; i++) {
-                    const { name } = styles[i];
-                    delete styles[i].name;
-                    let currentStyle = await getStyleByName(name);
-                    if (!currentStyle) currentStyle = await createStyle(name);
-                    if (currentStyle) {
-                        styles[i].itemId = item.id;
-                        styles[i].styleId = currentStyle.id;
-                        if (!styles[i].imageURL) styles[i].imageURL = "./images/default_shirt.png";
-                        const currentItemStyle = await createItemStyle(styles[i]);
-                        if (!currentItemStyle) itemStyleErrors.push(name);
+            const itemStyleSizeErrors = [];
+            for (let i = 0; i < styles.length; i++) {
+                let style = await getStyleByName(styles[i].name);
+                if (!style) style = await createStyle(styles[i].name);
+                if (style) {
+                    let imageURL = styles[i].imageURL;
+                    if (!imageURL) imageURL = "./images/default_shirt.png";
+                    const itemStyle = await createItemStyle({
+                        itemId: item.id,
+                        styleId: style.id,
+                        imageURL
+                    });
+                    if (itemStyle) {
+                        for (let j = 0; j < styles[i].sizes; j++) {
+                            const size = await getSizeByName(styles[i].sizes[j].name);
+                            if (!size) {
+                                itemStyleSizeErrors.push({
+                                    item: item.name,
+                                    style: style.name,
+                                    size: styles[i].sizes[j].name
+                                });
+                            } else {
+                                const itemStyleSize = await createItemStyleSize({
+                                    itemStyleId: itemStyle.id,
+                                    sizeId: size.id,
+                                    stock: styles[i].sizes[j].stock
+                                });
+                                if (!itemStyleSize) itemStyleSizeErrors.push({
+                                    item: item.name,
+                                    style: style.name,
+                                    size: size.name
+                                });
+                            };
+                        };
                     } else {
-                        styleErrors.push(name);
+                        itemStyleErrors.push({
+                            item: item.name,
+                            style: item.styles[i].name
+                        });
                     };
-                };
-                if (styleErrors.length) {
-                    message += `Error creating styles ${styleErrors.join(", ")}! `
-                } else if (itemStyleErrors.length) {
-                    message += `Error adding styles ${itemStyleErrors.join(", ")} to new item!`
                 } else {
-                    message = "No errors creating and adding styles to item!"
+                    styleErrors.push(name);
                 };
-            } else {
-                message = "No styles created or added to item."
             };
             res.send({
                 success: true,
-                message,
-                item
+                item,
+                styleErrors,
+                itemStyleErrors,
+                itemStyleSizeErrors
             });
         } else {
             res.send({ success: false });

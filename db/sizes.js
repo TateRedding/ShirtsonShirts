@@ -25,7 +25,21 @@ const getAllSizes = async () => {
     };
 };
 
+const getSizeByName = async (name) => {
+    try {
+        const { rows: [size] } = await client.query(`
+            SELECT *
+            FROM sizes
+            WHERE name='${name}'
+        `);
+        return size;
+    } catch (error) {
+        console.error(error);
+    };
+};
+
 module.exports = {
     createSize,
-    getAllSizes
+    getAllSizes,
+    getSizeByName
 };
