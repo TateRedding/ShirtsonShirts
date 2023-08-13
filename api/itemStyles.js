@@ -1,10 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { requireUser, requireAdmin } = require("./utils");
-const {
-    createItemStyle,
-    deactivateItemStyle
-} = require("../db/itemStyles");
+const { createItemStyle, deactivateItemStyle } = require("../db/itemStyles");
 const { getCartItemStylesByItemStyleId, destroyCartItemStyle } = require("../db/cartItemStyles");
 
 // POST /api/itemStyles

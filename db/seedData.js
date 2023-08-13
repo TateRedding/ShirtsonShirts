@@ -274,6 +274,19 @@ const createInitialSizes = async () => {
     };
 };
 
+const createInitialItemStyleSizes = async () => {
+    try {
+        console.log("Creating initial item_style_sizes...");
+        const itemStyleSizes = [];
+
+        console.log(itemStyleSizes);
+        console.log("Finished creating item_style_sizes!");
+    } catch (error) {
+        console.log("Error creating initial item_style_sizes!");
+        console.error(error);
+    };
+};
+
 const createInitialCarts = async () => {
     try {
         console.log("Creating initial carts...");
@@ -382,6 +395,7 @@ const seedDB = async () => {
         await createInitialStyles();
         await createInitialItemStyles();
         await createInitialSizes();
+        await createInitialItemStyleSizes();
         // await createInitialCarts();
         // await createInitialCartItemStyles();
         console.log("Finished seeding database!");

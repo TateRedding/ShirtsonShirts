@@ -1,15 +1,13 @@
 const client = require("./client");
 const { getItemStylesByItemId } = require("./itemStyles");
 
-const createItem = async (fields) => {
-    const keys = Object.keys(fields); const valuesString = keys.map((key, index) => `$${index + 1}`).join(", ");
-    const columnNames = keys.map((key) => `"${key}"`).join(", ");
+const createItem = async ({ name, categoryId, description, price }) => {
     try {
         const { rows: [item] } = await client.query(`
-            INSERT INTO items(${columnNames})
-            VALUES (${valuesString})
+            INSERT INTO items(name, "categoryId", description, price)
+            VALUES ($1, $2, $3, $4)
             RETURNING *;
-        `, Object.values(fields));
+        `, [name, categoryId, description, price]);
         return item;
     } catch (error) {
         console.error(error);
