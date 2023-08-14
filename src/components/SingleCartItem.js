@@ -11,13 +11,13 @@ const SingleCartItem = ({ cartItem, userToken, getCart, calcTotal }) => {
         event.preventDefault();
         if (cartItem.quantity !== quantity) {
             try {
-                const updatedItem = await axios.patch(`/api/cartItems/${item.cartItemId}`, { quantity }, {
+                const response = await axios.patch(`/api/cartItemStyleSizes/${cartItem.cartItemStyleSizeId}`, { quantity }, {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${userToken}`
                     }
                 });
-                cartItem.quantity = updatedItem.data.cartItem.quantity;
+                if (response.data.success) cartItem.quantity = response.data.updatedCartItemStyleSize.quantity;
                 calcTotal();
             } catch (error) {
                 console.error(error);
@@ -27,7 +27,7 @@ const SingleCartItem = ({ cartItem, userToken, getCart, calcTotal }) => {
 
     const removeItem = async () => {
         try {
-            await axios.delete(`api/cartItems/${item.cartItemId}`, {
+            await axios.delete(`api/cartItemStyleSizes/${cartItem.cartItemStyleSizeId}`, {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${userToken}`
@@ -75,12 +75,12 @@ const SingleCartItem = ({ cartItem, userToken, getCart, calcTotal }) => {
                                 </div>
                             </div>
                             <button
+                                type="submit"
                                 className="btn btn-primary"
-                                disabled={
-                                    (!quantity || Number(quantity) === cartItem.quantity) ?
-                                        true :
-                                        false
-                                }>Update Quantity</button>
+                                disabled={(!quantity || Number(quantity) === cartItem.quantity) ? true : false}
+                            >
+                                Update Quantity
+                            </button>
                         </form>
                     </div>
                 </div>

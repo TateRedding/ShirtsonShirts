@@ -29,7 +29,6 @@ const Cart = ({ userToken, user }) => {
 
                 if (response.data.success) {
                     setCart(response.data.cart);
-                    console.log(response.data.cart);
                 } else {
                     setCart({});
                 };
