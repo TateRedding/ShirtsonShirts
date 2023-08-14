@@ -2,22 +2,22 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const SingleCartItem = ({ item, userToken, getCart, calcTotal }) => {
+const SingleCartItem = ({ cartItem, userToken, getCart, calcTotal }) => {
     const navigate = useNavigate();
 
-    const [quantity, setQuantity] = useState(item.quantity);
+    const [quantity, setQuantity] = useState(cartItem.quantity);
 
     const updateQuantity = async (event) => {
         event.preventDefault();
-        if (item.quantity !== quantity) {
+        if (cartItem.quantity !== quantity) {
             try {
                 const updatedItem = await axios.patch(`/api/cartItems/${item.cartItemId}`, { quantity }, {
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${userToken}`
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${userToken}`
                     }
                 });
-                item.quantity = updatedItem.data.cartItem.quantity;
+                cartItem.quantity = updatedItem.data.cartItem.quantity;
                 calcTotal();
             } catch (error) {
                 console.error(error);
@@ -29,8 +29,8 @@ const SingleCartItem = ({ item, userToken, getCart, calcTotal }) => {
         try {
             await axios.delete(`api/cartItems/${item.cartItemId}`, {
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${userToken}`
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${userToken}`
                 }
             });
             getCart();
@@ -44,30 +44,31 @@ const SingleCartItem = ({ item, userToken, getCart, calcTotal }) => {
         <div className="card mb-3 cart-item-card">
             <div className="cart-item-details d-flex align-items-center">
                 <div className="flex-grow-2 d-flex justify-content-center">
-                    <button className="btn btn-outline-secondary" onClick={() => navigate(`/products/${item.name.split(' ').join('%20')}`)}>
+                    <button className="btn btn-outline-secondary" onClick={() => navigate(`/products/${cartItem.item.split(" ").join("%20")}`)}>
                         <img
                             className="product-thumbnail"
-                            src={item.imageURL}
-                            alt={item.name}
+                            src={cartItem.imageURL}
+                            alt={cartItem.item}
                         />
                     </button>
                 </div>
                 <div className="flex-grow-1">
                     <div className="card-body">
-                        <a className='nav-link' href={`/#/products/${item.name.split(' ').join('%20')}`}>
-                            <h5 className="card-title">{item.name}</h5>
+                        <a className="nav-link" href={`/#/products/${cartItem.item.split(" ").join("%20")}`}>
+                            <h5 className="card-title">{cartItem.item}</h5>
                         </a>
-                        <p className="card-text">Size: {item.size}</p>
+                        <p className="card-text">Size: {cartItem.size.toUpperCase()}</p>
+                        <p className="card-text">Color/ Style: {cartItem.style}</p>
                         <form onSubmit={updateQuantity}>
-                            <div className='mb-3 row align-items-center'>
+                            <div className="mb-3 row align-items-center">
                                 <div className="col-auto">
-                                    <label htmlFor='cart-item-quantity' className='form-label card-text'>Quantity</label>
+                                    <label htmlFor="cart-item-quantity" className="form-label card-text">Quantity</label>
                                 </div>
                                 <div className="col-auto">
                                     <input
                                         type="number"
-                                        className='form-control quantity-selection'
-                                        id='cart-item-quantity'
+                                        className="form-control quantity-selection"
+                                        id="cart-item-quantity"
                                         value={quantity}
                                         onChange={(event) => setQuantity(event.target.value)}>
                                     </input>
@@ -76,7 +77,7 @@ const SingleCartItem = ({ item, userToken, getCart, calcTotal }) => {
                             <button
                                 className="btn btn-primary"
                                 disabled={
-                                    (!quantity || Number(quantity) === item.quantity) ?
+                                    (!quantity || Number(quantity) === cartItem.quantity) ?
                                         true :
                                         false
                                 }>Update Quantity</button>

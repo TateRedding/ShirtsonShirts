@@ -32,9 +32,9 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
 
     useEffect(() => {
         if (selectedItemStyle.sizes && selectedSizeId) {
-            setSelectedItemStyleSize(selectedItemStyle.sizes.find(itemStyleSize => itemStyleSize.sizeId === Number(selectedSizeId)))
+            setSelectedItemStyleSize(selectedItemStyle.sizes.find(itemStyleSize => itemStyleSize.sizeId === Number(selectedSizeId)));
         };
-    }, [selectedItemStyle, selectedSizeId])
+    }, [selectedItemStyle, selectedSizeId]);
 
     const addToCart = async (event) => {
         event.preventDefault();
@@ -45,11 +45,10 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
         } else {
             try {
                 const response = await axios.post(
-                    `/api/cartItemStyles/`,
+                    `/api/cartItemStyleSizes/`,
                     {
-                        itemStyleId: selectedItemStyle.id,
-                        quantity,
-                        size: selectedSize
+                        itemStyleSizeId: selectedItemStyleSize.id,
+                        quantity
                     },
                     {
                         headers: {

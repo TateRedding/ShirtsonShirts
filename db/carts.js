@@ -50,7 +50,7 @@ const getCurrentCart = async (userId) => {
             AND "isPurchased"=false;
         `);
         if (cart) {
-            cart.items = await getCartItemStylesByCartId(cart.id);
+            cart.items = await getCartItemStyleSizesByCartId(cart.id);
             return cart;
         };
     } catch (error) {
@@ -68,7 +68,7 @@ const getPreviousCarts = async (userId) => {
         `);
         if (carts) {
             for (let i = 0; i < carts.length; i++) {
-                if (carts[i]) carts[i].items = await getCartItemStylesByCartId(carts[i].id);
+                if (carts[i]) carts[i].items = await getCartItemStyleSizesByCartId(carts[i].id);
             };
             return carts;
         };

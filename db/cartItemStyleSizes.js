@@ -44,16 +44,22 @@ const getCartItemStyleSizesByCartId = async (cartId) => {
     try {
         const { rows: cartItemStyles } = await client.query(`
             SELECT ciss.id AS "cartItemStyleSizeId",
-                ciss."cartId", ciss."itemId", ciss.quantity, ciss.size,
-                items.name, items.price,
+                ciss."cartId", ciss.quantity,
+                items.name AS item, items.price,
+                sizes.symbol AS size,
+                styles.name AS style,
                 item_styles."imageURL"
             FROM cart_item_style_sizes AS ciss
-            JOIN items_styles_sizes AS iss
+            JOIN item_style_sizes AS iss
                 ON ciss."itemStyleSizeId"=iss.id
+            JOIN sizes
+                ON iss."sizeId"=sizes.id
             JOIN item_styles
                 ON iss."itemStyleId"=item_styles.id
+            JOIN styles
+                ON item_styles."styleId"=styles.id
             JOIN items
-                ON item_styles."itemId"=item.id
+                ON item_styles."itemId"=items.id
             WHERE ciss."cartId"=${cartId};
         `);
         return cartItemStyles;
