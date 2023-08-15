@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import SizeSelect from "./tools/SizeSelect"
 import { useNavigate, useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
     const itemName = useParams().itemName.split("_").join(" ");
-    const [item, setItem] = useState([]);
+    const [item, setItem] = useState({});
     const [selectedItemStyle, setSelectedItemStyle] = useState({});
     const [selectedSizeId, setSelectedSizeId] = useState("");
     const [selectedItemStyleSize, setSelectedItemStyleSize] = useState({});
@@ -16,19 +16,45 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
 
     const navigate = useNavigate();
 
-    const getItem = async () => {
-        try {
-            const response = await axios.get(`/api/items/name/${itemName}`);
-            setItem(response.data.item);
-            setSelectedItemStyle(response.data.item.styles[0]);
-        } catch (err) {
-            console.error(err);
-        };
+    const useQuery = () => {
+        const { search } = useLocation();
+        return React.useMemo(() => new URLSearchParams(search), [search]);
     };
 
+    const query = useQuery();
+    const styleQuery = query.get("style");
+    const sizeQuery = query.get("size");
+
     useEffect(() => {
+        const getItem = async () => {
+            try {
+                const response = await axios.get(`/api/items/name/${itemName}`);
+                setItem(response.data.item);
+            } catch (err) {
+                console.error(err);
+            };
+        };
         getItem();
     }, []);
+
+    useEffect(() => {
+        if (item.styles) {
+            if (styleQuery) {
+                setSelectedItemStyle(item.styles.find(itemStyle => itemStyle.name === styleQuery));
+            } else {
+                setSelectedItemStyle(item.styles[0]);
+            };
+        };
+    }, [item]);
+
+    useEffect(() => {
+        if (sizeQuery && selectedItemStyle.sizes) {
+            const iss = selectedItemStyle.sizes.find(iss => iss.sizeSymbol === sizeQuery);
+            if (iss && iss.stock) {
+                setSelectedSizeId(iss.sizeId);
+            };
+        };
+    }, [selectedItemStyle]);
 
     useEffect(() => {
         if (selectedItemStyle.sizes && selectedSizeId) {
@@ -92,7 +118,7 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                             <select
                                 className="form-select"
                                 aria-label="style-select"
-                                defaultValue={selectedItemStyle.id}
+                                value={selectedItemStyle.id}
                                 required
                                 onChange={(event) => {
                                     setSelectedSizeId("");

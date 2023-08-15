@@ -16,8 +16,10 @@ const createItemStyleSize = async ({ itemStyleId, sizeId, stock }) => {
 const getItemStyleSizesByItemStyleId = async (itemStyleId) => {
     try {
         const { rows: itemStyleSizes } = await client.query(`
-            SELECT *
-            FROM item_style_sizes
+            SELECT iss.*, sizes.symbol AS "sizeSymbol"
+            FROM item_style_sizes AS iss
+            LEFT JOIN sizes
+                ON iss."sizeId"=sizes.id
             WHERE "itemStyleId"=${itemStyleId};
         `)
         return itemStyleSizes;

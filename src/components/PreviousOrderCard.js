@@ -29,7 +29,9 @@ const PreviousOrderCard = ({ cartItem, userToken, purchaseTime }) => {
         <div className="card mb-3 previous-order-card">
             <div className="previous-order-details d-flex align-items-center">
                 <div className="flex-grow-2 d-flex justify-content-center">
-                    <button className="btn btn-outline-secondary" onClick={() => navigate(`/products/${cartItem.item.split(" ").join("_")}`)}>
+                    <button className="btn btn-outline-secondary" onClick={() => {
+                        navigate(`/products/${cartItem.item.split(" ").join("_")}?style=${cartItem.style}&size=${cartItem.size}`)
+                    }}>
                         <img
                             className="product-thumbnail"
                             src={cartItem.imageURL}
@@ -39,7 +41,8 @@ const PreviousOrderCard = ({ cartItem, userToken, purchaseTime }) => {
                 </div>
                 <div className="flex-grow-1">
                     <div className="card-body">
-                        <a className="nav-link" href={`/#/products/${cartItem.item.split(" ").join("_")}`}>
+                        <a className="nav-link" href={
+                            `/products/${cartItem.item.split(" ").join("_")}?style=${cartItem.style}&size=${cartItem.size}`}>
                             <h5 className="card-title">{cartItem.item}</h5>
                         </a>
                         <p className="card-text">Size: {cartItem.size}</p>
