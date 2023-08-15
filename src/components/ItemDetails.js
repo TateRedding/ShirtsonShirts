@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
-    const { itemname } = useParams();
+    const itemName = useParams().itemName.split("_").join(" ");
     const [item, setItem] = useState([]);
     const [selectedItemStyle, setSelectedItemStyle] = useState({});
     const [selectedSizeId, setSelectedSizeId] = useState("");
@@ -18,7 +18,7 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
 
     const getItem = async () => {
         try {
-            const response = await axios.get(`/api/items/name/${itemname}`);
+            const response = await axios.get(`/api/items/name/${itemName}`);
             setItem(response.data.item);
             setSelectedItemStyle(response.data.item.styles[0]);
         } catch (err) {

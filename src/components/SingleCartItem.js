@@ -3,9 +3,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const SingleCartItem = ({ cartItem, userToken, getCart, calcTotal }) => {
-    const navigate = useNavigate();
-
     const [quantity, setQuantity] = useState(cartItem.quantity);
+
+    const navigate = useNavigate();
 
     const updateQuantity = async (event) => {
         event.preventDefault();
@@ -44,7 +44,7 @@ const SingleCartItem = ({ cartItem, userToken, getCart, calcTotal }) => {
         <div className="card mb-3 cart-item-card">
             <div className="cart-item-details d-flex align-items-center">
                 <div className="flex-grow-2 d-flex justify-content-center">
-                    <button className="btn btn-outline-secondary" onClick={() => navigate(`/products/${cartItem.item.split(" ").join("%20")}`)}>
+                    <button className="btn btn-outline-secondary" onClick={() => navigate(`/products/${cartItem.item.split(" ").join("_")}`)}>
                         <img
                             className="product-thumbnail"
                             src={cartItem.imageURL}
@@ -54,7 +54,7 @@ const SingleCartItem = ({ cartItem, userToken, getCart, calcTotal }) => {
                 </div>
                 <div className="flex-grow-1">
                     <div className="card-body">
-                        <a className="nav-link" href={`/#/products/${cartItem.item.split(" ").join("%20")}`}>
+                        <a className="nav-link" href={`/#/products/${cartItem.item.split(" ").join("_")}`}>
                             <h5 className="card-title">{cartItem.item}</h5>
                         </a>
                         <p className="card-text">Size: {cartItem.size.toUpperCase()}</p>

@@ -366,71 +366,63 @@ const createInitialCarts = async () => {
     };
 };
 
-const createInitialCartItemStyles = async () => {
+const createInitialCartItemStyleSizes = async () => {
     try {
-        console.log("creating intial cart_item_styles...");
-        const cartItemStyles = [];
+        console.log("Creating intial cart_item_style_sizes...");
+        const cartItemStyleSizes = [];
 
-        cartItemStyles.push(await createCartItemStyle({
+        cartItemStyleSizes.push(await createCartItemStyleSize({
             cartId: 1,
-            itemStyleId: 1,
-            quantity: 5,
-            size: "medium"
+            itemStyleSizeId: 1,
+            quantity: 5
         }));
 
-        cartItemStyles.push(await createCartItemStyle({
+        cartItemStyleSizes.push(await createCartItemStyleSize({
             cartId: 1,
-            itemStyleId: 4,
-            quantity: 3,
-            size: "large"
+            itemStyleSizeId: 4,
+            quantity: 3
         }));
 
-        cartItemStyles.push(await createCartItemStyle({
+        cartItemStyleSizes.push(await createCartItemStyleSize({
             cartId: 2,
-            itemStyleId: 2,
-            quantity: 2,
-            size: "small"
+            itemStyleSizeId: 8,
+            quantity: 1
         }));
 
-        cartItemStyles.push(await createCartItemStyle({
+        cartItemStyleSizes.push(await createCartItemStyleSize({
             cartId: 2,
-            itemStyleId: 3,
-            quantity: 1,
-            size: "doubleExtraLarge"
+            itemStyleSizeId: 9,
+            quantity: 4
         }));
 
-        cartItemStyles.push(await createCartItemStyle({
+        cartItemStyleSizes.push(await createCartItemStyleSize({
             cartId: 3,
-            itemStyleId: 5,
-            quantity: 1,
-            size: "extraLarge"
+            itemStyleSizeId: 5,
+            quantity: 1
         }));
 
-        cartItemStyles.push(await createCartItemStyle({
+        cartItemStyleSizes.push(await createCartItemStyleSize({
             cartId: 3,
-            itemStyleId: 5,
-            quantity: 3,
-            size: "large"
+            itemStyleSizeId: 7,
+            quantity: 3
         }));
 
-        cartItemStyles.push(await createCartItemStyle({
+        cartItemStyleSizes.push(await createCartItemStyleSize({
             cartId: 4,
-            itemStyleId: 2,
-            quantity: 4,
-            size: "extraSmall"
+            itemStyleSizeId: 2,
+            quantity: 3
         }));
 
-        cartItemStyles.push(await createCartItemStyle({
+        cartItemStyleSizes.push(await createCartItemStyleSize({
             cartId: 4,
-            itemStyleId: 1,
-            quantity: 7,
-            size: "small"
+            itemStyleSizeId: 6,
+            quantity: 2
         }));
 
-        console.log(cartItemStyles);
-        console.log("Finished creating initail cart_item_styles!");
+        console.log(cartItemStyleSizes);
+        console.log("Finished creating initail cart_item_style_sizes!");
     } catch (error) {
-        console.log("Error creating initial cart_item_styles");
+        console.log("Error creating initial cart_item_style_sizes");
         console.error(error);
     };
 };
@@ -456,7 +448,7 @@ const seedDB = async () => {
         await createInitialSizes();
         await createInitialItemStyleSizes();
         await createInitialCarts();
-        // await createInitialCartItemStyles();
+        await createInitialCartItemStyleSizes();
         console.log("Finished seeding database!");
     } catch (error) {
         console.log("Error seeding databse!");

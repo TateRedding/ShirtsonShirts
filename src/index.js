@@ -110,7 +110,7 @@ const App = () => {
                         user={user}
                     />}
                 />
-                <Route path="/products/:itemname" element={
+                <Route path="/products/:itemName" element={
                     <ItemDetails
                         userToken={userToken}
                         user={user}
@@ -132,7 +132,7 @@ const App = () => {
                         getCategories={getCategories}
                         user={user} />}
                 />
-                <Route path="/previousorders" element={
+                <Route path="/previous_orders" element={
                     <Orders
                         userToken={userToken}
                         user={user}
