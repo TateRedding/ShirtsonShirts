@@ -18,7 +18,6 @@ const Orders = ({ userToken, user }) => {
                     }
                 );
                 if (response.data.success) setOrders(response.data.carts);
-                console.log(response.data);
             };
         } catch (error) {
             console.error(error);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -7,18 +7,20 @@ const PreviousOrderCard = ({ cartItem, userToken, purchaseTime }) => {
 
     const orderAgain = async () => {
         try {
-            if (item) {
-                await axios.post("/api/cartItems", {
-                    itemId: cartItem.itemId,
-                    quantity: cartItem.quantity
+            if (cartItem) {
+                let quantity = cartItem.quantity;
+                if (cartItem.stock < cartItem.quantity) quantity = cartItem.stock;
+                const response = await axios.post("/api/cartItemStyleSizes", {
+                    itemStyleSizeId: cartItem.itemStyleSizeId,
+                    quantity
                 }, {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${userToken}`
                     }
-                })
+                });
+                if (response.data.success) navigate("/cart");
             };
-            navigate("/cart");
         } catch (error) {
             console.error(error);
         };
@@ -53,6 +55,14 @@ const PreviousOrderCard = ({ cartItem, userToken, purchaseTime }) => {
                 <div className="flex-grow-2 d-flex flex-column align-items-center">
                     <p className="card-text">Purchased on: {new Date(Date.parse(purchaseTime)).toString().split(" ").slice(0, 5).join(" ")}</p>
                     <button className="btn btn-success" onClick={orderAgain}>Order Again</button>
+                    {
+                        cartItem.stock && cartItem.stock < cartItem.quantity ?
+                            <p className="card-text text-danger">
+                                Only {cartItem.stock} left in stock!
+                            </p>
+                            :
+                            null
+                    }
                 </div>
             </div>
         </div>

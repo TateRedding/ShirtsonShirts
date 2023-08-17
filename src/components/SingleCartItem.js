@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const SingleCartItem = ({ cartItem, userToken, getCart, calcTotal }) => {
     const [quantity, setQuantity] = useState(cartItem.quantity);
+    const [showStockWarning, setShowStockWarning] = useState(false);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (cartItem) {
+            (quantity > cartItem.stock) ? setShowStockWarning(true) : setShowStockWarning(false);
+        };
+    }, [quantity]);
 
     const updateQuantity = async (event) => {
         event.preventDefault();
@@ -72,16 +79,30 @@ const SingleCartItem = ({ cartItem, userToken, getCart, calcTotal }) => {
                                     <input
                                         type="number"
                                         className="form-control quantity-selection"
+                                        aria-describedby="stock-warning"
                                         id="cart-item-quantity"
                                         value={quantity}
                                         onChange={(event) => setQuantity(event.target.value)}>
                                     </input>
                                 </div>
+                                {
+                                    showStockWarning ?
+                                        <div className="form-text col-auto text-danger" id="stock-warning">
+                                            Only {cartItem.stock} left in stock!
+                                        </div>
+                                        :
+                                        null
+                                }
                             </div>
                             <button
                                 type="submit"
                                 className="btn btn-primary"
-                                disabled={(!quantity || Number(quantity) === cartItem.quantity) ? true : false}
+                                disabled={
+                                    (!quantity || Number(quantity) === cartItem.quantity || quantity > cartItem.stock) ?
+                                        true
+                                        :
+                                        false
+                                }
                             >
                                 Update Quantity
                             </button>

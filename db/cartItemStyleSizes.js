@@ -43,8 +43,8 @@ const getCartItemStyleSizeByCartIdAndItemStyleSizeId = async (cartId, itemStyleS
 const getCartItemStyleSizesByCartId = async (cartId) => {
     try {
         const { rows: cartItemStyles } = await client.query(`
-            SELECT ciss.id AS "cartItemStyleSizeId",
-                ciss."cartId", ciss.quantity,
+            SELECT ciss.id AS "cartItemStyleSizeId", ciss."cartId", ciss."itemStyleSizeId", ciss.quantity,
+                iss.stock,
                 items.name AS item, items.price,
                 sizes.symbol AS size,
                 styles.name AS style,
