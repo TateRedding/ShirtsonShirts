@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const PreviousOrderCard = ({ cartItem, userToken, purchaseTime }) => {
+    const [showItemInCartWarning, setShowItemInCartWarning] = useState(false);
+
     const navigate = useNavigate();
 
     const orderAgain = async () => {
@@ -19,7 +21,11 @@ const PreviousOrderCard = ({ cartItem, userToken, purchaseTime }) => {
                         "Authorization": `Bearer ${userToken}`
                     }
                 });
-                if (response.data.success) navigate("/cart");
+                if (response.data.success) {
+                    navigate("/cart");
+                } else if (response.data.error === "ItemAlreadyInCart") {
+                    setShowItemInCartWarning(true);
+                };
             };
         } catch (error) {
             console.error(error);
@@ -59,6 +65,14 @@ const PreviousOrderCard = ({ cartItem, userToken, purchaseTime }) => {
                         cartItem.stock && cartItem.stock < cartItem.quantity ?
                             <p className="card-text text-danger">
                                 Only {cartItem.stock} left in stock!
+                            </p>
+                            :
+                            null
+                    }
+                    {
+                        showItemInCartWarning ?
+                            <p className="card-text">
+                                Don't sweat! This shirt is already in your cart!
                             </p>
                             :
                             null
