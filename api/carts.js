@@ -1,6 +1,8 @@
 const express = require("express");
 const { requireUser } = require("./utils");
 const { getCurrentCart, getPreviousCarts, purchaseCart } = require("../db/carts");
+const { getCartItemStyleSizesByCartId } = require("../db/cartItemStyleSizes");
+const { updateItemStyleSizeStock } = require("../db/itemStyleSizes");
 const router = express.Router();
 
 // GET /api/carts/:userId/current
@@ -52,10 +54,19 @@ router.patch("/:id", requireUser, async (req, res) => {
     const { id } = req.params;
     try {
         const cart = await purchaseCart(id);
+        const stockUpdateErrors = [];
         if (cart) {
+            const cartItemStyleSizes = await getCartItemStyleSizesByCartId(id);
+            if (cartItemStyleSizes) {
+            for (let i = 0; i < cartItemStyleSizes.length; i++) {
+                const updatedItemStyleSize = await updateItemStyleSizeStock(cartItemStyleSizes[i].itemStyleSizeId, cartItemStyleSizes[i].quantity);
+                if (!updatedItemStyleSize) stockUpdateErrors.push(cartItemStyleSizes[i]);
+            };
+        };
             res.send({
                 success: true,
                 cart,
+                stockUpdateErrors
             });
         } else {
             res.send({ success: false });

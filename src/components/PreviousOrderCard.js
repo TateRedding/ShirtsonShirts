@@ -60,7 +60,12 @@ const PreviousOrderCard = ({ cartItem, userToken, purchaseTime }) => {
                 </div>
                 <div className="flex-grow-2 d-flex flex-column align-items-center">
                     <p className="card-text">Purchased on: {new Date(Date.parse(purchaseTime)).toString().split(" ").slice(0, 5).join(" ")}</p>
-                    <button className="btn btn-success" onClick={orderAgain}>Order Again</button>
+                    {
+                        cartItem.stock ?
+                            <button className="btn btn-success" onClick={orderAgain}>Order Again</button>
+                            :
+                            <button className="btn btn-success" disabled>Out of Stock</button>
+                    }
                     {
                         cartItem.stock && cartItem.stock < cartItem.quantity ?
                             <p className="card-text text-danger">

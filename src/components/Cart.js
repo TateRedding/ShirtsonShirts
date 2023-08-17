@@ -40,22 +40,21 @@ const Cart = ({ userToken, user }) => {
 
     const checkout = async () => {
         try {
-            const _cart = await axios.patch(
-                `/api/carts/${cart.id}`,
-                {},
+            const response = await axios.patch(
+                `/api/carts/${cart.id}`, {},
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${userToken}`,
+                        "Authorization": `Bearer ${userToken}`,
                     },
                 }
             );
-            if (_cart.data.success) {
+            if (response.data.success) {
                 getCart();
-            }
+            };
         } catch (error) {
             console.error(error);
-        }
+        };
     };
 
     useEffect(() => {

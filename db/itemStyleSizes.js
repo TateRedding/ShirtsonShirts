@@ -28,7 +28,21 @@ const getItemStyleSizesByItemStyleId = async (itemStyleId) => {
     };
 };
 
+const updateItemStyleSizeStock = async (id, purchaseAmount) => {
+    try {
+        const { rows: updatedItemStyleSize } = await client.query(`
+            UPDATE item_style_sizes
+            SET stock=stock-${purchaseAmount}
+            WHERE id=${id}
+        `);
+        return updatedItemStyleSize;
+    } catch (error) {
+        console.error(error);
+    };
+};
+
 module.exports = {
     createItemStyleSize,
-    getItemStyleSizesByItemStyleId
+    getItemStyleSizesByItemStyleId,
+    updateItemStyleSizeStock
 };
