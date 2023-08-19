@@ -25,15 +25,16 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
     const styleQuery = query.get("style");
     const sizeQuery = query.get("size");
 
-    useEffect(() => {
-        const getItem = async () => {
-            try {
-                const response = await axios.get(`/api/items/name/${itemName}`);
-                setItem(response.data.item);
-            } catch (err) {
-                console.error(err);
-            };
+    const getItem = async () => {
+        try {
+            const response = await axios.get(`/api/items/name/${itemName}`);
+            setItem(response.data.item);
+        } catch (err) {
+            console.error(err);
         };
+    };
+
+    useEffect(() => {
         getItem();
     }, []);
 
@@ -70,8 +71,7 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
             setShowQuantityError(true);
         } else {
             try {
-                const response = await axios.post(
-                    `/api/cartItemStyleSizes/`,
+                const response = await axios.post("/api/cartItemStyleSizes/",
                     {
                         itemStyleSizeId: selectedItemStyleSize.id,
                         quantity
@@ -94,9 +94,49 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
         };
     };
 
+    const deactivateItem = async () => {
+        try {
+            const response = await axios.delete(`api/items/${item.id}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${userToken}`,
+                    },
+                }
+            );
+            if (response.data.success) {
+                getItem();
+            };
+        } catch (error) {
+            console.error(error);
+        };
+    };
+
+    const reactivateItem = async () => {
+        try {
+            const response = await axios.patch(`api/items/${item.id}`,
+                {
+                    isActive: true
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${userToken}`,
+                    },
+                }
+            );
+            if (response.data.success) {
+                getItem();
+            };
+        } catch (error) {
+            console.error(error);
+        };
+    };
+
     return (
         <div className="item-detail-container">
-            <h1>{item.name}</h1>
+
+            <h1>{item.name}{!item.isActive ? " (INACTIVE)" : null}</h1>
             <div className="item-detail-child">
                 <div className="item-detail-image-container">
                     <img className="item-detail-image" src={selectedItemStyle.imageURL} alt={`${item.name} in style ${selectedItemStyle.name}`} />
@@ -108,81 +148,94 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                 </div>
                 {
                     (user.isAdmin) ?
-                        <Link to={`/products/edit/${item.id}`}><button className="btn btn-primary">Edit Item</button></Link>
+                        <div>
+                            <Link to={`/products/edit/${item.id}`}><button className="btn btn-primary">Edit Item</button></Link>
+                            {
+                                item.isActive ?
+                                    <button className="btn btn-danger" onClick={deactivateItem}>Deactivate Item</button>
+                                    :
+                                    <button className="btn btn-success" onClick={reactivateItem}>Reactivate Item</button>
+                            }
+                        </div>
                         :
                         null
                 }
-                <form className="item-selection-form" onSubmit={addToCart}>
-                    {
-                        item.styles && item.styles.length > 1 ?
-                            <select
-                                className="form-select"
-                                aria-label="style-select"
-                                value={selectedItemStyle.id}
-                                required
-                                onChange={(event) => {
-                                    setSelectedSizeId("");
-                                    setSelectedItemStyle(item.styles.find(style => style.id.toString() === event.target.value))
-                                }}>
-                                {
-                                    item.styles.map((style) => {
-                                        return <option value={style.id} key={style.id}>{style.name}</option>
-                                    })
-                                }
-                            </select>
-                            :
-                            null
-                    }
-                    <SizeSelect
-                        itemStyle={selectedItemStyle}
-                        sizes={sizes}
-                        selectedSizeId={selectedSizeId}
-                        setSelectedSizeId={setSelectedSizeId}
-                    />
-                    {
-                        isLoggedIn ?
-                            <>
-                                <div className="form-floating mb-3" id="quantity-input">
-                                    <input
-                                        type="number"
-                                        className="form-control"
-                                        id="floatingInput"
-                                        onChange={(event) => setQuantity(event.target.value)}
+                {
+                    item.isActive ?
+                        <form className="item-selection-form" onSubmit={addToCart}>
+                            {
+                                item.styles && item.styles.length > 1 ?
+                                    <select
+                                        className="form-select"
+                                        aria-label="style-select"
+                                        value={selectedItemStyle.id}
                                         required
-                                        placeholder="0"
-                                        name="quantity"
-                                        value={quantity}
-                                    />
-                                    <label htmlFor="floatingInput">Quantity</label>
-                                    {
-                                        showQuantityError ?
-                                            <div id="quantity-error-message" className="form-text">
-                                                Sorry, there are only {selectedItemStyleSize.stock} left in stock.
-                                            </div>
-                                            :
-                                            null
-                                    }
-                                </div>
-                                <button
-                                    type="submit"
-                                    className="btn btn-primary"
-                                >
-                                    Add To Cart
-                                </button>
-                            </>
-                            :
-                            null
-                    }
-                    {
-                        showItemInCartError ?
-                            <>
-                                <p>That shirt is already in your cart!</p>
-                                <p>Edit the quantity from your cart if you wish to buy more</p>
-                            </>
-                            :
-                            null
-                    }
-                </form>
+                                        onChange={(event) => {
+                                            setSelectedSizeId("");
+                                            setSelectedItemStyle(item.styles.find(style => style.id.toString() === event.target.value))
+                                        }}>
+                                        {
+                                            item.styles.map((style) => {
+                                                return <option value={style.id} key={style.id}>{style.name}</option>
+                                            })
+                                        }
+                                    </select>
+                                    :
+                                    null
+                            }
+                            <SizeSelect
+                                itemStyle={selectedItemStyle}
+                                sizes={sizes}
+                                selectedSizeId={selectedSizeId}
+                                setSelectedSizeId={setSelectedSizeId}
+                            />
+                            {
+                                isLoggedIn ?
+                                    <>
+                                        <div className="form-floating mb-3" id="quantity-input">
+                                            <input
+                                                type="number"
+                                                className="form-control"
+                                                id="floatingInput"
+                                                onChange={(event) => setQuantity(event.target.value)}
+                                                required
+                                                placeholder="0"
+                                                name="quantity"
+                                                value={quantity}
+                                            />
+                                            <label htmlFor="floatingInput">Quantity</label>
+                                            {
+                                                showQuantityError ?
+                                                    <div id="quantity-error-message" className="form-text">
+                                                        Sorry, there are only {selectedItemStyleSize.stock} left in stock.
+                                                    </div>
+                                                    :
+                                                    null
+                                            }
+                                        </div>
+                                        <button
+                                            type="submit"
+                                            className="btn btn-primary"
+                                        >
+                                            Add To Cart
+                                        </button>
+                                    </>
+                                    :
+                                    null
+                            }
+                            {
+                                showItemInCartError ?
+                                    <>
+                                        <p>That shirt is already in your cart!</p>
+                                        <p>Edit the quantity from your cart if you wish to buy more</p>
+                                    </>
+                                    :
+                                    null
+                            }
+                        </form>
+                        :
+                        null
+                }
             </div>
         </div>
     );

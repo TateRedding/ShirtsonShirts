@@ -186,7 +186,7 @@ router.delete("/:id", requireUser, requireAdmin, async (req, res) => {
                     if (!cartItemStyleSizes[k].isPurchased) destroyCartItemStyleSize(cartItemStyleSizes[k].id);
                 };
             };
-            await deactivateItemStyle(itemStyles[i]);
+            await deactivateItemStyle(itemStyles[i].id);
         };
 
         const deactivatedItem = await deactivateItem(id);
