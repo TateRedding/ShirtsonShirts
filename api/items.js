@@ -8,11 +8,13 @@ const { getItemStylesByItemId, deactivateItemStyle, createItemStyle } = require(
 const {
     createItem,
     getAllItems,
+    getAllActiveItems,
     getItemById,
     getItemByName,
     getItemsByCategoryId,
+    getActiveItemsByCategoryId,
     updateItem,
-    deactivateItem,
+    deactivateItem
 } = require("../db/items");
 const { requireUser, requireAdmin } = require("./utils");
 
@@ -87,7 +89,12 @@ router.post("/", requireUser, requireAdmin, async (req, res) => {
 // GET /api/items
 router.get("/", async (req, res) => {
     try {
-        const items = await getAllItems();
+        let items;
+        if (req.user && req.user.isAdmin) {
+            items = await getAllItems();
+        } else {
+            items = await getAllActiveItems();
+        };
         if (items) {
             res.send({
                 success: true,
@@ -105,7 +112,12 @@ router.get("/", async (req, res) => {
 router.get("/category/:categoryId", async (req, res) => {
     const { categoryId } = req.params;
     try {
-        const items = await getItemsByCategoryId(categoryId);
+        let items;
+        if (req.user && req.user.isAdmin) {
+            items = await getItemsByCategoryId(categoryId);
+        } else {
+            items = await getActiveItemsByCategoryId(categoryId);
+        };
         if (items) {
             res.send({
                 success: true,

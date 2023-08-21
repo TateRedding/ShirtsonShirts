@@ -17,14 +17,13 @@ apiRouter.use(async (req, res, next) => {
 
         try {
             const { id } = jwt.verify(token, JWT_SECRET);
-
             if (id) {
                 req.user = await getUserById(id);
                 next();
-            }
-        } catch (err) {
-            next(err);
-        }
+            };
+        } catch (error) {
+            next(error);
+        };
     } else {
         next({
             name: "AuthorizationHeaderError",

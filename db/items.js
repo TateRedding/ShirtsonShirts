@@ -34,6 +34,26 @@ const getAllItems = async () => {
     };
 };
 
+const getAllActiveItems = async () => {
+    try {
+        const { rows: items } = await client.query(`
+            SELECT items.*, item_styles."imageURL"
+            FROM items
+            LEFT JOIN item_styles
+                ON item_styles."itemId"=items.id
+                AND item_styles."styleId"=(
+                    SELECT MIN(item_styles."styleId")
+                    FROM item_styles
+                    WHERE item_styles."itemId"=items.id
+                )
+            WHERE items."isActive"=true;
+        `);
+        return items;
+    } catch (error) {
+        console.error(error);
+    };
+};
+
 const getItemById = async (id) => {
     try {
         const { rows: [item] } = await client.query(`
@@ -66,8 +86,29 @@ const getItemsByCategoryId = async (categoryId) => {
                     SELECT MIN(item_styles."styleId")
                     FROM item_styles
                     WHERE item_styles."itemId"=items.id
-                );
+                )
             WHERE "categoryId"=${categoryId};
+        `);
+        return items;
+    } catch (error) {
+        console.error(error);
+    };
+};
+
+const getActiveItemsByCategoryId = async (categoryId) => {
+    try {
+        const { rows: items } = await client.query(`
+            SELECT *
+            FROM items
+            LEFT JOIN item_styles
+                ON item_styles."itemId"=items.id
+                AND item_styles."styleId"=(
+                    SELECT MIN(item_styles."styleId")
+                    FROM item_styles
+                    WHERE item_styles."itemId"=items.id
+                )
+            WHERE "categoryId"=${categoryId}
+            AND items."isActive"=true;
         `);
         return items;
     } catch (error) {
@@ -131,8 +172,10 @@ const deactivateItem = async (id) => {
 module.exports = {
     createItem,
     getAllItems,
+    getAllActiveItems,
     getItemById,
     getItemsByCategoryId,
+    getActiveItemsByCategoryId,
     getItemByName,
     updateItem,
     deactivateItem

@@ -41,10 +41,15 @@ const App = () => {
 
     const getItems = async () => {
         try {
-            const response = await axios.get("/api/items");
+            const response = await axios.get("/api/items", {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${userToken}`
+                }
+            });
             if (response.data.success) setItems(response.data.items);
-        } catch (err) {
-            console.error(err)
+        } catch (error) {
+            console.error(error);
         };
     };
 
@@ -74,7 +79,7 @@ const App = () => {
 
     useEffect(() => {
         getUserData();
-    }, [userToken])
+    }, [userToken]);
 
     return (
         <>

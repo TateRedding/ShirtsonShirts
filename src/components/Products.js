@@ -23,6 +23,7 @@ const Products = ({ items, setItems, getItems, categories, user, userToken }) =>
                         getItems={getItems}
                         categories={categories}
                         setSearchTerm={setSearchTerm}
+                        userToken={userToken}
                     />
                     <Search
                         searchTerm={searchTerm}
