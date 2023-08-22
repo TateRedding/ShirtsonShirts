@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { requireUser, requireAdmin } = require("./utils");
 const { getItemStyleSizesByItemStyleId } = require("../db/itemStyleSizes");
-const { createItemStyle, deactivateItemStyle } = require("../db/itemStyles");
+const { createItemStyle, deactivateItemStyle, updateItemStyle } = require("../db/itemStyles");
 const { getCartItemStyleSizesByItemStyleSizeId, destroyCartItemStyleSize } = require("../db/cartItemStyleSizes");
 
 // POST /api/itemStyles
@@ -16,6 +16,24 @@ router.post("/", requireUser, requireAdmin, async (req, res) => {
             });
         } else {
             res.send({ success: false });
+        };
+    } catch (error) {
+        console.error(error);
+    };
+});
+
+// PATCH /api/itemStyles/:id
+router.patch("/:id", requireUser, requireAdmin, async (req, res) => {
+    const { id } = req.params;
+    try {
+        const updatedItemStyle = await updateItemStyle(id, req.body);
+        if (updatedItemStyle) {
+            res.send({
+                success: true,
+                updatedItemStyle
+            });
+        } else {
+            res.send({ success: false })
         };
     } catch (error) {
         console.error(error);

@@ -28,6 +28,24 @@ const getItemStylesByItemId = async (itemId) => {
     };
 };
 
+const updateItemStyle = async (id, fields) => {
+    const setString = Object.keys(fields).map((key, index) => `"${key}"=$${index + 1}`).join(", ");
+    if (!setString.length) {
+        return;
+    };
+    try {
+        const { rows: [itemStyle] } = await client.query(`
+            UPDATE item_styles
+            SET ${setString}
+            WHERE id=${id}
+            RETURNING *;
+        `, Object.values(fields));
+        return itemStyle;
+    } catch (error) {
+        console.error(error);
+    };
+}
+
 const deactivateItemStyle = async (id) => {
     try {
         const { rows: [itemStyle] } = await client.query(`
@@ -45,5 +63,6 @@ const deactivateItemStyle = async (id) => {
 module.exports = {
     createItemStyle,
     getItemStylesByItemId,
+    updateItemStyle,
     deactivateItemStyle
 };

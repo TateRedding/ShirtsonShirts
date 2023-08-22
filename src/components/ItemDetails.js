@@ -100,7 +100,7 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${userToken}`,
+                        "Authorization": `Bearer ${userToken}`,
                     },
                 }
             );
@@ -121,7 +121,47 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${userToken}`,
+                        "Authorization": `Bearer ${userToken}`,
+                    },
+                }
+            );
+            if (response.data.success) {
+                getItem();
+            };
+        } catch (error) {
+            console.error(error);
+        };
+    };
+
+    const deactivateItemStyle = async () => {
+        console.log(selectedItemStyle);
+        try {
+            const response = await axios.delete(`api/itemStyles/${selectedItemStyle.id}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${userToken}`,
+                    },
+                }
+            );
+            if (response.data.success) {
+                getItem();
+            };
+        } catch (error) {
+            console.error(error);
+        };
+    };
+
+    const reactivateItemStyle = async () => {
+        try {
+            const response = await axios.patch(`api/itemStyles/${selectedItemStyle.id}`,
+                {
+                    isActive: true
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${userToken}`,
                     },
                 }
             );
@@ -152,7 +192,15 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                             <Link to={`/products/edit/${item.id}`}><button className="btn btn-primary">Edit Item</button></Link>
                             {
                                 item.isActive ?
-                                    <button className="btn btn-danger" onClick={deactivateItem}>Deactivate Item</button>
+                                    <>
+                                        <button className="btn btn-danger" onClick={deactivateItem}>Deactivate Item</button>
+                                        {
+                                            selectedItemStyle.isActive ?
+                                                <button className="btn btn-danger" onClick={deactivateItemStyle}>Deactivate Style</button>
+                                                :
+                                                <button className="btn btn-success" onClick={reactivateItemStyle}>Reactivate Style</button>
+                                        }
+                                    </>
                                     :
                                     <button className="btn btn-success" onClick={reactivateItem}>Reactivate Item</button>
                             }
@@ -176,7 +224,10 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                                         }}>
                                         {
                                             item.styles.map((style) => {
-                                                return <option value={style.id} key={style.id}>{style.name}</option>
+                                                return !style.isActive && user.isAdmin ?
+                                                    <option value={style.id} key={style.id}>{style.name} (INACTIVE)</option>
+                                                    :
+                                                    <option value={style.id} key={style.id} > {style.name}</option>
                                             })
                                         }
                                     </select>
@@ -237,7 +288,7 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                         null
                 }
             </div>
-        </div>
+        </div >
     );
 };
 
