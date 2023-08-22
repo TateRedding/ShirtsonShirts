@@ -4,7 +4,7 @@ const { getStyleByName, createStyle } = require("../db/styles");
 const { getSizeByName } = require("../db/sizes");
 const { getItemStyleSizesByItemStyleId, createItemStyleSize } = require("../db/itemStyleSizes");
 const { getCartItemStyleSizesByItemStyleSizeId, destroyCartItemStyleSize } = require("../db/cartItemStyleSizes");
-const { getItemStylesByItemId, deactivateItemStyle, createItemStyle } = require("../db/itemStyles");
+const { getItemStylesByItemId, createItemStyle } = require("../db/itemStyles");
 const {
     createItem,
     getAllItems,
@@ -198,7 +198,6 @@ router.delete("/:id", requireUser, requireAdmin, async (req, res) => {
                     if (!cartItemStyleSizes[k].isPurchased) destroyCartItemStyleSize(cartItemStyleSizes[k].id);
                 };
             };
-            await deactivateItemStyle(itemStyles[i].id);
         };
 
         const deactivatedItem = await deactivateItem(id);

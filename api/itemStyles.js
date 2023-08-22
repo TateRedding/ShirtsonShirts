@@ -1,9 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { requireUser, requireAdmin } = require("./utils");
-const { getItemStyleSizesByItemStyleId } = require("../db/itemStyleSizes");
-const { createItemStyle, deactivateItemStyle, updateItemStyle } = require("../db/itemStyles");
-const { getCartItemStyleSizesByItemStyleSizeId, destroyCartItemStyleSize } = require("../db/cartItemStyleSizes");
+const { createItemStyle, updateItemStyle } = require("../db/itemStyles");
 
 // POST /api/itemStyles
 router.post("/", requireUser, requireAdmin, async (req, res) => {
@@ -34,32 +32,6 @@ router.patch("/:id", requireUser, requireAdmin, async (req, res) => {
             });
         } else {
             res.send({ success: false })
-        };
-    } catch (error) {
-        console.error(error);
-    };
-});
-
-// DELETE /api/itemStyles/:id
-router.delete("/:id", requireUser, requireAdmin, async (req, res) => {
-    const { id } = req.params;
-    try {
-        const itemStyleSizes = await getItemStyleSizesByItemStyleId(id);
-        for (let i = 0; i < itemStyleSizes.length; i++) {
-            const cartItemStyleSizes = await getCartItemStyleSizesByItemStyleSizeId(itemStyleSizes[i].id);
-            for (let j = 0; j < cartItemStyleSizes.length; j++) {
-                if (!cartItemStyleSizes[j].isPurchased) destroyCartItemStyleSize(cartItemStyleSizes[j].id);
-            };
-        };
-
-        const deactivatedItemStyle = await deactivateItemStyle(id);
-        if (deactivatedItemStyle) {
-            res.send({
-                success: true,
-                deactivatedItemStyle
-            });
-        } else {
-            res.send({ success: false });
         };
     } catch (error) {
         console.error(error);

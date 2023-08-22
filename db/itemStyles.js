@@ -44,25 +44,10 @@ const updateItemStyle = async (id, fields) => {
     } catch (error) {
         console.error(error);
     };
-}
-
-const deactivateItemStyle = async (id) => {
-    try {
-        const { rows: [itemStyle] } = await client.query(`
-            UPDATE item_styles
-            SET "isActive"=false
-            WHERE id=${id}
-            RETURNING *;
-        `);
-        return itemStyle;
-    } catch (error) {
-        console.error(error);
-    };
 };
 
 module.exports = {
     createItemStyle,
     getItemStylesByItemId,
-    updateItemStyle,
-    deactivateItemStyle
+    updateItemStyle
 };

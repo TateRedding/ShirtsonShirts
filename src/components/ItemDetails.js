@@ -133,50 +133,16 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
         };
     };
 
-    const deactivateItemStyle = async () => {
-        console.log(selectedItemStyle);
-        try {
-            const response = await axios.delete(`api/itemStyles/${selectedItemStyle.id}`,
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${userToken}`,
-                    },
-                }
-            );
-            if (response.data.success) {
-                getItem();
-            };
-        } catch (error) {
-            console.error(error);
-        };
-    };
-
-    const reactivateItemStyle = async () => {
-        try {
-            const response = await axios.patch(`api/itemStyles/${selectedItemStyle.id}`,
-                {
-                    isActive: true
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${userToken}`,
-                    },
-                }
-            );
-            if (response.data.success) {
-                getItem();
-            };
-        } catch (error) {
-            console.error(error);
-        };
-    };
-
     return (
         <div className="item-detail-container">
 
-            <h1>{item.name}{!item.isActive ? " (INACTIVE)" : null}</h1>
+            <h1>{item.name}</h1>
+            {
+                !item.isActive ?
+                    <h2 className="text-danger">This shirt is no longer for sale.</h2>
+                    :
+                    null
+            }
             <div className="item-detail-child">
                 <div className="item-detail-image-container">
                     <img className="item-detail-image" src={selectedItemStyle.imageURL} alt={`${item.name} in style ${selectedItemStyle.name}`} />
@@ -192,15 +158,7 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                             <Link to={`/products/edit/${item.id}`}><button className="btn btn-primary">Edit Item</button></Link>
                             {
                                 item.isActive ?
-                                    <>
-                                        <button className="btn btn-danger" onClick={deactivateItem}>Deactivate Item</button>
-                                        {
-                                            selectedItemStyle.isActive ?
-                                                <button className="btn btn-danger" onClick={deactivateItemStyle}>Deactivate Style</button>
-                                                :
-                                                <button className="btn btn-success" onClick={reactivateItemStyle}>Reactivate Style</button>
-                                        }
-                                    </>
+                                    <button className="btn btn-danger" onClick={deactivateItem}>Deactivate Item</button>
                                     :
                                     <button className="btn btn-success" onClick={reactivateItem}>Reactivate Item</button>
                             }
@@ -223,12 +181,7 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                                             setSelectedItemStyle(item.styles.find(style => style.id.toString() === event.target.value))
                                         }}>
                                         {
-                                            item.styles.map((style) => {
-                                                return !style.isActive && user.isAdmin ?
-                                                    <option value={style.id} key={style.id}>{style.name} (INACTIVE)</option>
-                                                    :
-                                                    <option value={style.id} key={style.id} > {style.name}</option>
-                                            })
+                                            item.styles.map((style) => <option value={style.id} key={style.id}>{style.name}</option>)
                                         }
                                     </select>
                                     :
