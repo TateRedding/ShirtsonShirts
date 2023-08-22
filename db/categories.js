@@ -30,7 +30,7 @@ const getCategoryByName = async (name) => {
         const { rows: [category] } = await client.query(`
             SELECT *
             FROM categories
-            WHERE name=${name};
+            WHERE name='${name}';
         `);
         return category;
     } catch (error) {

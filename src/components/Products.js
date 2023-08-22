@@ -34,14 +34,10 @@ const Products = ({ items, setItems, getItems, categories, user, userToken }) =>
                 </div>
                 {
                     (user.isAdmin) ?
-                        <>
-                            <div className="product-page-tool">
-                                <NewCategoryForm userToken={userToken} />
-                            </div>
-                            <div className="product-page-tool">
-                                <Link to="/products/new"><button className="btn btn-primary">Add new Product</button></Link>
-                            </div>
-                        </> :
+                        <div className="product-page-tool">
+                            <Link to="/products/new"><button className="btn btn-primary">Add new Product</button></Link>
+                        </div>
+                        :
                         null
                 }
             </div>

@@ -61,7 +61,8 @@ const Login = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
                                 required
                                 onChange={(event) => setPassword(event.target.value)}
                                 name="loginPassword"
-                                placeholder="Password"></input>
+                                placeholder="Password"
+                            />
 
                             <label htmlFor="login-password">Password</label>
                         </div>

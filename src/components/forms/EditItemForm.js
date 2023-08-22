@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const EditItemForm = ({ userToken, categories, getCategories, user }) => {
     const [item, setItem] = useState({});
-    const [name, setName] = useState('');
-    const [size, setSize] = useState('');
-    const [categoryId, setCategoryId] = useState('');
-    const [description, setDescription] = useState('');
-    const [imageURL, setImageURL] = useState('');
+    const [name, setName] = useState("");
+    const [size, setSize] = useState("");
+    const [categoryId, setCategoryId] = useState("");
+    const [description, setDescription] = useState("");
+    const [imageURL, setImageURL] = useState("");
     const [price, setPrice] = useState(0);
     const [buttonDisabled, setButtonDisabled] = useState(true);
 
@@ -86,8 +86,8 @@ const EditItemForm = ({ userToken, categories, getCategories, user }) => {
 
         const updatedItem = await axios.patch(`/api/items/${itemId}`, updatedItemData, {
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${userToken}`
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${userToken}`
             }
         });
 
@@ -101,37 +101,40 @@ const EditItemForm = ({ userToken, categories, getCategories, user }) => {
         <>
             {
                 (user.isAdmin) ?
-                    <div className='item-form-container'>
-                        <form onSubmit={updateItem} className='item-form' autoComplete='off'>
+                    <div className="item-form-container">
+                        <form onSubmit={updateItem} className="item-form" autoComplete="off">
                             <h1>Edit Product</h1>
-                            <div className='form-floating mb-3 item-field'>
+
+                            <div className="form-floating mb-3 item-field">
                                 <input
-                                    className='form-control'
-                                    id='item-name'
+                                    className="form-control"
+                                    id="item-name"
                                     value={name}
                                     required
-                                    placeholder='Item Name'
-                                    onChange={(event) => setName(event.target.value)}>
-                                </input>
-                                <label htmlFor='item-name'>Item Name *</label>
+                                    placeholder="Item Name"
+                                    onChange={(event) => setName(event.target.value)}
+                                />
+                                <label htmlFor="item-name">Item Name *</label>
                             </div>
-                            <div className='form-floating mb-3 item-field'>
+
+                            <div className="form-floating mb-3 item-field">
                                 <input
-                                    className='form-control'
-                                    id='item-size'
+                                    className="form-control"
+                                    id="item-size"
                                     value={size}
                                     maxLength={10}
                                     required
-                                    placeholder='Size'
-                                    onChange={(event) => setSize(event.target.value)}>
-                                </input>
-                                <label htmlFor='item-size'>Size *</label>
+                                    placeholder="Size"
+                                    onChange={(event) => setSize(event.target.value)}
+                                />
+                                <label htmlFor="item-size">Size *</label>
                             </div>
+
                             <select
-                                className='form-select mb-3'
+                                className="form-select mb-3"
                                 value={categoryId}
                                 onChange={(event) => setCategoryId(event.target.value)}>
-                                <option value={'0'}>Select Category</option>
+                                <option value={"0"}>Select Category</option>
                                 {
                                     categories.length ?
                                         categories.map((category, idx) => {
@@ -142,55 +145,58 @@ const EditItemForm = ({ userToken, categories, getCategories, user }) => {
                                         null
                                 }
                             </select>
-                            <div className='form-floating mb-3'>
+
+                            <div className="form-floating mb-3">
                                 <textarea
-                                    className='form-control'
-                                    id='item-description'
+                                    className="form-control"
+                                    id="item-description"
                                     value={description}
                                     rows={2}
                                     required
-                                    placeholder='Description'
+                                    placeholder="Description"
                                     style={{
-                                        height: 100 + 'px'
+                                        height: 100 + "px"
                                     }}
-                                    onChange={(event) => setDescription(event.target.value)}>
-                                </textarea>
-                                <label htmlFor='item-description'>Description *</label>
+                                    onChange={(event) => setDescription(event.target.value)}
+                                />
+                                <label htmlFor="item-description">Description *</label>
+                            </div>
 
-                            </div>
-                            <div className='form-floating mb-3 item-field'>
+                            <div className="form-floating mb-3 item-field">
                                 <input
-                                    className='form-control'
-                                    id='item-imageURL'
+                                    className="form-control"
+                                    id="item-imageURL"
                                     value={imageURL}
-                                    placeholder='Image URL'
-                                    onChange={(event) => setImageURL(event.target.value)}>
-                                </input>
-                                <label htmlFor='item-imageURL'>Image URL *</label>
+                                    placeholder="Image URL"
+                                    onChange={(event) => setImageURL(event.target.value)}
+                                />
+                                <label htmlFor="item-imageURL">Image URL *</label>
                             </div>
-                            <div className='form-floating mb-3 item-field'>
+
+                            <div className="form-floating mb-3 item-field">
                                 <input
-                                    type='number'
-                                    className='form-control'
-                                    id='item-price'
+                                    type="number"
+                                    className="form-control"
+                                    id="item-price"
                                     value={price}
                                     required
-                                    placeholder='Price'
-                                    onChange={(event) => setPrice(event.target.value)}>
-                                </input>
-                                <label htmlFor='item-price'>Price *</label>
+                                    placeholder="Price"
+                                    onChange={(event) => setPrice(event.target.value)}
+                                />
+                                <label htmlFor="item-price">Price *</label>
                             </div>
+
                             <button
-                                type='submit'
-                                className='btn btn-primary item-form-button'
-                                disabled={
-                                    buttonDisabled ?
-                                        true :
-                                        false
-                                }>Update Item</button>
+                                type="submit"
+                                className="btn btn-primary item-form-button"
+                                disabled={buttonDisabled}
+                            >
+                                Update Item
+                            </button>
                         </form>
-                    </div> :
-                    <div className='admin-warning'>
+                    </div>
+                    :
+                    <div className="admin-warning">
                         <h2>Access Denied</h2>
                         <h3>You must be an administrator to view this page!</h3>
                     </div>

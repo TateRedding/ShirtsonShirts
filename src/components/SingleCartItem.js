@@ -82,8 +82,8 @@ const SingleCartItem = ({ cartItem, userToken, getCart, calcTotal }) => {
                                         aria-describedby="stock-warning"
                                         id="cart-item-quantity"
                                         value={quantity}
-                                        onChange={(event) => setQuantity(event.target.value)}>
-                                    </input>
+                                        onChange={(event) => setQuantity(event.target.value)}
+                                    />
                                 </div>
                                 {
                                     showStockWarning ?
