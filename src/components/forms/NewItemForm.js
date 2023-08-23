@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import SelectOrAddCategory from "../tools/SelectOrAddCategory";
 
 const NewItemForm = ({ userToken, categories, getCategories, user }) => {
     const [name, setName] = useState("");
@@ -8,17 +9,9 @@ const NewItemForm = ({ userToken, categories, getCategories, user }) => {
     const [price, setPrice] = useState(0);
     const [styles, setStyles] = useState([]);
 
-    const [addingNewCategory, setAddingNewCategory] = useState(false);
-    const [newCategory, setNewCategory] = useState("");
-    const [showCategoryWarning, setShowCategoryWarning] = useState(false);
-
     useEffect(() => {
         getCategories();
     }, []);
-
-    useEffect(() => {
-        setAddingNewCategory(categoryId === "new");
-    }, [categoryId]);
 
     const exampleData = {
         name: "New Item",
@@ -86,33 +79,6 @@ const NewItemForm = ({ userToken, categories, getCategories, user }) => {
         };
     };
 
-    const createNewCategory = async (event) => {
-        event.preventDefault();
-        setShowCategoryWarning(false);
-        if (!newCategory) return;
-
-        try {
-            const existingCategory = await axios.get(`/api/categories/${newCategory}`);
-            if (existingCategory.data.success) {
-                setShowCategoryWarning(true);
-            } else {
-                const response = await axios.post("/api/categories", { name: newCategory }, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${userToken}`
-                    }
-                });
-                if (response.data.success) {
-                    setCategoryId(response.data.category.id);
-                    setAddingNewCategory(false);
-                    getCategories();
-                };
-            };
-        } catch (error) {
-            console.error(error);
-        };
-    };
-
     return (
         <>
             {
@@ -133,51 +99,13 @@ const NewItemForm = ({ userToken, categories, getCategories, user }) => {
                                 <label htmlFor="item-name">Item Name *</label>
                             </div>
 
-                            <div className="d-flex align-items-between">
-                                <select
-                                    className="form-select mb-3"
-                                    onChange={(event) => setCategoryId(event.target.value)}
-                                    value={categoryId}
-                                >
-                                    <option value={""}>Select Category</option>
-                                    <option value={"new"}>Add New Category</option>
-                                    {
-                                        categories.length ?
-                                            categories.map((category, idx) => {
-                                                return (
-                                                    <option value={category.id} key={idx}>{category.name}</option>
-                                                )
-                                            }) :
-                                            null
-                                    }
-                                </select>
-                                {
-                                    addingNewCategory ?
-                                        <>
-                                            <input
-                                                className="form-control"
-                                                value={newCategory}
-                                                onChange={(event) => setNewCategory(event.target.value)}
-                                            />
-                                            {
-                                                showCategoryWarning ?
-                                                    <div className="form-text text-danger">
-                                                        That category already exists!
-                                                    </div>
-                                                    :
-                                                    null
-                                            }
-                                            <button
-                                                className="btn btn-primary"
-                                                onClick={createNewCategory}
-                                            >
-                                                Add
-                                            </button>
-                                        </>
-                                        :
-                                        null
-                                }
-                            </div>
+                            <SelectOrAddCategory
+                                categories={categories}
+                                getCategories={getCategories}
+                                categoryId={categoryId}
+                                setCategoryId={setCategoryId}
+                                userToken={userToken}
+                            />
 
                             <div className="form-floating mb-3">
                                 <textarea
