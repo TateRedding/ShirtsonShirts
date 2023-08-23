@@ -155,7 +155,7 @@ const EditItemForm = ({ userToken, categories, getCategories, user }) => {
                                     required
                                     placeholder="Description"
                                     style={{
-                                        height: 100 + "px"
+                                        height: "100px"
                                     }}
                                     onChange={(event) => setDescription(event.target.value)}
                                 />

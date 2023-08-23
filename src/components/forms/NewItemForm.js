@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import SelectOrAddCategory from "../tools/SelectOrAddCategory";
+import ItemStyleForm from "./ItemStyleForm";
 
 const NewItemForm = ({ userToken, categories, getCategories, user }) => {
     const [name, setName] = useState("");
     const [categoryId, setCategoryId] = useState(0);
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState(0);
-    const [styles, setStyles] = useState([]);
+    const [itemStyles, setItemStyles] = useState([]);
 
     useEffect(() => {
         getCategories();
     }, []);
+
+    console.log(itemStyles);
 
     const exampleData = {
         name: "New Item",
@@ -116,14 +119,14 @@ const NewItemForm = ({ userToken, categories, getCategories, user }) => {
                                     rows={5}
                                     placeholder="Description"
                                     style={{
-                                        height: 100 + "px"
+                                        height: "100px"
                                     }}
                                     onChange={(event) => setDescription(event.target.value)}
                                 />
                                 <label htmlFor="item-description">Description *</label>
                             </div>
 
-                            <div className="form-floating mb-3 item-field">
+                            <div className="form-floating mb-3">
                                 <input
                                     type="number"
                                     className="form-control"
@@ -135,9 +138,37 @@ const NewItemForm = ({ userToken, categories, getCategories, user }) => {
                                 <label htmlFor="item-price">Price *</label>
                             </div>
 
+                            <div className="d-flex">
+                                {
+                                    itemStyles.map((itemStyle, idx) => {
+                                        return <ItemStyleForm
+                                            itemStyle={itemStyle}
+                                            itemStyles={itemStyles}
+                                            setItemStyles={setItemStyles}
+                                            index={idx}
+                                            key={idx}
+                                        />
+                                    })
+                                }
+                            </div>
+
+                            <button
+                                type="button"
+                                className="btn btn-success"
+                                onClick={() => {
+                                    setItemStyles([...itemStyles, {
+                                        name: "",
+                                        imageURL: "./images/default_shirt.png",
+                                        sizes: []
+                                    }]);
+                                }}
+                            >
+                                Add Style
+                            </button>
+
                             <button
                                 type="submit"
-                                className="btn btn-primary item-form-button"
+                                className="btn btn-primary"
                                 disabled={
                                     name && description && price && categoryId && description ?
                                         false :

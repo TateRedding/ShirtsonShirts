@@ -10,22 +10,24 @@ body {
 
 /* ---LOGIN, REGISTER, NEW ITEM, EDIT ITEM CSS--- */
 
-#login-container,
-.item-form-container {
+#login-container {
     display: flex;
     justify-content: center;
 }
 
-#login,
-.item-form {
+.item-form-container {
+    width: 70vw;
+    margin: 0 auto;
+}
+
+#login {
     display: flex;
     justify-content: center;
     flex-direction: column;
     width: 500px;
 }
 
-.login-field,
-.item-field {
+.login-field {
     min-width: 350px;
     max-width: 500px;
     margin-bottom: 15px;
@@ -33,10 +35,6 @@ body {
 
 .login-buttons {
     width: 100px;
-}
-
-.item-form-button {
-    width: 150px;
 }
 
 .login-buttons:first-of-type {

@@ -3,7 +3,6 @@ import ProductCard from "./ProductCard";
 import Search from "./tools/Search";
 import SelectCategory from "./tools/SelectCategory";
 import { Link } from "react-router-dom";
-import NewCategoryForm from "./forms/NewCategoryForm"
 
 const Products = ({ items, setItems, getItems, categories, user, userToken }) => {
     const [filteredItems, setFilteredItems] = useState([]);
