@@ -3,7 +3,7 @@ import axios from "axios";
 import SelectOrAddCategory from "../tools/SelectOrAddCategory";
 import ItemStyleForm from "./ItemStyleForm";
 
-const NewItemForm = ({ userToken, categories, getCategories, user }) => {
+const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
     const [name, setName] = useState("");
     const [categoryId, setCategoryId] = useState(0);
     const [description, setDescription] = useState("");
@@ -146,6 +146,7 @@ const NewItemForm = ({ userToken, categories, getCategories, user }) => {
                                             itemStyles={itemStyles}
                                             setItemStyles={setItemStyles}
                                             index={idx}
+                                            sizes={sizes}
                                             key={idx}
                                         />
                                     })

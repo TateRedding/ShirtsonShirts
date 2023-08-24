@@ -128,14 +128,17 @@ const App = () => {
                         userToken={userToken}
                         categories={categories}
                         getCategories={getCategories}
-                        user={user} />}
+                        user={user}
+                        sizes={sizes}
+                    />}
                 />
                 <Route path="/products/edit/:itemId" element={
                     <EditItemForm
                         userToken={userToken}
                         categories={categories}
                         getCategories={getCategories}
-                        user={user} />}
+                        user={user}
+                    />}
                 />
                 <Route path="/previous_orders" element={
                     <Orders
