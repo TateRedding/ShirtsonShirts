@@ -16,8 +16,6 @@ const ItemStyleForm = ({ itemStyle, itemStyles, setItemStyles, index, sizes }) =
         setItemStyles([...temp]);
     }, [name, imageURL, itemStylesSizes]);
 
-    console.log(itemStyles);
-
     return (
         <div>
             <input

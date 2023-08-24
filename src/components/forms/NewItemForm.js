@@ -14,71 +14,28 @@ const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
         getCategories();
     }, []);
 
-    console.log(itemStyles);
-
-    const exampleData = {
-        name: "New Item",
-        categoryId: 3,
-        description: "It's a shirt",
-        price: 350,
-        styles: [
-            {
-                name: "yellow",
-                imageURL: "./images/yellow_shirt.png",
-                sizes: [
-                    {
-                        name: "medium",
-                        stock: 15
-                    },
-                    {
-                        name: "large",
-                        stock: 10
-                    }
-                ]
-            },
-            {
-                name: "green",
-                imageURL: "./images/green_shirt.png",
-                sizes: [
-                    {
-                        name: "small",
-                        stock: 12
-                    },
-                    {
-                        name: "extraLarge",
-                        stock: 9
-                    }
-                ]
-            }
-        ]
-    }
-
     const createNewItem = async (event) => {
         event.preventDefault();
 
-        const newItemData = {
+        const response = await axios.post("/api/items", {
             name,
-            size,
-            description,
             categoryId,
+            description,
             price,
-            imageURL
-        };
-
-        const newItem = await axios.post("/api/items", newItemData, {
+            styles: itemStyles
+        }, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${userToken}`
             }
         });
 
-        if (newItem) {
+        if (response.data.success) {
             setName("");
-            setSize("");
-            setDescription("");
             setCategoryId(0);
-            setImageURL("");
+            setDescription("");
             setPrice("");
+            setItemStyles([]);
         };
     };
 
@@ -171,7 +128,7 @@ const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
                                 type="submit"
                                 className="btn btn-primary"
                                 disabled={
-                                    name && description && price && categoryId && description ?
+                                    name && categoryId && description && price && itemStyles.length ?
                                         false :
                                         true
                                 }

@@ -18,8 +18,8 @@ const getStyleByName = async (name) => {
         const { rows: [style] } = await client.query(`
             SELECT *
             FROM styles
-            WHERE name=${name};
-        `, [name]);
+            WHERE name='${name}';
+        `);
         return style;
     } catch (error) {
         console.error(error);

@@ -20,8 +20,7 @@ const { requireUser, requireAdmin } = require("./utils");
 
 // POST/api/items
 router.post("/", requireUser, requireAdmin, async (req, res) => {
-    const { name, categoryId, description, price } = req.body;
-    const { styles } = req.body.styles;
+    const { name, categoryId, description, price, styles } = req.body;
     try {
         const item = await createItem({ name, categoryId, description, price });
         if (item) {
@@ -40,7 +39,7 @@ router.post("/", requireUser, requireAdmin, async (req, res) => {
                         imageURL
                     });
                     if (itemStyle) {
-                        for (let j = 0; j < styles[i].sizes; j++) {
+                        for (let j = 0; j < styles[i].sizes.length; j++) {
                             const size = await getSizeByName(styles[i].sizes[j].name);
                             if (!size) {
                                 itemStyleSizeErrors.push({
