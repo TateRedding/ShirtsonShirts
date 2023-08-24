@@ -150,13 +150,37 @@ router.get("/name/:name", async (req, res) => {
 
 // PATCH /api/items/:id
 router.patch("/:id", requireUser, requireAdmin, async (req, res) => {
+    // Something to think on when filling this method out:
+    // Can functions be optimized or reduced by completely seperating blocks based on weather or not something already exists,
+    // or is it better to just keep checking for lower level/ chilod stuff exists, even if the parent was just created and so children would obviously not exist yet
     const { id } = req.params;
+    const { name, categoryId, description, price, styles } = req.body;
     try {
-        const updatedItem = await updateItem(id, req.body);
-        if (updatedItem) {
+        const item = await updateItem(id, { name, categoryId, description, price });
+        if (item) {
+            const styleErrors = [];
+            const itemStyleErrors = [];
+            const itemStyleSizeErrors = [];
+            for (let i = 0; i < styles.length; i++) {
+                //check if style exists
+                // if it does
+                    //check if itemStyle exists with item id and found styleid
+                        //if it does, compare imageURLs, and send update if needed
+                        // if it doesnt, create it
+                        // get a list of existing ISS using itemStyleId from itemStyle you just updated or created
+                        // loop thoough the styles[i].sizes array and for each one
+                            //check if iss already exists
+                                // if it does, compare stock and update if needed
+                                // if it doesn't, create it
+                // if it doesn't
+                    //create the new style and follow steps to add in all the new itemStyles and iss as well
+            };
             res.send({
                 success: true,
-                updatedItem,
+                item,
+                styleErrors,
+                itemStyleErrors,
+                itemStyleSizeErrors
             });
         } else {
             res.send({ success: false });

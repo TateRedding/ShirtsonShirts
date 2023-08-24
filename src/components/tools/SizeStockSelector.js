@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
 
-const SizeStockSelector = ({ size, itemStyleIndex, itemStyleSizes, setItemStyleSizes }) => {
+const SizeStockSelector = ({ size, itemStyle, itemStyleIndex, itemStyleSizes, setItemStyleSizes }) => {
     const [selected, setSelected] = useState(false);
     const [stock, setStock] = useState(0);
+
+    useEffect(() => {
+        const iss = itemStyle.sizes.find(iss => iss.name === size.name);
+        if (iss && iss.stock) {
+            setSelected(true);
+            setStock(iss.stock);
+        };
+    }, []);
 
     useEffect(() => {
         const temp = [...itemStyleSizes];

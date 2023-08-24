@@ -50,7 +50,7 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
 
     useEffect(() => {
         if (sizeQuery && selectedItemStyle.sizes) {
-            const iss = selectedItemStyle.sizes.find(iss => iss.sizeSymbol === sizeQuery);
+            const iss = selectedItemStyle.sizes.find(iss => iss.symbol === sizeQuery);
             if (iss && iss.stock) {
                 setSelectedSizeId(iss.sizeId);
             };

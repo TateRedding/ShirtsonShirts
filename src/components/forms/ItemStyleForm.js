@@ -37,6 +37,7 @@ const ItemStyleForm = ({ itemStyle, itemStyles, setItemStyles, index, sizes }) =
                     sizes.map((size, idx) => (
                         <SizeStockSelector
                             size={size}
+                            itemStyle={itemStyle}
                             itemStyleIndex={index}
                             itemStyleSizes={itemStylesSizes}
                             setItemStyleSizes={setItemStyleSizes}

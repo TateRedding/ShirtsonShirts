@@ -9,8 +9,7 @@ import Register from "./components/Register.js";
 import Products from "./components/Products.js";
 import Cart from "./components/Cart.js";
 import ItemDetails from "./components/ItemDetails.js";
-import NewItemForm from "./components/forms/NewItemForm.js";
-import EditItemForm from "./components/forms/EditItemForm.js";
+import ItemForm from "./components/forms/ItemForm.js";
 import Orders from "./components/Orders.js";
 
 const App = () => {
@@ -124,7 +123,7 @@ const App = () => {
                     />}
                 />
                 <Route path="/products/new" element={
-                    <NewItemForm
+                    <ItemForm
                         userToken={userToken}
                         categories={categories}
                         getCategories={getCategories}
@@ -133,11 +132,12 @@ const App = () => {
                     />}
                 />
                 <Route path="/products/edit/:itemId" element={
-                    <EditItemForm
+                    <ItemForm
                         userToken={userToken}
                         categories={categories}
                         getCategories={getCategories}
                         user={user}
+                        sizes={sizes}
                     />}
                 />
                 <Route path="/previous_orders" element={

@@ -2,17 +2,52 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import SelectOrAddCategory from "../tools/SelectOrAddCategory";
 import ItemStyleForm from "./ItemStyleForm";
+import { useLocation, useParams } from "react-router-dom";
 
 const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
+    const [item, setItem] = useState({});
+    const [editing, setEditing] = useState(false);
     const [name, setName] = useState("");
     const [categoryId, setCategoryId] = useState(0);
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState(0);
     const [itemStyles, setItemStyles] = useState([]);
 
+    const { itemId } = useParams();
+
+    const { pathname } = useLocation();
+
     useEffect(() => {
         getCategories();
+        setEditing(pathname.includes("edit"));
     }, []);
+
+    useEffect(() => {
+        if (editing) getItemData();
+    }, [editing]);
+
+    useEffect(() => {
+        setValues();
+    }, [item]);
+
+    const getItemData = async () => {
+        try {
+            const response = await axios.get(`/api/items/${itemId}`);
+            setItem(response.data.item);
+        } catch (error) {
+            console.error(error);
+        };
+    };
+
+    const setValues = () => {
+        if (item && Object.keys(item).length) {
+            setName(item.name)
+            setCategoryId(item.categoryId);
+            setDescription(item.description);
+            setPrice(item.price);
+            setItemStyles(item.styles);
+        };
+    };
 
     const createNewItem = async (event) => {
         event.preventDefault();
@@ -39,13 +74,36 @@ const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
         };
     };
 
+    const updateItem = async (event) => {
+        event.preventDefault();
+
+        const response = await axios.patch(`/api/items/${itemId}`, {
+            name,
+            categoryId,
+            description,
+            price,
+            styles: itemStyles
+        }, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${userToken}`
+            }
+        });
+
+        console.log(response.data);
+
+        if (response.data.success) {
+            getItemData();
+        };
+    };
+
     return (
         <>
             {
                 (user.isAdmin) ?
                     <div className="item-form-container">
-                        <form onSubmit={createNewItem} className="item-form" autoComplete="off">
-                            <h1>New Product</h1>
+                        <form onSubmit={(event) => editing ? updateItem(event) : createNewItem(event)} className="item-form" autoComplete="off">
+                            <h1>{editing ? "Edit Product" : "New Product"}</h1>
 
                             <div className="form-floating mb-3 item-field">
                                 <input
@@ -97,8 +155,8 @@ const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
 
                             <div className="d-flex">
                                 {
-                                    itemStyles.map((itemStyle, idx) => {
-                                        return <ItemStyleForm
+                                    itemStyles.map((itemStyle, idx) => (
+                                        <ItemStyleForm
                                             itemStyle={itemStyle}
                                             itemStyles={itemStyles}
                                             setItemStyles={setItemStyles}
@@ -106,7 +164,7 @@ const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
                                             sizes={sizes}
                                             key={idx}
                                         />
-                                    })
+                                    ))
                                 }
                             </div>
 
@@ -127,13 +185,8 @@ const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
                             <button
                                 type="submit"
                                 className="btn btn-primary"
-                                disabled={
-                                    name && categoryId && description && price && itemStyles.length ?
-                                        false :
-                                        true
-                                }
                             >
-                                Create New Item
+                                {editing ? "Update Product" : "Create Product"}
                             </button>
                         </form >
                     </div >
