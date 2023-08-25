@@ -90,8 +90,6 @@ const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
             }
         });
 
-        console.log(response.data);
-
         if (response.data.success) {
             getItemData();
         };

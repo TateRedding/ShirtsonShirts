@@ -28,7 +28,21 @@ const getItemStyleSizesByItemStyleId = async (itemStyleId) => {
     };
 };
 
-const updateItemStyleSizeStock = async (id, purchaseAmount) => {
+const getItemStyleSizeByItemStyleIdAndSizeId = async (itemStyleId, sizeId) => {
+    try {
+        const { rows: [itemStyleSize] } = await client.query(`
+            SELECT *
+            FROM item_style_sizes
+            WHERE "itemStyleId"=${itemStyleId}
+            AND "sizeId"=${sizeId};
+        `);
+        return itemStyleSize;
+    } catch (error) {
+        console.error(error);
+    };
+};
+
+const purchaseItemStyleSize = async (id, purchaseAmount) => {
     try {
         const { rows: updatedItemStyleSize } = await client.query(`
             UPDATE item_style_sizes
@@ -41,8 +55,23 @@ const updateItemStyleSizeStock = async (id, purchaseAmount) => {
     };
 };
 
+const updateItemStyleSize = async (id, stock) => {
+    try {
+        const { rows: updatedItemStyleSize } = await client.query(`
+            UPDATE item_style_sizes
+            SET stock=${stock}
+            WHERE id=${id}
+        `);
+        return updatedItemStyleSize;
+    } catch (error) {
+        console.error(error);
+    };
+};
+
 module.exports = {
     createItemStyleSize,
     getItemStyleSizesByItemStyleId,
-    updateItemStyleSizeStock
+    getItemStyleSizeByItemStyleIdAndSizeId,
+    purchaseItemStyleSize,
+    updateItemStyleSize
 };

@@ -4,17 +4,17 @@ import SizeStockSelector from "../tools/SizeStockSelector";
 const ItemStyleForm = ({ itemStyle, itemStyles, setItemStyles, index, sizes }) => {
     const [name, setName] = useState(itemStyle.name);
     const [imageURL, setImageURL] = useState(itemStyle.imageURL);
-    const [itemStylesSizes, setItemStyleSizes] = useState(itemStyle.sizes);
+    const [itemStyleSizes, setItemStyleSizes] = useState(itemStyle.sizes);
 
     useEffect(() => {
         const temp = [...itemStyles];
         temp[index] = {
             name: name.toLowerCase(),
             imageURL,
-            sizes: itemStylesSizes.filter(iss => iss.stock)
+            sizes: itemStyleSizes
         };
         setItemStyles([...temp]);
-    }, [name, imageURL, itemStylesSizes]);
+    }, [name, imageURL, itemStyleSizes]);
 
     return (
         <div>
@@ -39,7 +39,7 @@ const ItemStyleForm = ({ itemStyle, itemStyles, setItemStyles, index, sizes }) =
                             size={size}
                             itemStyle={itemStyle}
                             itemStyleIndex={index}
-                            itemStyleSizes={itemStylesSizes}
+                            itemStyleSizes={itemStyleSizes}
                             setItemStyleSizes={setItemStyleSizes}
                             key={size.id}
                         />

@@ -2,9 +2,19 @@ const express = require("express");
 const router = express.Router();
 const { getStyleByName, createStyle } = require("../db/styles");
 const { getSizeByName } = require("../db/sizes");
-const { getItemStyleSizesByItemStyleId, createItemStyleSize } = require("../db/itemStyleSizes");
+const {
+    getItemStyleSizesByItemStyleId,
+    createItemStyleSize,
+    getItemStyleSizeByItemStyleIdAndSizeId,
+    updateItemStyleSize
+} = require("../db/itemStyleSizes");
 const { getCartItemStyleSizesByItemStyleSizeId, destroyCartItemStyleSize } = require("../db/cartItemStyleSizes");
-const { getItemStylesByItemId, createItemStyle } = require("../db/itemStyles");
+const {
+    getItemStylesByItemId,
+    createItemStyle,
+    getItemStyleByItemIdAndStyleId,
+    updateItemStyle
+} = require("../db/itemStyles");
 const {
     createItem,
     getAllItems,
@@ -17,6 +27,7 @@ const {
     deactivateItem
 } = require("../db/items");
 const { requireUser, requireAdmin } = require("./utils");
+const e = require("express");
 
 // POST/api/items
 router.post("/", requireUser, requireAdmin, async (req, res) => {
@@ -41,13 +52,7 @@ router.post("/", requireUser, requireAdmin, async (req, res) => {
                     if (itemStyle) {
                         for (let j = 0; j < styles[i].sizes.length; j++) {
                             const size = await getSizeByName(styles[i].sizes[j].name);
-                            if (!size) {
-                                itemStyleSizeErrors.push({
-                                    item: item.name,
-                                    style: style.name,
-                                    size: styles[i].sizes[j].name
-                                });
-                            } else {
+                            if (size) {
                                 const itemStyleSize = await createItemStyleSize({
                                     itemStyleId: itemStyle.id,
                                     sizeId: size.id,
@@ -58,6 +63,12 @@ router.post("/", requireUser, requireAdmin, async (req, res) => {
                                     style: style.name,
                                     size: size.name
                                 });
+                            } else {
+                                itemStyleSizeErrors.push({
+                                    item: item.name,
+                                    style: style.name,
+                                    size: styles[i].sizes[j].name
+                                });
                             };
                         };
                     } else {
@@ -67,7 +78,7 @@ router.post("/", requireUser, requireAdmin, async (req, res) => {
                         });
                     };
                 } else {
-                    styleErrors.push(name);
+                    styleErrors.push(styles[i].name);
                 };
             };
             res.send({
@@ -150,9 +161,6 @@ router.get("/name/:name", async (req, res) => {
 
 // PATCH /api/items/:id
 router.patch("/:id", requireUser, requireAdmin, async (req, res) => {
-    // Something to think on when filling this method out:
-    // Can functions be optimized or reduced by completely seperating blocks based on weather or not something already exists,
-    // or is it better to just keep checking for lower level/ chilod stuff exists, even if the parent was just created and so children would obviously not exist yet
     const { id } = req.params;
     const { name, categoryId, description, price, styles } = req.body;
     try {
@@ -162,18 +170,57 @@ router.patch("/:id", requireUser, requireAdmin, async (req, res) => {
             const itemStyleErrors = [];
             const itemStyleSizeErrors = [];
             for (let i = 0; i < styles.length; i++) {
-                //check if style exists
-                // if it does
-                    //check if itemStyle exists with item id and found styleid
-                        //if it does, compare imageURLs, and send update if needed
-                        // if it doesnt, create it
-                        // get a list of existing ISS using itemStyleId from itemStyle you just updated or created
-                        // loop thoough the styles[i].sizes array and for each one
-                            //check if iss already exists
-                                // if it does, compare stock and update if needed
-                                // if it doesn't, create it
-                // if it doesn't
-                    //create the new style and follow steps to add in all the new itemStyles and iss as well
+                let style = await getStyleByName(styles[i].name);
+                if (!style) style = await createStyle(styles[i].name);
+                if (style) {
+                    let itemStyle = await getItemStyleByItemIdAndStyleId(item.id, style.id);
+                    if (!itemStyle) itemStyle = await createItemStyle({
+                        itemId: item.id,
+                        styleId: style.id,
+                        imageURL: styles[i].imageURL
+                    });
+                    if (itemStyle) {
+                        if (!(styles[i].imageURL === itemStyle.imageURL)) {
+                            const updatedItemStyle = await updateItemStyle(itemStyle.id, { imageURL: styles[i].imageURL });
+                            if (!updatedItemStyle) itemStyleErrors.push({
+                                item: item.name,
+                                style: item.styles[i].name
+                            });
+                        };
+                        for (let j = 0; j < styles[i].sizes.length; j++) {
+                            const size = await getSizeByName(styles[i].sizes[j].name);
+                            if (size) {
+                                let itemStyleSize = await getItemStyleSizeByItemStyleIdAndSizeId(itemStyle.id, size.id);
+                                if (!itemStyleSize) itemStyleSize = await createItemStyleSize({
+                                    itemStyleId: itemStyle.id,
+                                    sizeId: size.id,
+                                    stock: styles[i].sizes[j].stock
+                                });
+                                if (!(styles[i].sizes[j].stock === itemStyleSize.stock)) {
+                                    const updatedItemStyleSize = await updateItemStyleSize(itemStyleSize.id, styles[i].sizes[j].stock);
+                                    if (!updatedItemStyleSize) itemStyleSizeErrors.push({
+                                        item: item.name,
+                                        style: style.name,
+                                        size: styles[i].sizes[j].name
+                                    });
+                                };
+                            } else {
+                                itemStyleSizeErrors.push({
+                                    item: item.name,
+                                    style: style.name,
+                                    size: styles[i].sizes[j].name
+                                });
+                            };
+                        };
+                    } else {
+                        itemStyleErrors.push({
+                            item: item.name,
+                            style: item.styles[i].name
+                        });
+                    };
+                } else {
+                    styleErrors.push(styles[i].name);
+                };
             };
             res.send({
                 success: true,

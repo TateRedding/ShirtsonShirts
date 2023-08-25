@@ -66,7 +66,6 @@ const createTables = async () => {
                 "itemId" INTEGER REFERENCES items(id),
                 "styleId" INTEGER REFERENCES styles(id),
                 "imageURL" TEXT NOT NULL,
-                "isActive" BOOLEAN DEFAULT true,
                 UNIQUE ("itemId", "styleId")
             );
 
