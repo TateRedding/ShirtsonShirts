@@ -6,7 +6,7 @@ const ProductCard = ({ item }) => {
     
     return (
         <div className="card align-items-center product-card">
-            <a className="nav-link" href={`/#/products/${item.name.split(" ").join("_")}`}>
+            <a className="nav-link" href={`/#/shirts/${item.name.split(" ").join("_")}`}>
                 <h5 className="card-title mt-3">{item.isActive ? item.name : `${item.name} (INACTIVE)`}</h5>
             </a>
             <div className="product-image-container d-flex align-items-center justify-content-center">
@@ -14,7 +14,7 @@ const ProductCard = ({ item }) => {
             </div>
             <div className="card-body">
                 <p className="card-text text-center">${item.price.toFixed(2)}</p>
-                <button className="btn btn-primary" onClick={() => navigate(`/products/${item.name.split(" ").join("_")}`)}>Details</button>
+                <button className="btn btn-primary" onClick={() => navigate(`/shirts/${item.name.split(" ").join("_")}`)}>Details</button>
             </div>
         </div>
     );

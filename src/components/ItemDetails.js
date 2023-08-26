@@ -155,7 +155,7 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                 {
                     (user.isAdmin) ?
                         <div>
-                            <Link to={`/products/edit/${item.id}`}><button className="btn btn-primary">Edit Item</button></Link>
+                            <Link to={`/shirts/edit/${item.id}`}><button className="btn btn-primary">Edit Item</button></Link>
                             {
                                 item.isActive ?
                                     <button className="btn btn-danger" onClick={deactivateItem}>Deactivate Item</button>

@@ -2,10 +2,10 @@ body {
     background-color: #708ca6;
 }
 
-/* ---HEADER CSS--- */
+/* --- HEADER --- */
 
-#header {
-    margin-bottom: 10px;
+header {
+    margin-bottom: .5rem;
 }
 
 /* ---LOGIN, REGISTER, NEW ITEM, EDIT ITEM CSS--- */
@@ -160,4 +160,12 @@ ul {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+
+@media (max-width: 576px) {
+    /* --- HEADER --- */
+    .account-nav {
+        flex-direction: column;
+    }
 }

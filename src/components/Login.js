@@ -10,7 +10,7 @@ const Login = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (isLoggedIn) navigate("/products");
+        if (isLoggedIn) navigate("/shirts");
     }, []);
 
     const accountLogin = async (event) => {
@@ -26,7 +26,7 @@ const Login = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
                 setUserToken(response.data.token);
                 window.localStorage.setItem("token", `${response.data.token}`);
                 setIsLoggedIn(true);
-                navigate("/products");
+                navigate("/shirts");
             };
         } catch (err) {
             console.error(err);

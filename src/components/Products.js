@@ -34,7 +34,7 @@ const Products = ({ items, setItems, getItems, categories, user, userToken }) =>
                 {
                     (user.isAdmin) ?
                         <div className="product-page-tool">
-                            <Link to="/products/new"><button className="btn btn-primary">Add new Product</button></Link>
+                            <Link to="/shirts/new"><button className="btn btn-primary">Add new Product</button></Link>
                         </div>
                         :
                         null

@@ -82,7 +82,11 @@ const App = () => {
 
     return (
         <>
-            <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} setUserToken={setUserToken} />
+            <Header
+                isLoggedIn={isLoggedIn}
+                setIsLoggedIn={setIsLoggedIn}
+                setUserToken={setUserToken}
+            />
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={
@@ -98,7 +102,7 @@ const App = () => {
                         setIsLoggedIn={setIsLoggedIn}
                     />}
                 />
-                <Route path="/products" element={
+                <Route path="/shirts" element={
                     <Products
                         items={items}
                         setItems={setItems}
@@ -114,7 +118,7 @@ const App = () => {
                         user={user}
                     />}
                 />
-                <Route path="/products/:itemName" element={
+                <Route path="/shirts/:itemName" element={
                     <ItemDetails
                         userToken={userToken}
                         user={user}
@@ -122,7 +126,7 @@ const App = () => {
                         sizes={sizes}
                     />}
                 />
-                <Route path="/products/new" element={
+                <Route path="/shirts/new" element={
                     <ItemForm
                         userToken={userToken}
                         categories={categories}
@@ -131,7 +135,7 @@ const App = () => {
                         sizes={sizes}
                     />}
                 />
-                <Route path="/products/edit/:itemId" element={
+                <Route path="/shirts/edit/:itemId" element={
                     <ItemForm
                         userToken={userToken}
                         categories={categories}

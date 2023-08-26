@@ -105,7 +105,7 @@ const Register = (props) => {
                             <label htmlFor="floatingPassword">Confirm Password</label>
                         </div>
 
-                        {isRegistered ? <Navigate to="/products" /> : <div className="text-danger">{errorMessage}</div>}
+                        {isRegistered ? <Navigate to="/shirts" /> : <div className="text-danger">{errorMessage}</div>}
 
                         {registerPasswordsMatch ? null : <div className="text-danger">The entered passwords do not match.</div>}
 
