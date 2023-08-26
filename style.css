@@ -132,39 +132,27 @@ ul {
     list-style-type: none;
 }
 
-/* ---PRODUCTS PAGE CSS--- */
-
-.product-display-image {
-    max-width: 500px;
-    max-height: 500px;
-}
-
-.product-image-container {
-    height: 500px;
-}
-
-.product-card {
-    min-width: 500px;
-    margin: 1em;
-}
+/* --- PRODUCTS PAGE --- */
 
 .category-filter {
     max-width: 200px;
 }
 
-.new-category-button {
-    width: 200px;
+.product-display-image {
+    height: 200px;
 }
 
-.product-page-tool {
-    flex: 1 1 0px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.product-card {
+    width: 300px;
+    aspect-ratio: 16/9;
 }
 
+.search-bar {
+    width: 35vw;
+}
 
 @media (max-width: 576px) {
+
     /* --- HEADER --- */
     .account-nav {
         flex-direction: column;

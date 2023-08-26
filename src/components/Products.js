@@ -15,8 +15,8 @@ const Products = ({ items, setItems, getItems, categories, user, userToken }) =>
     return (
         <div>
             <h1 className="text-center">Shirts!</h1>
-            <div className="d-flex justify-content-evenly">
-                <div className="d-flex product-page-tool">
+            <div className="d-flex flex-column align-items-center">
+                <div className="d-flex">
                     <SelectCategory
                         setItems={setItems}
                         getItems={getItems}
@@ -33,8 +33,10 @@ const Products = ({ items, setItems, getItems, categories, user, userToken }) =>
                 </div>
                 {
                     (user.isAdmin) ?
-                        <div className="product-page-tool">
-                            <Link to="/shirts/new"><button className="btn btn-primary">Add new Product</button></Link>
+                        <div>
+                            <Link to="/shirts/new">
+                                <button className="btn btn-lg btn-primary mt-3">Add New Shirt</button>
+                                </Link>
                         </div>
                         :
                         null
