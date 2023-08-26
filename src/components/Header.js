@@ -40,11 +40,6 @@ const Header = ({ setUserToken, isLoggedIn, setIsLoggedIn }) => {
                                             </Link>
                                         </li>
                                         <li className="nav-item">
-                                            <Link className="nav-link" to="/cart">
-                                                <span data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show"><i className="bi bi-cart"></i></span>
-                                            </Link>
-                                        </li>
-                                        <li className="nav-item">
                                             <Link className="nav-link" to="/shirts">
                                                 <span
                                                     data-bs-toggle="collapse"
@@ -53,6 +48,11 @@ const Header = ({ setUserToken, isLoggedIn, setIsLoggedIn }) => {
                                                 >
                                                     Logout
                                                 </span>
+                                            </Link>
+                                        </li>
+                                        <li className="nav-item d-flex align-items-center">
+                                            <Link className="nav-link" to="/cart">
+                                                <span data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show"><i className="bi bi-cart"></i></span>
                                             </Link>
                                         </li>
                                     </div>
