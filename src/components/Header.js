@@ -12,8 +12,8 @@ const Header = ({ setUserToken, isLoggedIn, setIsLoggedIn }) => {
 
     return (
         <header>
-            <nav className="navbar navbar-expand-sm bg-primary">
-                <div className="container-fluid">
+            <nav className="navbar navbar-dark navbar-expand-sm bg-dark">
+                <div className="container-fluid mx-5">
                     <a className="navbar-brand" href="#">Shirts on Shirts</a>
                     <button
                         className="navbar-toggler"
@@ -25,44 +25,40 @@ const Header = ({ setUserToken, isLoggedIn, setIsLoggedIn }) => {
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-                        <ul className="navbar-nav d-flex justify-content-between w-100">
-                            <li className="nav-item">
+                        <ul className="navbar-nav d-flex w-100">
+                            <li className="nav-item nav-text">
                                 <Link className="nav-link" to="/shirts">
-                                    <span data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">Shirts</span>
+                                    <span data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">Shop</span>
                                 </Link>
                             </li>
-                            {
-                                isLoggedIn ?
-                                    <div className="account-nav d-flex">
-                                        <li className="nav-item">
-                                            <Link className="nav-link" to="/previous_orders">
-                                                <span data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">Order History</span>
-                                            </Link>
-                                        </li>
-                                        <li className="nav-item">
+                            <div className="account-nav d-flex">
+                                <li className="nav-item nav-icon">
+                                    <Link className="nav-link" to={isLoggedIn ? "/previous_orders" : "/login"}>
+                                        <span data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show"><i className="bi bi-person"></i></span>
+                                    </Link>
+                                </li>
+                                {
+                                    isLoggedIn ?
+                                        <li className="nav-item nav-icon">
                                             <Link className="nav-link" to="/shirts">
                                                 <span
                                                     data-bs-toggle="collapse"
                                                     data-bs-target=".navbar-collapse.show"
                                                     onClick={() => logout()}
                                                 >
-                                                    Logout
+                                                    <i className="bi bi-box-arrow-right"></i>
                                                 </span>
                                             </Link>
                                         </li>
-                                        <li className="nav-item d-flex align-items-center">
-                                            <Link className="nav-link" to="/cart">
-                                                <span data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show"><i className="bi bi-cart"></i></span>
-                                            </Link>
-                                        </li>
-                                    </div>
-                                    :
-                                    <li className="nav-item">
-                                        <Link className="nav-link" to="/login">
-                                            <span data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">Login</span>
-                                        </Link>
-                                    </li>
-                            }
+                                        :
+                                        null
+                                }
+                                <li className="nav-item nav-icon">
+                                    <Link className="nav-link" to={isLoggedIn ? "/cart" : "/login"}>
+                                        <span data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show"><i className="bi bi-cart"></i></span>
+                                    </Link>
+                                </li>
+                            </div>
                         </ul>
                     </div>
                 </div>

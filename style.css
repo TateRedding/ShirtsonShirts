@@ -1,11 +1,32 @@
-body {
-    background-color: #708ca6;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Nanum Gothic", sans-serif;
 }
 
 /* --- HEADER --- */
 
 header {
     margin-bottom: .5rem;
+}
+
+.navbar-nav {
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-icon {
+    display: flex;
+    align-items: center;
+    font-size: 2rem;
+}
+
+.nav-item {
+    padding: 0 1rem;
+}
+
+.nav-text {
     font-size: 1.5rem;
 }
 
@@ -156,5 +177,13 @@ ul {
     /* --- HEADER --- */
     .account-nav {
         flex-direction: column;
+    }
+
+    .navbar-nav {
+        align-items: flex-start;
+    }
+
+    .nav-item {
+        padding: 0;
     }
 }
