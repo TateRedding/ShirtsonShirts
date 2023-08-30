@@ -30,38 +30,38 @@ header {
     font-size: 1.5rem;
 }
 
-/* ---LOGIN, REGISTER, NEW ITEM, EDIT ITEM CSS--- */
+/* --- LOGIN PAGE --- */
 
-#login-container {
-    display: flex;
-    justify-content: center;
-}
-
-.item-form-container {
-    width: 70vw;
+.login-button,
+.register-link {
+    width: 80%;
     margin: 0 auto;
 }
 
-#login {
+.login-container {
+    margin: 3rem auto 0 auto;
+}
+
+.login-form,
+.new-customer {
+    width: 26rem;
     display: flex;
-    justify-content: center;
     flex-direction: column;
-    width: 500px;
 }
 
-.login-field {
-    min-width: 350px;
-    max-width: 500px;
-    margin-bottom: 15px;
+.login-form {
+    padding-right: 4rem;
 }
 
-.login-buttons {
-    width: 100px;
+.new-customer {
+    padding-left: 4rem;
 }
 
-.login-buttons:first-of-type {
-    margin-right: 5px;
+.new-customer > ul {
+    list-style-type: circle;
 }
+
+/* --- REGISTER, NEW ITEM, EDIT ITEM CSS--- */
 
 .admin-warning {
     text-align: center;

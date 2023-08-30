@@ -10,7 +10,7 @@ const Login = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (isLoggedIn) navigate("/shirts");
+        if (isLoggedIn) navigate("/#/previous_orders");
     }, []);
 
     const accountLogin = async (event) => {
@@ -34,53 +34,99 @@ const Login = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
     };
 
     return (
-        <div className="container" id="loginform">
-            <div id="login-container">
-                <div id="login">
-                    <h1>Login</h1>
-                    <div className="text-danger">{errorMessage}</div>
-                    <form onSubmit={accountLogin}>
-                        <div className="form-floating mb-3 login-field">
-                            <input
-                                className="form-control"
-                                id="login-username"
-                                value={username}
-                                required
-                                onChange={(event) => setUsername(event.target.value)}
-                                name="loginUsername"
-                                placeholder="Username" />
-
-                            <label htmlFor="login-username">Username</label>
-                        </div>
-                        <div className="form-floating login-field">
-                            <input
-                                type="password"
-                                className="form-control"
-                                id="login-password"
-                                value={password}
-                                required
-                                onChange={(event) => setPassword(event.target.value)}
-                                name="loginPassword"
-                                placeholder="Password"
-                            />
-
-                            <label htmlFor="login-password">Password</label>
-                        </div>
-                        <button
-                            type="submit"
-                            className="btn btn-primary login-buttons"
-                        >
-                            Login
-                        </button>
-                        <Link to="/register">
-                            <button className="btn btn-primary login-buttons">Register</button>
-                        </Link>
-                    </form>
+        <div className="login-container d-flex flex-column align-items-center">
+            <h1><b>SIGN IN</b></h1>
+            <div className="d-flex mt-5">
+                <form onSubmit={accountLogin} className="login-form border-end">
+                    <div className="text-danger text-center">{errorMessage}</div>
+                    <div className="mb-4 px-3">
+                        <label htmlFor="login-username">Username:</label>
+                        <input
+                            className="form-control"
+                            id="login-username"
+                            value={username}
+                            required
+                            onChange={(event) => setUsername(event.target.value)}
+                        />
+                    </div>
+                    <div className="mb-4 px-3">
+                        <label htmlFor="login-password">Password:</label>
+                        <input
+                            type="password"
+                            className="form-control"
+                            id="login-password"
+                            value={password}
+                            required
+                            onChange={(event) => setPassword(event.target.value)}
+                        />
+                    </div>
+                    <button type="submit" className="login-button btn btn-dark btn-lg">
+                        Sign In
+                    </button>
+                </form>
+                <div className="new-customer">
+                    <h2 className="text-center">You new here?</h2>
+                    <p className="mb-0">Create an account now so you can:</p>
+                    <ul>
+                        <li>Add shirts to your cart</li>
+                        <li>Access your order history</li>
+                        <li>Track your orders</li>
+                        <li>Order you favorite shirts again and again</li>
+                    </ul>
+                    <button onClick={() => navigate("/#/register")} className="register-link btn btn-dark btn-lg">Create Account</button>
                 </div>
             </div>
         </div>
 
-    )
-}
+
+
+
+        // <div>
+        //     <div>
+        //         <div>
+        //             <h1>Login</h1>
+        //             
+        //             <form onSubmit={accountLogin}>
+        //                 <div className="form-floating mb-3 login-field">
+        //                     <input
+        //                         className="form-control"
+        //                         id="login-username"
+        //                         value={username}
+        //                         required
+        //                         onChange={(event) => setUsername(event.target.value)}
+        //                         name="loginUsername"
+        //                         placeholder="Username" />
+
+        //                     <label htmlFor="login-username">Username</label>
+        //                 </div>
+        //                 <div className="form-floating login-field">
+        //                     <input
+        //                         type="password"
+        //                         className="form-control"
+        //                         id="login-password"
+        //                         value={password}
+        //                         required
+        //                         onChange={(event) => setPassword(event.target.value)}
+        //                         name="loginPassword"
+        //                         placeholder="Password"
+        //                     />
+
+        //                     <label htmlFor="login-password">Password</label>
+        //                 </div>
+        //                 <button
+        //                     type="submit"
+        //                     className="btn btn-primary login-buttons"
+        //                 >
+        //                     Login
+        //                 </button>
+        //                 <Link to="/register">
+        //                     <button className="btn btn-primary login-buttons">Register</button>
+        //                 </Link>
+        //             </form>
+        //         </div>
+        //     </div>
+        // </div>
+    );
+};
 
 export default Login;
