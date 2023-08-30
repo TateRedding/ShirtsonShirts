@@ -38,8 +38,14 @@ header {
     margin: 0 auto;
 }
 
-.login-container {
+.login-container-main {
     margin: 3rem auto 0 auto;
+}
+
+.login-form {
+    padding-right: 4rem;
+    border-right: 1px solid lightgrey;
+    border-bottom: none;
 }
 
 .login-form,
@@ -49,16 +55,13 @@ header {
     flex-direction: column;
 }
 
-.login-form {
-    padding-right: 4rem;
-}
-
 .new-customer {
     padding-left: 4rem;
 }
 
-.new-customer > ul {
+.new-customer>ul {
     list-style-type: circle;
+    font-size: .9rem;
 }
 
 /* --- REGISTER, NEW ITEM, EDIT ITEM CSS--- */
@@ -170,6 +173,39 @@ ul {
 
 .search-bar {
     width: 35vw;
+}
+
+@media (max-width: 768px) {
+
+    /* --- LOGIN PAGE --- */
+    .login-button,
+    .register-link {
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    .login-container-bottom {
+        flex-direction: column;
+    }
+
+    .login-form {
+        padding-right: 0;
+        border-right: none;
+        border-bottom: 1px solid lightgrey;
+        padding-bottom: 2rem;
+    }
+
+    .login-form,
+    .new-customer {
+        width: 90vw;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .new-customer {
+        padding-left: 0;
+        padding-top: 2rem;
+    }
 }
 
 @media (max-width: 576px) {

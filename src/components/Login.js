@@ -34,10 +34,10 @@ const Login = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
     };
 
     return (
-        <div className="login-container d-flex flex-column align-items-center">
+        <div className="login-container-main d-flex flex-column align-items-center">
             <h1><b>SIGN IN</b></h1>
-            <div className="d-flex mt-5">
-                <form onSubmit={accountLogin} className="login-form border-end">
+            <div className="login-container-bottom d-flex mt-5">
+                <form onSubmit={accountLogin} className="login-form">
                     <div className="text-danger text-center">{errorMessage}</div>
                     <div className="mb-4 px-3">
                         <label htmlFor="login-username">Username:</label>
