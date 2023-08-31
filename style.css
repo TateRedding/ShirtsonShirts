@@ -67,7 +67,7 @@ header {
 /* --- REGISTER PAGE --- */
 
 .register-form {
-    width: 55rem;
+    max-width: 55rem;
 }
 
 .register-form  small {

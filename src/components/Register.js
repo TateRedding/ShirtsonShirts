@@ -88,8 +88,8 @@ const Register = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
         <div>
             <h1 className="text-center">New Account</h1>
             <form className="container register-form" onSubmit={accountRegister}>
-                <div className="row mb-4">
-                    <div className="col">
+                <div className="row">
+                    <div className="col-12 col-sm-6 mb-4">
                         <label className="register-required-label" htmlFor="register-username">
                             Username
                             <small>REQUIRED</small>
@@ -109,7 +109,7 @@ const Register = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
                                 null
                         }
                     </div>
-                    <div className="col">
+                    <div className="col-12 col-sm-6 mb-4">
                         <label className="register-required-label" htmlFor="register-email">
                             Email
                             <small>REQUIRED</small>
@@ -132,8 +132,8 @@ const Register = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
                     </div>
                 </div>
 
-                <div className="row mb-4">
-                    <div className="col">
+                <div className="row">
+                    <div className="col-12 col-sm-6 mb-4">
                         <label className="register-required-label" htmlFor="register-first-name">
                             First Name
                             <small>REQUIRED</small>
@@ -146,7 +146,7 @@ const Register = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
                             onChange={(event) => setFirstName(event.target.value)}
                         />
                     </div>
-                    <div className="col">
+                    <div className="col-12 col-sm-6 mb-4">
                         <label htmlFor="register-last-name">Last Name</label>
                         <input
                             className="form-control"
@@ -157,8 +157,8 @@ const Register = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
                     </div>
                 </div>
 
-                <div className="row mb-4">
-                    <div className="col">
+                <div className="row">
+                    <div className="col-12 col-sm-6 mb-4">
                         <label className="register-required-label" htmlFor="register-password">
                             Password
                             <small>REQUIRED</small>
@@ -179,7 +179,7 @@ const Register = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
                                 null
                         }
                     </div>
-                    <div className="col">
+                    <div className="col-12 col-sm-6 mb-4">
                         <label className="register-required-label" htmlFor="register-confirm-password">
                             Confirm Password
                             <small>REQUIRED</small>
@@ -201,8 +201,8 @@ const Register = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
                         }
                     </div>
                 </div>
-                <div className="row justify-content-md-center">
-                    <button className="col-md-auto btn btn-dark btn-lg" type="submit">
+                <div className="row justify-content-center">
+                    <button className="col-auto btn btn-dark btn-lg" type="submit">
                         Create Account
                     </button>
                 </div>
