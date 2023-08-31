@@ -10,7 +10,7 @@ const Login = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (isLoggedIn) navigate("/#/previous_orders");
+        if (isLoggedIn) navigate("/previous_orders");
     }, []);
 
     const accountLogin = async (event) => {
@@ -73,59 +73,10 @@ const Login = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
                         <li>Track your orders</li>
                         <li>Order you favorite shirts again and again</li>
                     </ul>
-                    <button onClick={() => navigate("/#/register")} className="register-link btn btn-dark btn-lg">Create Account</button>
+                    <button onClick={() => navigate("/register")} className="register-link btn btn-dark btn-lg">Create Account</button>
                 </div>
             </div>
         </div>
-
-
-
-
-        // <div>
-        //     <div>
-        //         <div>
-        //             <h1>Login</h1>
-        //             
-        //             <form onSubmit={accountLogin}>
-        //                 <div className="form-floating mb-3 login-field">
-        //                     <input
-        //                         className="form-control"
-        //                         id="login-username"
-        //                         value={username}
-        //                         required
-        //                         onChange={(event) => setUsername(event.target.value)}
-        //                         name="loginUsername"
-        //                         placeholder="Username" />
-
-        //                     <label htmlFor="login-username">Username</label>
-        //                 </div>
-        //                 <div className="form-floating login-field">
-        //                     <input
-        //                         type="password"
-        //                         className="form-control"
-        //                         id="login-password"
-        //                         value={password}
-        //                         required
-        //                         onChange={(event) => setPassword(event.target.value)}
-        //                         name="loginPassword"
-        //                         placeholder="Password"
-        //                     />
-
-        //                     <label htmlFor="login-password">Password</label>
-        //                 </div>
-        //                 <button
-        //                     type="submit"
-        //                     className="btn btn-primary login-buttons"
-        //                 >
-        //                     Login
-        //                 </button>
-        //                 <Link to="/register">
-        //                     <button className="btn btn-primary login-buttons">Register</button>
-        //                 </Link>
-        //             </form>
-        //         </div>
-        //     </div>
-        // </div>
     );
 };
 
