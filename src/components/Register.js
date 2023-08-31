@@ -9,7 +9,6 @@ const Register = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
-
     const [showPasswordMatchWarning, setShowPasswordMatchWarning] = useState(false);
     const [showPasswordLengthWarning, setShowPasswordLengthWarning] = useState(false);
     const [showUsernameWarning, setShowUsernameWarining] = useState(false);
@@ -57,9 +56,6 @@ const Register = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
         if (lastName) newUser.lastName = lastName;
         try {
             const response = await axios.post("/api/users/register", newUser);
-
-            console.log(response.data);
-
             setPassword("");
             setConfirmPassword("");
 
