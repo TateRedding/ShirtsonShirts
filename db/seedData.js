@@ -39,6 +39,9 @@ const createTables = async () => {
                 id SERIAL PRIMARY KEY,
                 username VARCHAR(100) UNIQUE NOT NULL,
                 password VARCHAR(255) NOT NULL,
+                "firstName" VARCHAR(64) NOT NULL,
+                "lastName" VARCHAR(64),
+                email VARCHAR(128) NOT NULL,
                 "isAdmin" BOOLEAN DEFAULT FALSE
             );
 
@@ -112,23 +115,34 @@ const createInitialUsers = async () => {
 
         users.push(await createUser({
             username: "tredding",
-            password: "slushies89"
+            password: "slushies89",
+            firstName: "Tate",
+            lastName: "Redding",
+            email: "tateredding@gmail.com"
         }));
 
         users.push(await createUser({
             username: "cdoussan",
             password: "apples45",
+            firstName: "Cass",
+            lastName: "Doussan",
+            email: "cdfakeemail@gmail.com",
             isAdmin: true
         }));
 
         users.push(await createUser({
             username: "saxelson",
-            password: "saxman33"
+            password: "saxman33",
+            firstName: "Soren",
+            lastName: "Sxelson",
+            email: "safakeemail@gmail.com"
         }));
 
         users.push(await createUser({
             username: "cpruna",
             password: "shirtsarethefuture",
+            firstName: "Cara",
+            email: "cpfakeemail@gmail.com",
             isAdmin: true
         }));
 
