@@ -5,7 +5,7 @@ import axios from "axios";
 const Login = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
+    const [incorrectCredentials, setIncorrectCredentials] = useState(false);
 
     const navigate = useNavigate();
 
@@ -15,18 +15,20 @@ const Login = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
 
     const accountLogin = async (event) => {
         event.preventDefault();
+        setIncorrectCredentials(false);
         try {
             const response = await axios.post("/api/users/login", {
                 username,
                 password
             });
-            if (!response.data.success) {
-                setErrorMessage(response.data.message);
-            } else {
+
+            if (response.data.success) {
                 setUserToken(response.data.token);
                 window.localStorage.setItem("token", `${response.data.token}`);
                 setIsLoggedIn(true);
                 navigate("/shirts");
+            } else if (response.data.error === "IncorrectCredentialsError") {
+                setIncorrectCredentials(true);
             };
         } catch (err) {
             console.error(err);
@@ -38,7 +40,12 @@ const Login = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
             <h1><b>SIGN IN</b></h1>
             <div className="login-container-bottom d-flex mt-5">
                 <form onSubmit={accountLogin} className="login-form">
-                    <div className="text-danger text-center">{errorMessage}</div>
+                    {
+                        incorrectCredentials ?
+                            <div className="text-danger text-center">Username and password do not match!</div>
+                            :
+                            null
+                    }
                     <div className="mb-4 px-3">
                         <label htmlFor="login-username">Username:</label>
                         <input

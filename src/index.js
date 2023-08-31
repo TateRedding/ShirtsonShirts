@@ -98,8 +98,9 @@ const App = () => {
                 />
                 <Route path="/register" element={
                     <Register
-                        setUserToken={setUserToken}
+                        isLoggedIn={isLoggedIn}
                         setIsLoggedIn={setIsLoggedIn}
+                        setUserToken={setUserToken}
                     />}
                 />
                 <Route path="/shirts" element={

@@ -9,6 +9,7 @@ const {
     getUserByUsername,
     getUserById,
     createUser,
+    getUserByEmail,
 } = require("../db/users");
 
 // POST /api/users/login
@@ -48,15 +49,22 @@ router.post("/login", async (req, res) => {
 
 // POST /api/users/register
 router.post("/register", async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, email } = req.body;
     try {
         if (!username || !password) return;
         const existingUser = await getUserByUsername(username);
+        const existingEmail = await getUserByEmail(email);
         if (existingUser) {
             res.send({
                 success: false,
                 error: "UsernameTakenError",
                 message: "Username is already taken.",
+            });
+        } else if (existingEmail) {
+            res.send({
+                success: false,
+                error: "EmailAlreadyInUse",
+                message: "There is already an account registered under that email."
             });
         } else if (password.length < 8) {
             res.send({
