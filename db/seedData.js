@@ -9,6 +9,15 @@ const { createItemColorSize } = require("./itemColorSizes");
 const { createCart, purchaseCart } = require("./carts");
 const { createCartItemColorSize } = require("./cartItemColorSizes");
 
+const itemColors = [];
+const sizes = [];
+const itemColorSizes = [];
+const carts = [];
+
+const randomInt = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
 const dropTables = async () => {
     try {
         console.log("Dropping tables...");
@@ -177,24 +186,66 @@ const createInitialItems = async () => {
         const items = [];
 
         items.push(await createItem({
-            name: "SoCaTaCa Tee",
-            price: 500,
+            name: "Plain Tee",
+            price: 25,
             categoryId: 1,
-            description: "Cotton blend tee-shirt with the SoCaTaCa team logo"
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        }));
+
+        items.push(await createItem({
+            name: "SoCaTaCa Tee",
+            price: 35,
+            categoryId: 1,
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        }));
+
+        items.push(await createItem({
+            name: "React Tee",
+            price: 30,
+            categoryId: 1,
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
         }));
 
         items.push(await createItem({
             name: "Plain Tank",
-            price: 300,
+            price: 20,
             categoryId: 2,
-            description: "Cotton blend tank-top"
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
         }));
 
         items.push(await createItem({
-            name: "Rainbow Long-sleeve",
-            price: 500,
+            name: "SoCaTaCa Tank",
+            price: 25,
+            categoryId: 2,
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        }));
+
+        items.push(await createItem({
+            name: "Pride Tank",
+            price: 25,
+            categoryId: 2,
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        }));
+
+        items.push(await createItem({
+            name: "Plain Long-Sleeve",
+            price: 35,
             categoryId: 3,
-            description: "Cotton blend long-sleeve shirt, perfect for cool weather!",
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        }));
+
+        items.push(await createItem({
+            name: "Aperture Long Sleeve",
+            price: 45,
+            categoryId: 3,
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        }));
+
+        items.push(await createItem({
+            name: "Pride Long-sleeve",
+            price: 45,
+            categoryId: 3,
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
         }));
 
         console.log(items);
@@ -210,9 +261,11 @@ const createInitialColors = async () => {
         console.log("Creating initial colors...");
         const colors = [];
 
+        colors.push(await createColor("white"))
         colors.push(await createColor("red"));
-        colors.push(await createColor("blue"));
         colors.push(await createColor("green"));
+        colors.push(await createColor("blue"));
+        colors.push(await createColor("yellow"));
         colors.push(await createColor("rainbow"));
 
         console.log(colors);
@@ -226,36 +279,149 @@ const createInitialColors = async () => {
 const createInitialItemColors = async () => {
     try {
         console.log("Creating initial item_colors...");
-        const itemColors = [];
-
-        itemColors.push(await createItemColor({
-            itemId: 1,
-            colorId: 1,
-            imageURL: "./images/red_socataca_tee.png"
-        }));
 
         itemColors.push(await createItemColor({
             itemId: 1,
             colorId: 2,
-            imageURL: "./images/blue_socataca_tee.png"
+            imageURL: "./images/plain_tee/red.png"
+        }));
+
+        itemColors.push(await createItemColor({
+            itemId: 1,
+            colorId: 3,
+            imageURL: "./images/plain_tee/green.png"
+        }));
+
+        itemColors.push(await createItemColor({
+            itemId: 1,
+            colorId: 4,
+            imageURL: "./images/plain_tee/blue.png"
+        }));
+
+        itemColors.push(await createItemColor({
+            itemId: 1,
+            colorId: 5,
+            imageURL: "./images/plain_tee/yellow.png"
         }));
 
         itemColors.push(await createItemColor({
             itemId: 2,
-            colorId: 1,
-            imageURL: "./images/default_shirt.png"
+            colorId: 2,
+            imageURL: "./images/socataca_tee/red.png"
         }));
 
         itemColors.push(await createItemColor({
             itemId: 2,
             colorId: 3,
-            imageURL: "./images/default_shirt.png"
+            imageURL: "./images/socataca_tee/green.png"
+        }));
+
+        itemColors.push(await createItemColor({
+            itemId: 2,
+            colorId: 4,
+            imageURL: "./images/socataca_tee/blue.png"
+        }));
+
+        itemColors.push(await createItemColor({
+            itemId: 3,
+            colorId: 2,
+            imageURL: "./images/react_tee/red.png"
+        }));
+
+        itemColors.push(await createItemColor({
+            itemId: 3,
+            colorId: 3,
+            imageURL: "./images/react_tee/green.png"
         }));
 
         itemColors.push(await createItemColor({
             itemId: 3,
             colorId: 4,
-            imageURL: "./images/default_shirt.png"
+            imageURL: "./images/react_tee/blue.png"
+        }));
+
+        itemColors.push(await createItemColor({
+            itemId: 3,
+            colorId: 5,
+            imageURL: "./images/react_tee/yellow.png"
+        }));
+
+        itemColors.push(await createItemColor({
+            itemId: 4,
+            colorId: 1,
+            imageURL: "./images/plain_tank/white.png"
+        }));
+
+        itemColors.push(await createItemColor({
+            itemId: 4,
+            colorId: 3,
+            imageURL: "./images/plain_tank/green.png"
+        }));
+
+        itemColors.push(await createItemColor({
+            itemId: 4,
+            colorId: 5,
+            imageURL: "./images/plain_tank/yellow.png"
+        }));
+
+        itemColors.push(await createItemColor({
+            itemId: 5,
+            colorId: 2,
+            imageURL: "./images/socataca_tank/red.png"
+        }));
+
+        itemColors.push(await createItemColor({
+            itemId: 5,
+            colorId: 4,
+            imageURL: "./images/socataca_tank/blue.png"
+        }));
+
+        itemColors.push(await createItemColor({
+            itemId: 6,
+            colorId: 6,
+            imageURL: "./images/rainbow_tank.png"
+        }));
+
+        itemColors.push(await createItemColor({
+            itemId: 7,
+            colorId: 1,
+            imageURL: "./images/plain_long_sleeve/white.png"
+        }));
+
+        itemColors.push(await createItemColor({
+            itemId: 7,
+            colorId: 2,
+            imageURL: "./images/plain_long_sleeve/red.png"
+        }));
+
+        itemColors.push(await createItemColor({
+            itemId: 7,
+            colorId: 3,
+            imageURL: "./images/plain_long_sleeve/green.png"
+        }));
+
+        itemColors.push(await createItemColor({
+            itemId: 8,
+            colorId: 1,
+            imageURL: "./images/aperture_long_sleeve/white.png"
+        }));
+
+        itemColors.push(await createItemColor({
+            itemId: 8,
+            colorId: 2,
+            imageURL: "./images/aperture_long_sleeve/red.png"
+        }));
+
+        itemColors.push(await createItemColor({
+            itemId: 8,
+            colorId: 3,
+            imageURL: "./images/aperture_long_sleeve/green.png"
+        }));
+
+        itemColors.push(await createItemColor({
+            itemId: 9,
+            colorId: 6,
+            imageURL: "./images/rainbow_long_sleeve.png"
         }));
 
         console.log(itemColors);
@@ -269,7 +435,6 @@ const createInitialItemColors = async () => {
 const createInitialSizes = async () => {
     try {
         console.log("Creating initial sizes...");
-        const sizes = [];
 
         sizes.push(await createSize("extraSmall", "xs"));
         sizes.push(await createSize("small", "s"));
@@ -289,68 +454,23 @@ const createInitialSizes = async () => {
 const createInitialItemColorSizes = async () => {
     try {
         console.log("Creating initial item_color_sizes...");
-        const itemColorSizes = [];
 
-        itemColorSizes.push(await createItemColorSize({
-            itemColorId: 1,
-            sizeId: 3,
-            stock: 4
-        }));
+        const sizeIds = [...sizes.map(size => size.id)];
 
-        itemColorSizes.push(await createItemColorSize({
-            itemColorId: 1,
-            sizeId: 4,
-            stock: 3
-        }));
+        for (let i = 0; i < itemColors.length; i++) {
+            const numSizes = randomInt(2, 6);
+            const possibleSizeIds = [...sizeIds];
+            for (let s = 0; s < numSizes; s++) {
+                const sizeIndex = randomInt(0, possibleSizeIds.length - 1);
+                itemColorSizes.push(await createItemColorSize({
+                    itemColorId: itemColors[i].id,
+                    sizeId: possibleSizeIds[sizeIndex],
+                    stock: randomInt(1, 20)
+                }));
+                possibleSizeIds.splice(sizeIndex, 1);
+            };
+        };
 
-        itemColorSizes.push(await createItemColorSize({
-            itemColorId: 2,
-            sizeId: 1,
-            stock: 6
-        }));
-
-        itemColorSizes.push(await createItemColorSize({
-            itemColorId: 2,
-            sizeId: 2,
-            stock: 5
-        }));
-
-        itemColorSizes.push(await createItemColorSize({
-            itemColorId: 3,
-            sizeId: 3,
-            stock: 8
-        }));
-
-        itemColorSizes.push(await createItemColorSize({
-            itemColorId: 3,
-            sizeId: 6,
-            stock: 2
-        }));
-
-        itemColorSizes.push(await createItemColorSize({
-            itemColorId: 4,
-            sizeId: 4,
-            stock: 9
-        }));
-
-        itemColorSizes.push(await createItemColorSize({
-            itemColorId: 4,
-            sizeId: 5,
-            stock: 1
-        }));
-
-        itemColorSizes.push(await createItemColorSize({
-            itemColorId: 5,
-            sizeId: 2,
-            stock: 8
-        }));
-
-        itemColorSizes.push(await createItemColorSize({
-            itemColorId: 5,
-            sizeId: 4,
-            stock: 3
-        }));
-        
         console.log(itemColorSizes);
         console.log("Finished creating item_color_sizes!");
     } catch (error) {
@@ -362,7 +482,6 @@ const createInitialItemColorSizes = async () => {
 const createInitialCarts = async () => {
     try {
         console.log("Creating initial carts...");
-        const carts = [];
 
         await createCart(1);
         carts.push(await purchaseCart(1));
@@ -384,53 +503,21 @@ const createInitialCartItemColorSizes = async () => {
         console.log("Creating intial cart_item_color_sizes...");
         const cartItemColorSizes = [];
 
-        cartItemColorSizes.push(await createCartItemColorSize({
-            cartId: 1,
-            itemColorSizeId: 1,
-            quantity: 5
-        }));
+        const itemColorSizeIds = [...itemColorSizes.map(ics => ics.id)];
 
-        cartItemColorSizes.push(await createCartItemColorSize({
-            cartId: 1,
-            itemColorSizeId: 4,
-            quantity: 3
-        }));
-
-        cartItemColorSizes.push(await createCartItemColorSize({
-            cartId: 2,
-            itemColorSizeId: 8,
-            quantity: 1
-        }));
-
-        cartItemColorSizes.push(await createCartItemColorSize({
-            cartId: 2,
-            itemColorSizeId: 9,
-            quantity: 4
-        }));
-
-        cartItemColorSizes.push(await createCartItemColorSize({
-            cartId: 3,
-            itemColorSizeId: 5,
-            quantity: 1
-        }));
-
-        cartItemColorSizes.push(await createCartItemColorSize({
-            cartId: 3,
-            itemColorSizeId: 7,
-            quantity: 3
-        }));
-
-        cartItemColorSizes.push(await createCartItemColorSize({
-            cartId: 4,
-            itemColorSizeId: 2,
-            quantity: 3
-        }));
-
-        cartItemColorSizes.push(await createCartItemColorSize({
-            cartId: 4,
-            itemColorSizeId: 6,
-            quantity: 2
-        }));
+        for (let i = 0; i < carts.length; i++) {
+            const numCartItems = randomInt(2, 4);
+            const possibleItemColorSizeIds = [...itemColorSizeIds];
+            for (let j = 0; j < numCartItems; j++) {
+                const itemColorSizeIndex = randomInt(0, possibleItemColorSizeIds.length - 1);
+                cartItemColorSizes.push(await createCartItemColorSize({
+                    cartId: carts[i].id,
+                    itemColorSizeId: possibleItemColorSizeIds[itemColorSizeIndex],
+                    quantity: randomInt(1, 10)
+                }));
+                possibleItemColorSizeIds.splice(itemColorSizeIndex, 1);
+            };
+        };
 
         console.log(cartItemColorSizes);
         console.log("Finished creating initail cart_item_color_sizes!");
