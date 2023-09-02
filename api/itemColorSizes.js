@@ -1,16 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const { requireUser, requireAdmin } = require("./utils");
-const { createItemStyleSize, getItemStyleSizesByItemStyleId } = require("../db/itemStyleSizes");
+const { createItemColorSize, getItemColorSizesByItemColorId } = require("../db/itemColorSizes");
 
-// POST /api/itemStyleSizes
+// POST /api/itemColorSizes
 router.post("/", requireUser, requireAdmin, async (req, res) => {
     try {
-        const itemStyleSize = await createItemStyleSize(req.body);
-        if (itemStyleSize) {
+        const itemColorSize = await createItemColorSize(req.body);
+        if (itemColorSize) {
             res.send({
                 success: true,
-                itemStyleSize
+                itemColorSize
             });
         } else {
             res.send({ success: false });
@@ -20,15 +20,15 @@ router.post("/", requireUser, requireAdmin, async (req, res) => {
     };
 });
 
-// GET /api/itemStyleSizes/:itemStyleId
-router.get("/:itemStyleId", async (req, res) => {
-    const { itemStyleId } = req.params;;
+// GET /api/itemColorSizes/:itemColorId
+router.get("/:itemColorId", async (req, res) => {
+    const { itemColorId } = req.params;;
     try {
-        const itemStyleSizes = await getItemStyleSizesByItemStyleId(itemStyleId);
-        if (itemStyleSizes) {
+        const itemColorSizes = await getItemColorSizesByItemColorId(itemColorId);
+        if (itemColorSizes) {
             res.send({
                 success: true,
-                itemStyleSizes
+                itemColorSizes
             });
         } else {
             res.send({ success: false });

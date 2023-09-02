@@ -1,16 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const { requireUser, requireAdmin } = require("./utils");
-const { createItemStyle, updateItemStyle } = require("../db/itemStyles");
+const { createItemColor, updateItemColor } = require("../db/itemColors");
 
-// POST /api/itemStyles
+// POST /api/itemColors
 router.post("/", requireUser, requireAdmin, async (req, res) => {
     try {
-        const itemStyle = await createItemStyle(req.body);
-        if (itemStyle) {
+        const itemColor = await createItemColor(req.body);
+        if (itemColor) {
             res.send({
                 success: true,
-                itemStyle
+                itemColor
             });
         } else {
             res.send({ success: false });
@@ -20,15 +20,15 @@ router.post("/", requireUser, requireAdmin, async (req, res) => {
     };
 });
 
-// PATCH /api/itemStyles/:id
+// PATCH /api/itemColors/:id
 router.patch("/:id", requireUser, requireAdmin, async (req, res) => {
     const { id } = req.params;
     try {
-        const updatedItemStyle = await updateItemStyle(id, req.body);
-        if (updatedItemStyle) {
+        const updatedItemColor = await updateItemColor(id, req.body);
+        if (updatedItemColor) {
             res.send({
                 success: true,
-                updatedItemStyle
+                updatedItemColor
             });
         } else {
             res.send({ success: false })

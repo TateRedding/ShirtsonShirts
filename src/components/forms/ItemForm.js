@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import SelectOrAddCategory from "../tools/SelectOrAddCategory";
-import ItemStyleForm from "./ItemStyleForm";
+import ItemColorForm from "./ItemColorForm";
 import { useLocation, useParams } from "react-router-dom";
 
 const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
@@ -11,7 +11,7 @@ const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
     const [categoryId, setCategoryId] = useState(0);
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState(0);
-    const [itemStyles, setItemStyles] = useState([]);
+    const [itemColors, setItemColors] = useState([]);
 
     const { itemId } = useParams();
 
@@ -45,7 +45,7 @@ const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
             setCategoryId(item.categoryId);
             setDescription(item.description);
             setPrice(item.price);
-            setItemStyles(item.styles);
+            setItemColors(item.colors);
         };
     };
 
@@ -57,7 +57,7 @@ const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
             categoryId,
             description,
             price,
-            styles: itemStyles
+            colors: itemColors
         }, {
             headers: {
                 "Content-Type": "application/json",
@@ -70,7 +70,7 @@ const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
             setCategoryId(0);
             setDescription("");
             setPrice("");
-            setItemStyles([]);
+            setItemColors([]);
         };
     };
 
@@ -82,7 +82,7 @@ const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
             categoryId,
             description,
             price,
-            styles: itemStyles
+            colors: itemColors
         }, {
             headers: {
                 "Content-Type": "application/json",
@@ -153,11 +153,11 @@ const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
 
                             <div className="d-flex">
                                 {
-                                    itemStyles.map((itemStyle, idx) => (
-                                        <ItemStyleForm
-                                            itemStyle={itemStyle}
-                                            itemStyles={itemStyles}
-                                            setItemStyles={setItemStyles}
+                                    itemColors.map((itemColor, idx) => (
+                                        <ItemColorForm
+                                            itemColor={itemColor}
+                                            itemColors={itemColors}
+                                            setItemColors={setItemColors}
                                             index={idx}
                                             sizes={sizes}
                                             key={idx}
@@ -170,14 +170,14 @@ const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
                                 type="button"
                                 className="btn btn-success"
                                 onClick={() => {
-                                    setItemStyles([...itemStyles, {
+                                    setItemColors([...itemColors, {
                                         name: "",
                                         imageURL: "./images/default_shirt.png",
                                         sizes: []
                                     }]);
                                 }}
                             >
-                                Add Style
+                                Add Color
                             </button>
 
                             <button

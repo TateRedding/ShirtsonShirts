@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-const SizeStockSelector = ({ size, itemStyle, itemStyleIndex, itemStyleSizes, setItemStyleSizes }) => {
+const SizeStockSelector = ({ size, itemColor, itemColorIndex, itemColorSizes, setItemColorSizes }) => {
     const [selected, setSelected] = useState(false);
     const [stock, setStock] = useState(0);
 
     useEffect(() => {
-        const iss = itemStyle.sizes.find(iss => iss.name === size.name);
+        const iss = itemColor.sizes.find(iss => iss.name === size.name);
         if (iss && iss.stock) {
             setSelected(true);
             setStock(iss.stock);
@@ -13,10 +13,10 @@ const SizeStockSelector = ({ size, itemStyle, itemStyleIndex, itemStyleSizes, se
     }, []);
 
     useEffect(() => {
-        const temp = [...itemStyleSizes];
-        const itemStyleSize = temp.find(iss => iss.name === size.name);
-        if (itemStyleSize) {
-            const idx = temp.indexOf(itemStyleSize);
+        const temp = [...itemColorSizes];
+        const itemColorSize = temp.find(iss => iss.name === size.name);
+        if (itemColorSize) {
+            const idx = temp.indexOf(itemColorSize);
             if (selected) {
                 temp[idx].stock = Number(stock);
             } else {
@@ -30,7 +30,7 @@ const SizeStockSelector = ({ size, itemStyle, itemStyleIndex, itemStyleSizes, se
                 });
             };
         };
-        setItemStyleSizes(temp);
+        setItemColorSizes(temp);
     }, [selected, stock]);
 
     return (
@@ -41,9 +41,9 @@ const SizeStockSelector = ({ size, itemStyle, itemStyleIndex, itemStyleSizes, se
                     type="checkbox"
                     checked={selected}
                     onChange={(event) => setSelected(event.target.checked)}
-                    id={`${size.name}-checkbox-iss-${itemStyleIndex}`}
+                    id={`${size.name}-checkbox-iss-${itemColorIndex}`}
                 />
-                <label className="form-check-label" htmlFor={`${size.name}-checkbox-iss-${itemStyleIndex}`}>
+                <label className="form-check-label" htmlFor={`${size.name}-checkbox-iss-${itemColorIndex}`}>
                     {size.symbol.toUpperCase()}
                 </label>
             </div>

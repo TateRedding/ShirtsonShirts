@@ -18,13 +18,13 @@ const SingleCartItem = ({ cartItem, userToken, getCart, calcTotal }) => {
         event.preventDefault();
         if (cartItem.quantity !== quantity) {
             try {
-                const response = await axios.patch(`/api/cartItemStyleSizes/${cartItem.cartItemStyleSizeId}`, { quantity }, {
+                const response = await axios.patch(`/api/cartItemColorSizes/${cartItem.cartItemColorSizeId}`, { quantity }, {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${userToken}`
                     }
                 });
-                if (response.data.success) cartItem.quantity = response.data.updatedCartItemStyleSize.quantity;
+                if (response.data.success) cartItem.quantity = response.data.updatedCartItemColorSize.quantity;
                 calcTotal();
             } catch (error) {
                 console.error(error);
@@ -34,7 +34,7 @@ const SingleCartItem = ({ cartItem, userToken, getCart, calcTotal }) => {
 
     const removeItem = async () => {
         try {
-            await axios.delete(`api/cartItemStyleSizes/${cartItem.cartItemStyleSizeId}`, {
+            await axios.delete(`api/cartItemColorSizes/${cartItem.cartItemColorSizeId}`, {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${userToken}`
@@ -52,7 +52,7 @@ const SingleCartItem = ({ cartItem, userToken, getCart, calcTotal }) => {
             <div className="cart-item-details d-flex align-items-center">
                 <div className="flex-grow-2 d-flex justify-content-center">
                     <button className="btn btn-outline-secondary" onClick={() => {
-                        navigate(`/shirts/${cartItem.item.split(" ").join("_")}?style=${cartItem.style}&size=${cartItem.size}`)
+                        navigate(`/shirts/${cartItem.item.split(" ").join("_")}?color=${cartItem.color}&size=${cartItem.size}`)
                     }}>
                         <img
                             className="product-thumbnail"
@@ -64,12 +64,12 @@ const SingleCartItem = ({ cartItem, userToken, getCart, calcTotal }) => {
                 <div className="flex-grow-1">
                     <div className="card-body">
                         <a className="nav-link" href={
-                            `/#/shirts/${cartItem.item.split(" ").join("_")}?style=${cartItem.style}&size=${cartItem.size}`
+                            `/#/shirts/${cartItem.item.split(" ").join("_")}?color=${cartItem.color}&size=${cartItem.size}`
                         }>
                             <h5 className="card-title">{cartItem.item}</h5>
                         </a>
                         <p className="card-text">Size: {cartItem.size.toUpperCase()}</p>
-                        <p className="card-text">Color/ Style: {cartItem.style}</p>
+                        <p className="card-text">Color: {cartItem.color}</p>
                         <form onSubmit={updateQuantity}>
                             <div className="mb-3 row align-items-center">
                                 <div className="col-auto">

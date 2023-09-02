@@ -40,7 +40,7 @@ const Orders = ({ userToken, user }) => {
                                     cartItem={cartItem}
                                     userToken={userToken}
                                     purchaseTime={order.purchaseTime}
-                                    key={cartItem.cartItemStyleSizeId}
+                                    key={cartItem.cartItemColorSizeId}
                                 />
                             );
                         });

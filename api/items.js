@@ -1,20 +1,20 @@
 const express = require("express");
 const router = express.Router();
-const { getStyleByName, createStyle } = require("../db/styles");
+const { getColorByName, createColor } = require("../db/colors");
 const { getSizeByName } = require("../db/sizes");
 const {
-    getItemStyleSizesByItemStyleId,
-    createItemStyleSize,
-    getItemStyleSizeByItemStyleIdAndSizeId,
-    updateItemStyleSize
-} = require("../db/itemStyleSizes");
-const { getCartItemStyleSizesByItemStyleSizeId, destroyCartItemStyleSize } = require("../db/cartItemStyleSizes");
+    getItemColorSizesByItemColorId,
+    createItemColorSize,
+    getItemColorSizeByItemColorIdAndSizeId,
+    updateItemColorSize
+} = require("../db/itemColorSizes");
+const { getCartItemColorSizesByItemColorSizeId, destroyCartItemColorSize } = require("../db/cartItemColorSizes");
 const {
-    getItemStylesByItemId,
-    createItemStyle,
-    getItemStyleByItemIdAndStyleId,
-    updateItemStyle
-} = require("../db/itemStyles");
+    getItemColorsByItemId,
+    createItemColor,
+    getItemColorByItemIdAndColorId,
+    updateItemColor
+} = require("../db/itemColors");
 const {
     createItem,
     getAllItems,
@@ -31,62 +31,62 @@ const e = require("express");
 
 // POST/api/items
 router.post("/", requireUser, requireAdmin, async (req, res) => {
-    const { name, categoryId, description, price, styles } = req.body;
+    const { name, categoryId, description, price, colors } = req.body;
     try {
         const item = await createItem({ name, categoryId, description, price });
         if (item) {
-            const styleErrors = [];
-            const itemStyleErrors = [];
-            const itemStyleSizeErrors = [];
-            for (let i = 0; i < styles.length; i++) {
-                let style = await getStyleByName(styles[i].name);
-                if (!style) style = await createStyle(styles[i].name);
-                if (style) {
-                    let imageURL = styles[i].imageURL;
+            const colorErrors = [];
+            const itemColorErrors = [];
+            const itemColorSizeErrors = [];
+            for (let i = 0; i < colors.length; i++) {
+                let color = await getColorByName(colors[i].name);
+                if (!color) color = await createColor(colors[i].name);
+                if (color) {
+                    let imageURL = colors[i].imageURL;
                     if (!imageURL) imageURL = "./images/default_shirt.png";
-                    const itemStyle = await createItemStyle({
+                    const itemColor = await createItemColor({
                         itemId: item.id,
-                        styleId: style.id,
+                        colorId: color.id,
                         imageURL
                     });
-                    if (itemStyle) {
-                        for (let j = 0; j < styles[i].sizes.length; j++) {
-                            const size = await getSizeByName(styles[i].sizes[j].name);
+                    if (itemColor) {
+                        for (let j = 0; j < colors[i].sizes.length; j++) {
+                            const size = await getSizeByName(colors[i].sizes[j].name);
                             if (size) {
-                                const itemStyleSize = await createItemStyleSize({
-                                    itemStyleId: itemStyle.id,
+                                const itemColorSize = await createItemColorSize({
+                                    itemColorId: itemColor.id,
                                     sizeId: size.id,
-                                    stock: styles[i].sizes[j].stock
+                                    stock: colors[i].sizes[j].stock
                                 });
-                                if (!itemStyleSize) itemStyleSizeErrors.push({
+                                if (!itemColorSize) itemColorSizeErrors.push({
                                     item: item.name,
-                                    style: style.name,
+                                    color: color.name,
                                     size: size.name
                                 });
                             } else {
-                                itemStyleSizeErrors.push({
+                                itemColorSizeErrors.push({
                                     item: item.name,
-                                    style: style.name,
-                                    size: styles[i].sizes[j].name
+                                    color: color.name,
+                                    size: colors[i].sizes[j].name
                                 });
                             };
                         };
                     } else {
-                        itemStyleErrors.push({
+                        itemColorErrors.push({
                             item: item.name,
-                            style: item.styles[i].name
+                            color: item.colors[i].name
                         });
                     };
                 } else {
-                    styleErrors.push(styles[i].name);
+                    colorErrors.push(colors[i].name);
                 };
             };
             res.send({
                 success: true,
                 item,
-                styleErrors,
-                itemStyleErrors,
-                itemStyleSizeErrors
+                colorErrors,
+                itemColorErrors,
+                itemColorSizeErrors
             });
         } else {
             res.send({ success: false });
@@ -162,72 +162,72 @@ router.get("/name/:name", async (req, res) => {
 // PATCH /api/items/:id
 router.patch("/:id", requireUser, requireAdmin, async (req, res) => {
     const { id } = req.params;
-    const { name, categoryId, description, price, styles } = req.body;
+    const { name, categoryId, description, price, colors } = req.body;
     try {
         const item = await updateItem(id, { name, categoryId, description, price });
         if (item) {
-            const styleErrors = [];
-            const itemStyleErrors = [];
-            const itemStyleSizeErrors = [];
-            for (let i = 0; i < styles.length; i++) {
-                let style = await getStyleByName(styles[i].name);
-                if (!style) style = await createStyle(styles[i].name);
-                if (style) {
-                    let itemStyle = await getItemStyleByItemIdAndStyleId(item.id, style.id);
-                    if (!itemStyle) itemStyle = await createItemStyle({
+            const colorErrors = [];
+            const itemColorErrors = [];
+            const itemColorSizeErrors = [];
+            for (let i = 0; i < colors.length; i++) {
+                let color = await getColorByName(colors[i].name);
+                if (!color) color = await createColor(colors[i].name);
+                if (color) {
+                    let itemColor = await getItemColorByItemIdAndColorId(item.id, color.id);
+                    if (!itemColor) itemColor = await createItemColor({
                         itemId: item.id,
-                        styleId: style.id,
-                        imageURL: styles[i].imageURL
+                        colorId: color.id,
+                        imageURL: colors[i].imageURL
                     });
-                    if (itemStyle) {
-                        if (!(styles[i].imageURL === itemStyle.imageURL)) {
-                            const updatedItemStyle = await updateItemStyle(itemStyle.id, { imageURL: styles[i].imageURL });
-                            if (!updatedItemStyle) itemStyleErrors.push({
+                    if (itemColor) {
+                        if (!(colors[i].imageURL === itemColor.imageURL)) {
+                            const updatedItemColor = await updateItemColor(itemColor.id, { imageURL: colors[i].imageURL });
+                            if (!updatedItemColor) itemColorErrors.push({
                                 item: item.name,
-                                style: item.styles[i].name
+                                color: item.colors[i].name
                             });
                         };
-                        for (let j = 0; j < styles[i].sizes.length; j++) {
-                            const size = await getSizeByName(styles[i].sizes[j].name);
+                        for (let j = 0; j < colors[i].sizes.length; j++) {
+                            const size = await getSizeByName(colors[i].sizes[j].name);
                             if (size) {
-                                let itemStyleSize = await getItemStyleSizeByItemStyleIdAndSizeId(itemStyle.id, size.id);
-                                if (!itemStyleSize) itemStyleSize = await createItemStyleSize({
-                                    itemStyleId: itemStyle.id,
+                                let itemColorSize = await getItemColorSizeByItemColorIdAndSizeId(itemColor.id, size.id);
+                                if (!itemColorSize) itemColorSize = await createItemColorSize({
+                                    itemColorId: itemColor.id,
                                     sizeId: size.id,
-                                    stock: styles[i].sizes[j].stock
+                                    stock: colors[i].sizes[j].stock
                                 });
-                                if (!(styles[i].sizes[j].stock === itemStyleSize.stock)) {
-                                    const updatedItemStyleSize = await updateItemStyleSize(itemStyleSize.id, styles[i].sizes[j].stock);
-                                    if (!updatedItemStyleSize) itemStyleSizeErrors.push({
+                                if (!(colors[i].sizes[j].stock === itemColorSize.stock)) {
+                                    const updatedItemColorSize = await updateItemColorSize(itemColorSize.id, colors[i].sizes[j].stock);
+                                    if (!updatedItemColorSize) itemColorSizeErrors.push({
                                         item: item.name,
-                                        style: style.name,
-                                        size: styles[i].sizes[j].name
+                                        color: color.name,
+                                        size: colors[i].sizes[j].name
                                     });
                                 };
                             } else {
-                                itemStyleSizeErrors.push({
+                                itemColorSizeErrors.push({
                                     item: item.name,
-                                    style: style.name,
-                                    size: styles[i].sizes[j].name
+                                    color: color.name,
+                                    size: colors[i].sizes[j].name
                                 });
                             };
                         };
                     } else {
-                        itemStyleErrors.push({
+                        itemColorErrors.push({
                             item: item.name,
-                            style: item.styles[i].name
+                            color: item.colors[i].name
                         });
                     };
                 } else {
-                    styleErrors.push(styles[i].name);
+                    colorErrors.push(colors[i].name);
                 };
             };
             res.send({
                 success: true,
                 item,
-                styleErrors,
-                itemStyleErrors,
-                itemStyleSizeErrors
+                colorErrors,
+                itemColorErrors,
+                itemColorSizeErrors
             });
         } else {
             res.send({ success: false });
@@ -259,13 +259,13 @@ router.get("/:id", async (req, res) => {
 router.delete("/:id", requireUser, requireAdmin, async (req, res) => {
     const { id } = req.params;
     try {
-        const itemStyles = await getItemStylesByItemId(id);
-        for (let i = 0; i < itemStyles.length; i++) {
-            const itemStyleSizes = await getItemStyleSizesByItemStyleId(itemStyles[i].id);
-            for (let j = 0; j < itemStyleSizes.length; j++) {
-                const cartItemStyleSizes = await getCartItemStyleSizesByItemStyleSizeId(itemStyleSizes[j].id);
-                for (let k = 0; k < cartItemStyleSizes.length; k++) {
-                    if (!cartItemStyleSizes[k].isPurchased) destroyCartItemStyleSize(cartItemStyleSizes[k].id);
+        const itemColors = await getItemColorsByItemId(id);
+        for (let i = 0; i < itemColors.length; i++) {
+            const itemColorSizes = await getItemColorSizesByItemColorId(itemColors[i].id);
+            for (let j = 0; j < itemColorSizes.length; j++) {
+                const cartItemColorSizes = await getCartItemColorSizesByItemColorSizeId(itemColorSizes[j].id);
+                for (let k = 0; k < cartItemColorSizes.length; k++) {
+                    if (!cartItemColorSizes[k].isPurchased) destroyCartItemColorSize(cartItemColorSizes[k].id);
                 };
             };
         };

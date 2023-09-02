@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from "react";
 import SizeStockSelector from "../tools/SizeStockSelector";
 
-const ItemStyleForm = ({ itemStyle, itemStyles, setItemStyles, index, sizes }) => {
-    const [name, setName] = useState(itemStyle.name);
-    const [imageURL, setImageURL] = useState(itemStyle.imageURL);
-    const [itemStyleSizes, setItemStyleSizes] = useState(itemStyle.sizes);
+const ItemColorForm = ({ itemColor, itemColors, setItemColors, index, sizes }) => {
+    const [name, setName] = useState(itemColor.name);
+    const [imageURL, setImageURL] = useState(itemColor.imageURL);
+    const [itemColorSizes, setItemColorSizes] = useState(itemColor.sizes);
 
     useEffect(() => {
-        const temp = [...itemStyles];
+        const temp = [...itemColors];
         temp[index] = {
             name: name.toLowerCase(),
             imageURL,
-            sizes: itemStyleSizes
+            sizes: itemColorSizes
         };
-        setItemStyles([...temp]);
-    }, [name, imageURL, itemStyleSizes]);
+        setItemColors([...temp]);
+    }, [name, imageURL, itemColorSizes]);
 
     return (
         <div>
             <input
                 className="form-control"
                 value={name}
-                placeholder="Style Name"
+                placeholder="Color Name"
                 required
                 onChange={(event) => setName(event.target.value)}
             />
@@ -37,10 +37,10 @@ const ItemStyleForm = ({ itemStyle, itemStyles, setItemStyles, index, sizes }) =
                     sizes.map((size, idx) => (
                         <SizeStockSelector
                             size={size}
-                            itemStyle={itemStyle}
-                            itemStyleIndex={index}
-                            itemStyleSizes={itemStyleSizes}
-                            setItemStyleSizes={setItemStyleSizes}
+                            itemColor={itemColor}
+                            itemColorIndex={index}
+                            itemColorSizes={itemColorSizes}
+                            setItemColorSizes={setItemColorSizes}
                             key={size.id}
                         />
                     ))
@@ -50,4 +50,4 @@ const ItemStyleForm = ({ itemStyle, itemStyles, setItemStyles, index, sizes }) =
     );
 };
 
-export default ItemStyleForm;
+export default ItemColorForm;

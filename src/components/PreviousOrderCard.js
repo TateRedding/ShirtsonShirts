@@ -12,8 +12,8 @@ const PreviousOrderCard = ({ cartItem, userToken, purchaseTime }) => {
             if (cartItem) {
                 let quantity = cartItem.quantity;
                 if (cartItem.stock < cartItem.quantity) quantity = cartItem.stock;
-                const response = await axios.post("/api/cartItemStyleSizes", {
-                    itemStyleSizeId: cartItem.itemStyleSizeId,
+                const response = await axios.post("/api/cartItemColorSizes", {
+                    itemColorSizeId: cartItem.itemColorSizeId,
                     quantity
                 }, {
                     headers: {
@@ -38,7 +38,7 @@ const PreviousOrderCard = ({ cartItem, userToken, purchaseTime }) => {
             <div className="previous-order-details d-flex align-items-center">
                 <div className="flex-grow-2 d-flex justify-content-center">
                     <button className="btn btn-outline-secondary" onClick={() => {
-                        navigate(`/shirts/${cartItem.item.split(" ").join("_")}?style=${cartItem.style}&size=${cartItem.size}`)
+                        navigate(`/shirts/${cartItem.item.split(" ").join("_")}?color=${cartItem.color}&size=${cartItem.size}`)
                     }}>
                         <img
                             className="product-thumbnail"
@@ -50,7 +50,7 @@ const PreviousOrderCard = ({ cartItem, userToken, purchaseTime }) => {
                 <div className="flex-grow-1">
                     <div className="card-body">
                         <a className="nav-link" href={
-                            `/shirts/${cartItem.item.split(" ").join("_")}?style=${cartItem.style}&size=${cartItem.size}`}>
+                            `/shirts/${cartItem.item.split(" ").join("_")}?color=${cartItem.color}&size=${cartItem.size}`}>
                             <h5 className="card-title">{cartItem.item}</h5>
                         </a>
                         <p className="card-text">Size: {cartItem.size}</p>

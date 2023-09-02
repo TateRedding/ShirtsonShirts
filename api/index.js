@@ -36,11 +36,11 @@ apiRouter.use(async (req, res, next) => {
 });
 
 apiRouter.use("/carts", require("./carts"));
-apiRouter.use("/cartItemStyleSizes", require("./cartItemStyleSizes"));
+apiRouter.use("/cartItemColorSizes", require("./cartItemColorSizes"));
 apiRouter.use("/categories", require("./categories"));
 apiRouter.use("/items", require("./items"));
-apiRouter.use("/itemStyles", require("./itemStyles.js"));
-apiRouter.use("/itemStyleSizes", require("./itemStyleSizes.js"));
+apiRouter.use("/itemColors", require("./itemColors.js"));
+apiRouter.use("/itemColorSizes", require("./itemColorSizes.js"));
 apiRouter.use("/sizes", require("./sizes"));
 apiRouter.use("/users", require("./users"));
 

@@ -1,8 +1,8 @@
 const express = require("express");
 const { requireUser } = require("./utils");
 const { getCurrentCart, getPreviousCarts, purchaseCart } = require("../db/carts");
-const { getCartItemStyleSizesByCartId } = require("../db/cartItemStyleSizes");
-const { purchaseItemStyleSize } = require("../db/itemStyleSizes");
+const { getCartItemColorSizesByCartId } = require("../db/cartItemColorSizes");
+const { purchaseItemColorSize } = require("../db/itemColorSizes");
 const router = express.Router();
 
 // GET /api/carts/:userId/current
@@ -56,11 +56,11 @@ router.patch("/:id", requireUser, async (req, res) => {
         const cart = await purchaseCart(id);
         const stockUpdateErrors = [];
         if (cart) {
-            const cartItemStyleSizes = await getCartItemStyleSizesByCartId(id);
-            if (cartItemStyleSizes) {
-            for (let i = 0; i < cartItemStyleSizes.length; i++) {
-                const updatedItemStyleSize = await purchaseItemStyleSize(cartItemStyleSizes[i].itemStyleSizeId, cartItemStyleSizes[i].quantity);
-                if (!updatedItemStyleSize) stockUpdateErrors.push(cartItemStyleSizes[i]);
+            const cartItemColorSizes = await getCartItemColorSizesByCartId(id);
+            if (cartItemColorSizes) {
+            for (let i = 0; i < cartItemColorSizes.length; i++) {
+                const updatedItemColorSize = await purchaseItemColorSize(cartItemColorSizes[i].itemColorSizeId, cartItemColorSizes[i].quantity);
+                if (!updatedItemColorSize) stockUpdateErrors.push(cartItemColorSizes[i]);
             };
         };
             res.send({

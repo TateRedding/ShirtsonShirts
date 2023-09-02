@@ -7,9 +7,9 @@ import { Link, useLocation } from "react-router-dom";
 const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
     const itemName = useParams().itemName.split("_").join(" ");
     const [item, setItem] = useState({});
-    const [selectedItemStyle, setSelectedItemStyle] = useState({});
+    const [selectedItemColor, setSelectedItemColor] = useState({});
     const [selectedSizeId, setSelectedSizeId] = useState("");
-    const [selectedItemStyleSize, setSelectedItemStyleSize] = useState({});
+    const [selectedItemColorSize, setSelectedItemColorSize] = useState({});
     const [quantity, setQuantity] = useState("");
     const [showQuantityError, setShowQuantityError] = useState(false);
     const [showItemInCartError, setShowItemInCartError] = useState(false);
@@ -22,7 +22,7 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
     };
 
     const query = useQuery();
-    const styleQuery = query.get("style");
+    const colorQuery = query.get("color");
     const sizeQuery = query.get("size");
 
     const getItem = async () => {
@@ -39,41 +39,41 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
     }, []);
 
     useEffect(() => {
-        if (item.styles) {
-            if (styleQuery) {
-                setSelectedItemStyle(item.styles.find(itemStyle => itemStyle.name === styleQuery));
+        if (item.colors) {
+            if (colorQuery) {
+                setSelectedItemColor(item.colors.find(itemColor => itemColor.name === colorQuery));
             } else {
-                setSelectedItemStyle(item.styles[0]);
+                setSelectedItemColor(item.colors[0]);
             };
         };
     }, [item]);
 
     useEffect(() => {
-        if (sizeQuery && selectedItemStyle.sizes) {
-            const iss = selectedItemStyle.sizes.find(iss => iss.symbol === sizeQuery);
+        if (sizeQuery && selectedItemColor.sizes) {
+            const iss = selectedItemColor.sizes.find(iss => iss.symbol === sizeQuery);
             if (iss && iss.stock) {
                 setSelectedSizeId(iss.sizeId);
             };
         };
-    }, [selectedItemStyle]);
+    }, [selectedItemColor]);
 
     useEffect(() => {
-        if (selectedItemStyle.sizes && selectedSizeId) {
-            setSelectedItemStyleSize(selectedItemStyle.sizes.find(itemStyleSize => itemStyleSize.sizeId === Number(selectedSizeId)));
+        if (selectedItemColor.sizes && selectedSizeId) {
+            setSelectedItemColorSize(selectedItemColor.sizes.find(itemColorSize => itemColorSize.sizeId === Number(selectedSizeId)));
         };
-    }, [selectedItemStyle, selectedSizeId]);
+    }, [selectedItemColor, selectedSizeId]);
 
     const addToCart = async (event) => {
         event.preventDefault();
         setShowQuantityError(false);
         setShowItemInCartError(false);
-        if (selectedItemStyleSize.stock < quantity) {
+        if (selectedItemColorSize.stock < quantity) {
             setShowQuantityError(true);
         } else {
             try {
-                const response = await axios.post("/api/cartItemStyleSizes/",
+                const response = await axios.post("/api/cartItemColorSizes/",
                     {
-                        itemStyleSizeId: selectedItemStyleSize.id,
+                        itemColorSizeId: selectedItemColorSize.id,
                         quantity
                     },
                     {
@@ -145,7 +145,7 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
             }
             <div className="item-detail-child">
                 <div className="item-detail-image-container">
-                    <img className="item-detail-image" src={selectedItemStyle.imageURL} alt={`${item.name} in style ${selectedItemStyle.name}`} />
+                    <img className="item-detail-image" src={selectedItemColor.imageURL} alt={`${item.name} in color ${selectedItemColor.name}`} />
                 </div>
 
                 <div className="item-detail-description">
@@ -170,25 +170,25 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                     item.isActive ?
                         <form className="item-selection-form" onSubmit={addToCart}>
                             {
-                                item.styles && item.styles.length > 1 ?
+                                item.colors && item.colors.length > 1 ?
                                     <select
                                         className="form-select"
-                                        aria-label="style-select"
-                                        value={selectedItemStyle.id}
+                                        aria-label="color-select"
+                                        value={selectedItemColor.id}
                                         required
                                         onChange={(event) => {
                                             setSelectedSizeId("");
-                                            setSelectedItemStyle(item.styles.find(style => style.id.toString() === event.target.value))
+                                            setSelectedItemColor(item.colors.find(color => color.id.toString() === event.target.value))
                                         }}>
                                         {
-                                            item.styles.map((style) => <option value={style.id} key={style.id}>{style.name}</option>)
+                                            item.colors.map((color) => <option value={color.id} key={color.id}>{color.name}</option>)
                                         }
                                     </select>
                                     :
                                     null
                             }
                             <SizeSelect
-                                itemStyle={selectedItemStyle}
+                                itemColor={selectedItemColor}
                                 sizes={sizes}
                                 selectedSizeId={selectedSizeId}
                                 setSelectedSizeId={setSelectedSizeId}
@@ -211,7 +211,7 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                                             {
                                                 showQuantityError ?
                                                     <div id="quantity-error-message" className="form-text">
-                                                        Sorry, there are only {selectedItemStyleSize.stock} left in stock.
+                                                        Sorry, there are only {selectedItemColorSize.stock} left in stock.
                                                     </div>
                                                     :
                                                     null

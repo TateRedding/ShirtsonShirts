@@ -2,39 +2,39 @@ const express = require("express");
 const router = express.Router();
 const { requireUser } = require('./utils');
 const {
-    createCartItemStyleSize,
-    getCartItemStyleSizeByCartIdAndItemStyleSizeId,
-    getCartItemStyleSizeById,
-    updateCartItemStyleSize,
-    destroyCartItemStyleSize } = require("../db/cartItemStyleSizes");
+    createCartItemColorSize,
+    getCartItemColorSizeByCartIdAndItemColorSizeId,
+    getCartItemColorSizeById,
+    updateCartItemColorSize,
+    destroyCartItemColorSize } = require("../db/cartItemColorSizes");
 const { getCartById, getCurrentCart, createCart } = require('../db/carts');
 
-// POST /api/cartItemStyleSizes
+// POST /api/cartItemColorSizes
 router.post('/', requireUser, async (req, res) => {
-    const { itemStyleSizeId, quantity } = req.body;
+    const { itemColorSizeId, quantity } = req.body;
     try {
         let currentCart = await getCurrentCart(req.user.id);
         if (!currentCart) {
             currentCart = await createCart(req.user.id);
         };
 
-        const _cartItemStyleSize = await getCartItemStyleSizeByCartIdAndItemStyleSizeId(currentCart.id, itemStyleSizeId);
-        if (_cartItemStyleSize) {
+        const _cartItemColorSize = await getCartItemColorSizeByCartIdAndItemColorSizeId(currentCart.id, itemColorSizeId);
+        if (_cartItemColorSize) {
             res.send({
                 success: false,
                 error: "ItemAlreadyInCart",
                 message: "That item is already in your cart!"
             });
         } else {
-            const cartItemStyleSize = await createCartItemStyleSize({
+            const cartItemColorSize = await createCartItemColorSize({
                 cartId: currentCart.id,
-                itemStyleSizeId,
+                itemColorSizeId,
                 quantity
             });
-            if (cartItemStyleSize) {
+            if (cartItemColorSize) {
                 res.send({
                     success: true,
-                    cartItemStyleSize
+                    cartItemColorSize
                 });
             };
         };
@@ -43,14 +43,14 @@ router.post('/', requireUser, async (req, res) => {
     };
 });
 
-// PATCH /api/cartItemStyleSizes/:cartItemStyleSizeId
-router.patch('/:cartItemStyleSizeId', requireUser, async (req, res) => {
-    const { cartItemStyleSizeId } = req.params;
+// PATCH /api/cartItemColorSizes/:cartItemColorSizeId
+router.patch('/:cartItemColorSizeId', requireUser, async (req, res) => {
+    const { cartItemColorSizeId } = req.params;
     const { quantity } = req.body;
     try {
-        const cartItemStyleSize = await getCartItemStyleSizeById(cartItemStyleSizeId);
-        if (cartItemStyleSize) {
-            const cart = await getCartById(cartItemStyleSize.cartId);
+        const cartItemColorSize = await getCartItemColorSizeById(cartItemColorSizeId);
+        if (cartItemColorSize) {
+            const cart = await getCartById(cartItemColorSize.cartId);
             if (cart.userId === req.user.id) {
                 if (cart.isPurchased) {
                     res.send({
@@ -59,11 +59,11 @@ router.patch('/:cartItemStyleSizeId', requireUser, async (req, res) => {
                         message: "You can not update an item from a previous order!"
                     });
                 } else {
-                    const updatedCartItemStyleSize = await updateCartItemStyleSize(cartItemStyleSizeId, quantity);
-                    if (updatedCartItemStyleSize) {
+                    const updatedCartItemColorSize = await updateCartItemColorSize(cartItemColorSizeId, quantity);
+                    if (updatedCartItemColorSize) {
                         res.send({
                             success: true,
-                            updatedCartItemStyleSize
+                            updatedCartItemColorSize
                         });
                     }
                 }
@@ -77,8 +77,8 @@ router.patch('/:cartItemStyleSizeId', requireUser, async (req, res) => {
         } else {
             res.send({
                 success: false,
-                error: "InvalidCartItemStyleSizeId",
-                message: `Can not find a cart_item_style_size with id ${cartItemStyleSizeId}`
+                error: "InvalidCartItemColorSizeId",
+                message: `Can not find a cart_item_color_size with id ${cartItemColorSizeId}`
             });
         };
 
@@ -87,13 +87,13 @@ router.patch('/:cartItemStyleSizeId', requireUser, async (req, res) => {
     };
 });
 
-// DELETE /api/cartItemStyleSizes/:cartItemStyleSizeId
-router.delete('/:cartItemStyleSizeId', requireUser, async (req, res) => {
-    const { cartItemStyleSizeId } = req.params;
+// DELETE /api/cartItemColorSizes/:cartItemColorSizeId
+router.delete('/:cartItemColorSizeId', requireUser, async (req, res) => {
+    const { cartItemColorSizeId } = req.params;
     try {
-        const cartItemStyleSize = await getCartItemStyleSizeById(cartItemStyleSizeId);
-        if (cartItemStyleSize) {
-            const cart = await getCartById(cartItemStyleSize.cartId);
+        const cartItemColorSize = await getCartItemColorSizeById(cartItemColorSizeId);
+        if (cartItemColorSize) {
+            const cart = await getCartById(cartItemColorSize.cartId);
             if (cart.userId === req.user.id) {
                 if (cart.isPurchased) {
                     res.send({
@@ -102,10 +102,10 @@ router.delete('/:cartItemStyleSizeId', requireUser, async (req, res) => {
                         message: "You can not remove an item from a previous order!"
                     });
                 } else {
-                    const deletedCartItemStyleSize = await destroyCartItemStyleSize(cartItemStyleSizeId);
+                    const deletedCartItemColorSize = await destroyCartItemColorSize(cartItemColorSizeId);
                     res.send({
                         success: true,
-                        deletedCartItemStyleSize
+                        deletedCartItemColorSize
                     });
                 };
             } else {
@@ -118,8 +118,8 @@ router.delete('/:cartItemStyleSizeId', requireUser, async (req, res) => {
         } else {
             res.send({
                 success: false,
-                error: "InvalidCartItemStyleSizeId",
-                message: `Can not find a cart_item_style_size with id ${cartItemStyleSizeId}`
+                error: "InvalidCartItemColorSizeId",
+                message: `Can not find a cart_item_color_size with id ${cartItemColorSizeId}`
             });
         };
     } catch (error) {

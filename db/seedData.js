@@ -2,24 +2,24 @@ const client = require("./client");
 const { createUser } = require("./users");
 const { createCategory } = require("./categories");
 const { createItem } = require("./items");
-const { createStyle } = require("./styles");
-const { createItemStyle } = require("./itemStyles");
+const { createColor } = require("./colors");
+const { createItemColor } = require("./itemColors");
 const { createSize } = require("./sizes");
-const { createItemStyleSize } = require("./itemStyleSizes");
+const { createItemColorSize } = require("./itemColorSizes");
 const { createCart, purchaseCart } = require("./carts");
-const { createCartItemStyleSize } = require("./cartItemStyleSizes");
+const { createCartItemColorSize } = require("./cartItemColorSizes");
 
 const dropTables = async () => {
     try {
         console.log("Dropping tables...");
         await client.query(`
-            DROP TABLE IF EXISTS cart_item_style_sizes;
-            DROP TABLE IF EXISTS cart_item_styles;
+            DROP TABLE IF EXISTS cart_item_color_sizes;
+            DROP TABLE IF EXISTS cart_item_colors;
             DROP TABLE IF EXISTS carts;
-            DROP TABLE IF EXISTS item_style_sizes;
+            DROP TABLE IF EXISTS item_color_sizes;
             DROP TABLE IF EXISTS sizes;
-            DROP TABLE IF EXISTS item_styles;
-            DROP TABLE IF EXISTS styles;
+            DROP TABLE IF EXISTS item_colors;
+            DROP TABLE IF EXISTS colors;
             DROP TABLE IF EXISTS items;
             DROP TABLE IF EXISTS categories;
             DROP TABLE IF EXISTS users;
@@ -59,17 +59,17 @@ const createTables = async () => {
                 "isActive" BOOLEAN DEFAULT true
             );
 
-            CREATE TABLE styles (
+            CREATE TABLE colors (
                 id SERIAL PRIMARY KEY,
                 name VARCHAR(100) UNIQUE NOT NULL
             );
 
-            CREATE TABLE item_styles (
+            CREATE TABLE item_colors (
                 id SERIAL PRIMARY KEY,
                 "itemId" INTEGER REFERENCES items(id),
-                "styleId" INTEGER REFERENCES styles(id),
+                "colorId" INTEGER REFERENCES colors(id),
                 "imageURL" TEXT NOT NULL,
-                UNIQUE ("itemId", "styleId")
+                UNIQUE ("itemId", "colorId")
             );
 
             CREATE TABLE sizes (
@@ -78,12 +78,12 @@ const createTables = async () => {
                 symbol VARCHAR(4)
             );
 
-            CREATE TABLE item_style_sizes (
+            CREATE TABLE item_color_sizes (
                 id SERIAL PRIMARY KEY,
-                "itemStyleId" INTEGER REFERENCES item_styles(id),
+                "itemColorId" INTEGER REFERENCES item_colors(id),
                 "sizeId" INTEGER REFERENCES sizes(id),
                 stock INTEGER DEFAULT 0,
-                UNIQUE ("itemStyleId", "sizeId")
+                UNIQUE ("itemColorId", "sizeId")
             );
 
             CREATE TABLE carts (
@@ -93,12 +93,12 @@ const createTables = async () => {
                 "purchaseTime" TIMESTAMPTZ
             );
 
-            CREATE TABLE cart_item_style_sizes (
+            CREATE TABLE cart_item_color_sizes (
                 id SERIAL PRIMARY KEY,
                 "cartId" INTEGER REFERENCES carts(id),
-                "itemStyleSizeId" INTEGER REFERENCES item_style_sizes(id),
+                "itemColorSizeId" INTEGER REFERENCES item_color_sizes(id),
                 quantity INTEGER DEFAULT 0,
-                UNIQUE ("cartId", "itemStyleSizeId")
+                UNIQUE ("cartId", "itemColorSizeId")
             );
         `);
         console.log("Finished creating tables!");
@@ -205,63 +205,63 @@ const createInitialItems = async () => {
     };
 };
 
-const createInitialStyles = async () => {
+const createInitialColors = async () => {
     try {
-        console.log("Creating initial styles...");
-        const styles = [];
+        console.log("Creating initial colors...");
+        const colors = [];
 
-        styles.push(await createStyle("red"));
-        styles.push(await createStyle("blue"));
-        styles.push(await createStyle("green"));
-        styles.push(await createStyle("rainbow"));
+        colors.push(await createColor("red"));
+        colors.push(await createColor("blue"));
+        colors.push(await createColor("green"));
+        colors.push(await createColor("rainbow"));
 
-        console.log(styles);
-        console.log("Finished creating styles!");
+        console.log(colors);
+        console.log("Finished creating colors!");
     } catch (error) {
-        console.log("Error creating initial styles!");
+        console.log("Error creating initial colors!");
         console.error(error);
     };
 };
 
-const createInitialItemStyles = async () => {
+const createInitialItemColors = async () => {
     try {
-        console.log("Creating initial item_styles...");
-        const itemStyles = [];
+        console.log("Creating initial item_colors...");
+        const itemColors = [];
 
-        itemStyles.push(await createItemStyle({
+        itemColors.push(await createItemColor({
             itemId: 1,
-            styleId: 1,
+            colorId: 1,
             imageURL: "./images/red_socataca_tee.png"
         }));
 
-        itemStyles.push(await createItemStyle({
+        itemColors.push(await createItemColor({
             itemId: 1,
-            styleId: 2,
+            colorId: 2,
             imageURL: "./images/blue_socataca_tee.png"
         }));
 
-        itemStyles.push(await createItemStyle({
+        itemColors.push(await createItemColor({
             itemId: 2,
-            styleId: 1,
+            colorId: 1,
             imageURL: "./images/default_shirt.png"
         }));
 
-        itemStyles.push(await createItemStyle({
+        itemColors.push(await createItemColor({
             itemId: 2,
-            styleId: 3,
+            colorId: 3,
             imageURL: "./images/default_shirt.png"
         }));
 
-        itemStyles.push(await createItemStyle({
+        itemColors.push(await createItemColor({
             itemId: 3,
-            styleId: 4,
+            colorId: 4,
             imageURL: "./images/default_shirt.png"
         }));
 
-        console.log(itemStyles);
-        console.log("Finished creating item_styles!");
+        console.log(itemColors);
+        console.log("Finished creating item_colors!");
     } catch (error) {
-        console.log("Error creating initail item_styles!")
+        console.log("Error creating initail item_colors!")
         console.error(error);
     };
 };
@@ -286,75 +286,75 @@ const createInitialSizes = async () => {
     };
 };
 
-const createInitialItemStyleSizes = async () => {
+const createInitialItemColorSizes = async () => {
     try {
-        console.log("Creating initial item_style_sizes...");
-        const itemStyleSizes = [];
+        console.log("Creating initial item_color_sizes...");
+        const itemColorSizes = [];
 
-        itemStyleSizes.push(await createItemStyleSize({
-            itemStyleId: 1,
+        itemColorSizes.push(await createItemColorSize({
+            itemColorId: 1,
             sizeId: 3,
             stock: 4
         }));
 
-        itemStyleSizes.push(await createItemStyleSize({
-            itemStyleId: 1,
+        itemColorSizes.push(await createItemColorSize({
+            itemColorId: 1,
             sizeId: 4,
             stock: 3
         }));
 
-        itemStyleSizes.push(await createItemStyleSize({
-            itemStyleId: 2,
+        itemColorSizes.push(await createItemColorSize({
+            itemColorId: 2,
             sizeId: 1,
             stock: 6
         }));
 
-        itemStyleSizes.push(await createItemStyleSize({
-            itemStyleId: 2,
+        itemColorSizes.push(await createItemColorSize({
+            itemColorId: 2,
             sizeId: 2,
             stock: 5
         }));
 
-        itemStyleSizes.push(await createItemStyleSize({
-            itemStyleId: 3,
+        itemColorSizes.push(await createItemColorSize({
+            itemColorId: 3,
             sizeId: 3,
             stock: 8
         }));
 
-        itemStyleSizes.push(await createItemStyleSize({
-            itemStyleId: 3,
+        itemColorSizes.push(await createItemColorSize({
+            itemColorId: 3,
             sizeId: 6,
             stock: 2
         }));
 
-        itemStyleSizes.push(await createItemStyleSize({
-            itemStyleId: 4,
+        itemColorSizes.push(await createItemColorSize({
+            itemColorId: 4,
             sizeId: 4,
             stock: 9
         }));
 
-        itemStyleSizes.push(await createItemStyleSize({
-            itemStyleId: 4,
+        itemColorSizes.push(await createItemColorSize({
+            itemColorId: 4,
             sizeId: 5,
             stock: 1
         }));
 
-        itemStyleSizes.push(await createItemStyleSize({
-            itemStyleId: 5,
+        itemColorSizes.push(await createItemColorSize({
+            itemColorId: 5,
             sizeId: 2,
             stock: 8
         }));
 
-        itemStyleSizes.push(await createItemStyleSize({
-            itemStyleId: 5,
+        itemColorSizes.push(await createItemColorSize({
+            itemColorId: 5,
             sizeId: 4,
             stock: 3
         }));
         
-        console.log(itemStyleSizes);
-        console.log("Finished creating item_style_sizes!");
+        console.log(itemColorSizes);
+        console.log("Finished creating item_color_sizes!");
     } catch (error) {
-        console.log("Error creating initial item_style_sizes!");
+        console.log("Error creating initial item_color_sizes!");
         console.error(error);
     };
 };
@@ -379,63 +379,63 @@ const createInitialCarts = async () => {
     };
 };
 
-const createInitialCartItemStyleSizes = async () => {
+const createInitialCartItemColorSizes = async () => {
     try {
-        console.log("Creating intial cart_item_style_sizes...");
-        const cartItemStyleSizes = [];
+        console.log("Creating intial cart_item_color_sizes...");
+        const cartItemColorSizes = [];
 
-        cartItemStyleSizes.push(await createCartItemStyleSize({
+        cartItemColorSizes.push(await createCartItemColorSize({
             cartId: 1,
-            itemStyleSizeId: 1,
+            itemColorSizeId: 1,
             quantity: 5
         }));
 
-        cartItemStyleSizes.push(await createCartItemStyleSize({
+        cartItemColorSizes.push(await createCartItemColorSize({
             cartId: 1,
-            itemStyleSizeId: 4,
+            itemColorSizeId: 4,
             quantity: 3
         }));
 
-        cartItemStyleSizes.push(await createCartItemStyleSize({
+        cartItemColorSizes.push(await createCartItemColorSize({
             cartId: 2,
-            itemStyleSizeId: 8,
+            itemColorSizeId: 8,
             quantity: 1
         }));
 
-        cartItemStyleSizes.push(await createCartItemStyleSize({
+        cartItemColorSizes.push(await createCartItemColorSize({
             cartId: 2,
-            itemStyleSizeId: 9,
+            itemColorSizeId: 9,
             quantity: 4
         }));
 
-        cartItemStyleSizes.push(await createCartItemStyleSize({
+        cartItemColorSizes.push(await createCartItemColorSize({
             cartId: 3,
-            itemStyleSizeId: 5,
+            itemColorSizeId: 5,
             quantity: 1
         }));
 
-        cartItemStyleSizes.push(await createCartItemStyleSize({
+        cartItemColorSizes.push(await createCartItemColorSize({
             cartId: 3,
-            itemStyleSizeId: 7,
+            itemColorSizeId: 7,
             quantity: 3
         }));
 
-        cartItemStyleSizes.push(await createCartItemStyleSize({
+        cartItemColorSizes.push(await createCartItemColorSize({
             cartId: 4,
-            itemStyleSizeId: 2,
+            itemColorSizeId: 2,
             quantity: 3
         }));
 
-        cartItemStyleSizes.push(await createCartItemStyleSize({
+        cartItemColorSizes.push(await createCartItemColorSize({
             cartId: 4,
-            itemStyleSizeId: 6,
+            itemColorSizeId: 6,
             quantity: 2
         }));
 
-        console.log(cartItemStyleSizes);
-        console.log("Finished creating initail cart_item_style_sizes!");
+        console.log(cartItemColorSizes);
+        console.log("Finished creating initail cart_item_color_sizes!");
     } catch (error) {
-        console.log("Error creating initial cart_item_style_sizes");
+        console.log("Error creating initial cart_item_color_sizes");
         console.error(error);
     };
 };
@@ -456,12 +456,12 @@ const seedDB = async () => {
         await createInitialUsers();
         await createInitialCategories();
         await createInitialItems();
-        await createInitialStyles();
-        await createInitialItemStyles();
+        await createInitialColors();
+        await createInitialItemColors();
         await createInitialSizes();
-        await createInitialItemStyleSizes();
+        await createInitialItemColorSizes();
         await createInitialCarts();
-        await createInitialCartItemStyleSizes();
+        await createInitialCartItemColorSizes();
         console.log("Finished seeding database!");
     } catch (error) {
         console.log("Error seeding databse!");

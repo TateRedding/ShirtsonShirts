@@ -1,6 +1,6 @@
 const client = require("./client");
-const { getItemStylesByItemId } = require("./itemStyles");
-const { getItemStyleSizesByItemStyleId } = require("./itemStyleSizes");
+const { getItemColorsByItemId } = require("./itemColors");
+const { getItemColorSizesByItemColorId } = require("./itemColorSizes");
 
 const createItem = async ({ name, categoryId, description, price }) => {
     try {
@@ -18,14 +18,14 @@ const createItem = async ({ name, categoryId, description, price }) => {
 const getAllItems = async () => {
     try {
         const { rows: items } = await client.query(`
-            SELECT items.*, item_styles."imageURL"
+            SELECT items.*, item_colors."imageURL"
             FROM items
-            LEFT JOIN item_styles
-                ON item_styles."itemId"=items.id
-                AND item_styles."styleId"=(
-                    SELECT MIN(item_styles."styleId")
-                    FROM item_styles
-                    WHERE item_styles."itemId"=items.id
+            LEFT JOIN item_colors
+                ON item_colors."itemId"=items.id
+                AND item_colors."colorId"=(
+                    SELECT MIN(item_colors."colorId")
+                    FROM item_colors
+                    WHERE item_colors."itemId"=items.id
                 );
         `);
         return items;
@@ -37,14 +37,14 @@ const getAllItems = async () => {
 const getAllActiveItems = async () => {
     try {
         const { rows: items } = await client.query(`
-            SELECT items.*, item_styles."imageURL"
+            SELECT items.*, item_colors."imageURL"
             FROM items
-            LEFT JOIN item_styles
-                ON item_styles."itemId"=items.id
-                AND item_styles."styleId"=(
-                    SELECT MIN(item_styles."styleId")
-                    FROM item_styles
-                    WHERE item_styles."itemId"=items.id
+            LEFT JOIN item_colors
+                ON item_colors."itemId"=items.id
+                AND item_colors."colorId"=(
+                    SELECT MIN(item_colors."colorId")
+                    FROM item_colors
+                    WHERE item_colors."itemId"=items.id
                 )
             WHERE items."isActive"=true;
         `);
@@ -62,10 +62,10 @@ const getItemById = async (id) => {
             WHERE id=${id};
         `);
         if (item) {
-            item.styles = await getItemStylesByItemId(id);
-            if (item.styles) {
-                for (let i = 0; i < item.styles.length; i++) {
-                    item.styles[i].sizes = await getItemStyleSizesByItemStyleId(item.styles[i].id);
+            item.colors = await getItemColorsByItemId(id);
+            if (item.colors) {
+                for (let i = 0; i < item.colors.length; i++) {
+                    item.colors[i].sizes = await getItemColorSizesByItemColorId(item.colors[i].id);
                 };
             };
             return item;
@@ -80,12 +80,12 @@ const getItemsByCategoryId = async (categoryId) => {
         const { rows: items } = await client.query(`
             SELECT *
             FROM items
-            LEFT JOIN item_styles
-                ON item_styles."itemId"=items.id
-                AND item_styles."styleId"=(
-                    SELECT MIN(item_styles."styleId")
-                    FROM item_styles
-                    WHERE item_styles."itemId"=items.id
+            LEFT JOIN item_colors
+                ON item_colors."itemId"=items.id
+                AND item_colors."colorId"=(
+                    SELECT MIN(item_colors."colorId")
+                    FROM item_colors
+                    WHERE item_colors."itemId"=items.id
                 )
             WHERE "categoryId"=${categoryId};
         `);
@@ -100,12 +100,12 @@ const getActiveItemsByCategoryId = async (categoryId) => {
         const { rows: items } = await client.query(`
             SELECT *
             FROM items
-            LEFT JOIN item_styles
-                ON item_styles."itemId"=items.id
-                AND item_styles."styleId"=(
-                    SELECT MIN(item_styles."styleId")
-                    FROM item_styles
-                    WHERE item_styles."itemId"=items.id
+            LEFT JOIN item_colors
+                ON item_colors."itemId"=items.id
+                AND item_colors."colorId"=(
+                    SELECT MIN(item_colors."colorId")
+                    FROM item_colors
+                    WHERE item_colors."itemId"=items.id
                 )
             WHERE "categoryId"=${categoryId}
             AND items."isActive"=true;
@@ -124,10 +124,10 @@ const getItemByName = async (name) => {
             WHERE name='${name}';
         `);
         if (item) {
-            item.styles = await getItemStylesByItemId(item.id);
-            if (item.styles) {
-                for (let i = 0; i < item.styles.length; i++) {
-                    item.styles[i].sizes = await getItemStyleSizesByItemStyleId(item.styles[i].id);
+            item.colors = await getItemColorsByItemId(item.id);
+            if (item.colors) {
+                for (let i = 0; i < item.colors.length; i++) {
+                    item.colors[i].sizes = await getItemColorSizesByItemColorId(item.colors[i].id);
                 };
             };
             return item;

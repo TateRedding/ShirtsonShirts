@@ -1,6 +1,6 @@
 import React from "react";
 
-const SizeSelect = ({ itemStyle, sizes, selectedSizeId, setSelectedSizeId }) => {
+const SizeSelect = ({ itemColor, sizes, selectedSizeId, setSelectedSizeId }) => {
     return (
         <select
             className="form-select"
@@ -11,9 +11,9 @@ const SizeSelect = ({ itemStyle, sizes, selectedSizeId, setSelectedSizeId }) => 
         >
             <option value="">Select Size</option>
             {
-                sizes.length && itemStyle.sizes ?
+                sizes.length && itemColor.sizes ?
                     sizes.map(size => {
-                        return itemStyle.sizes.find(itemStyleSize => itemStyleSize.sizeId === size.id && itemStyleSize.stock) ?
+                        return itemColor.sizes.find(itemColorSize => itemColorSize.sizeId === size.id && itemColorSize.stock) ?
                             <option value={size.id} key={size.id}>{size.symbol.toUpperCase()}</option> :
                             <option value={size.id} key={size.id} disabled>{size.symbol.toUpperCase()} Out of Stock</option>
                     })

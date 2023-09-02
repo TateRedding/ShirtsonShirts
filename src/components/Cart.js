@@ -79,7 +79,7 @@ const Cart = ({ userToken, user }) => {
                                             userToken={userToken}
                                             getCart={getCart}
                                             calcTotal={calcTotal}
-                                            key={item.cartItemStyleSizeId}
+                                            key={item.cartItemColorSizeId}
                                         />
                                     );
                                 })
