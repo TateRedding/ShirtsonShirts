@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const PriceRangeSelect = ({ priceMin, setPriceMin, priceMax, setPriceMax }) => {
     const [showContents, setShowContents] = useState(false);
+    
     return (
         <div className="p-3 border-bottom">
             <div className="d-flex justify-content-between align-items-center">

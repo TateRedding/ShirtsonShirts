@@ -179,7 +179,8 @@ ul {
 }
 
 .hide-filters,
-.down-chevron {
+.down-chevron,
+.category-list-item {
     cursor: pointer;
 }
 
