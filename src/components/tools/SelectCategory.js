@@ -39,7 +39,7 @@ const SelectCategory = ({ categories, setItems, getItems, setSearchTerm, userTok
                 showContents ?
                     <div>
                         <div
-                            className={`category-list-item my-2 ${selectedCategoryIdx === 0 ? "fw-bold" : "text-secondary"}`}
+                            className={`category-list-item mt-2 ${selectedCategoryIdx === 0 ? "fw-bold" : "text-secondary"}`}
                             onClick={() => {
                                 setCategoryId(0);
                                 setSelectedCategoryIdx(0);
@@ -52,7 +52,7 @@ const SelectCategory = ({ categories, setItems, getItems, setSearchTerm, userTok
                                 const name = category.name.split("-").map(word => word[0].toUpperCase() + word.slice(1).toLowerCase()).join(" ");
                                 return <div
                                     key={category.id}
-                                    className={`category-list-item my-2 ${selectedCategoryIdx === idx + 1 ? "fw-bold" : "text-secondary"}`}
+                                    className={`category-list-item mt-2 ${selectedCategoryIdx === idx + 1 ? "fw-bold" : "text-secondary"}`}
                                     onClick={() => {
                                         setCategoryId(category.id);
                                         setSelectedCategoryIdx(idx + 1);
