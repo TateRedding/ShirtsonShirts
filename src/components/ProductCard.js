@@ -1,17 +1,18 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const ProductCard = ({ item }) => {
+    const navigate = useNavigate();
+
     return (
-        <div className="card align-items-center product-card m-3">
-            <a className="nav-link" href={`/#/shirts/${item.name.split(" ").join("_")}`}>
-                <h5 className="card-title my-3 text-center">{item.isActive ? item.name : `${item.name} (INACTIVE)`}</h5>
-                <div className="d-flex align-items-center justify-content-center">
-                    <img className="product-display-image" src={item.imageURL} alt={item.name} />
+        <div className="product-card">
+            <div className="product-link" onClick={() => navigate(`/shirts/${item.name.split(" ").join("_")}`)}>
+                <div className="product-card-image-container d-flex align-items-center justify-content-center mb-2">
+                    <img src={item.imageURL} alt={item.name} />
                 </div>
-            </a>
-            <div className="card-body">
-                <p className="card-text text-center">${item.price.toFixed(2)}</p>
+                <h5><b>{item.isActive ? item.name : `${item.name} (INACTIVE)`}</b></h5>
             </div>
+            <p>${item.price.toFixed(2)}</p>
         </div>
     );
 };

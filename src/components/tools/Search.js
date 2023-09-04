@@ -9,7 +9,7 @@ const Search = ({ searchTerm, setSearchTerm, items, setFilteredItems }) => {
     };
 
     return (
-        <div>
+        <div className="mb-3">
             <input
                 className="form-control search-bar"
                 type="text"
