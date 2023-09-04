@@ -67,21 +67,6 @@ const SelectCategory = ({ categories, setItems, getItems, setSearchTerm, userTok
                     null
             }
         </div>
-
-
-        // <select
-        //     className="form-select product-filter"
-        //     aria-label="category selection"
-        //     defaultValue={0}
-        //     onChange={(event) => setCategoryId(event.target.value)}>
-        //     <option value={0}>All Categories</option>
-        //     {
-        //         categories.map((category) => {
-        //             const name = category.name.split("-").map(word => word[0].toUpperCase() +word.slice(1).toLowerCase()).join(" ");
-        //             return <option value={category.id} key={category.id}>{name}</option>
-        //         })
-        //     }
-        // </select>
     );
 };
 
