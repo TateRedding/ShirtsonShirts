@@ -1,11 +1,9 @@
 import React from "react";
 
-const Search = ({ searchTerm, setSearchTerm, items, setFilteredItems }) => {
+const Search = ({ searchTerm, setSearchTerm }) => {
     const handleSearch = (event) => {
         const value = event.target.value;
-        const filteredItems = items.filter(item => item.name.toLowerCase().includes(value.toLowerCase()));
         setSearchTerm(value);
-        setFilteredItems(filteredItems);
     };
 
     return (

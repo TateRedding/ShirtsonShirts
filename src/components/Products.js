@@ -7,13 +7,10 @@ import PriceRangeSelect from "./tools/PriceRangeSelect";
 import SortSelect from "./tools/SortSelect";
 
 const Products = ({ items, setItems, getItems, categories, user, userToken }) => {
-    const [filteredItems, setFilteredItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [showFilters, setShowFilters] = useState(true);
-
-    useEffect(() => {
-        setFilteredItems(items);
-    }, [items]);
+    const [priceMin, setPriceMin] = useState("");
+    const [priceMax, setPriceMax] = useState("");
 
     return (
         <div className="d-flex flex-column align-items-center">
@@ -41,8 +38,6 @@ const Products = ({ items, setItems, getItems, categories, user, userToken }) =>
                             <Search
                                 searchTerm={searchTerm}
                                 setSearchTerm={setSearchTerm}
-                                items={items}
-                                setFilteredItems={setFilteredItems}
                             />
                             <SelectCategory
                                 setItems={setItems}
@@ -51,16 +46,26 @@ const Products = ({ items, setItems, getItems, categories, user, userToken }) =>
                                 setSearchTerm={setSearchTerm}
                                 userToken={userToken}
                             />
-                            <PriceRangeSelect />
+                            <PriceRangeSelect
+                                priceMin={priceMin}
+                                setPriceMin={setPriceMin}
+                                priceMax={priceMax}
+                                setPriceMax={setPriceMax}
+                            />
                         </div>
                         :
                         null
                 }
                 <div className="product-card-container d-flex flex-wrap justify-content-around flex-grow-1">
                     {
-                        filteredItems.map((item, index) => {
-                            return <ProductCard item={item} key={index} />
-                        })
+                        items.filter(
+                            item => item.name.toLowerCase().includes(searchTerm.toLowerCase())
+                                && ((priceMin ? item.price >= priceMin : true) && (priceMax ? item.price <= priceMax : true))
+                        ).map(
+                            (item, index) => {
+                                return <ProductCard item={item} key={index} />
+                            }
+                        )
                     }
                 </div>
             </div>
