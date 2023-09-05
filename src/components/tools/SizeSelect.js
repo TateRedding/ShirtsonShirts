@@ -1,26 +1,38 @@
 import React from "react";
 
-const SizeSelect = ({ itemColor, sizes, selectedSizeId, setSelectedSizeId }) => {
+const SizeSelect = ({ itemColor, sizes, selectedSize, setSelectedSize }) => {
     return (
-        <select
-            className="form-select"
-            aria-label="size-select"
-            value={selectedSizeId}
-            required
-            onChange={(event) => setSelectedSizeId(event.target.value)}
-        >
-            <option value="">Select Size</option>
-            {
-                sizes.length && itemColor.sizes ?
-                    sizes.map(size => {
-                        return itemColor.sizes.find(itemColorSize => itemColorSize.sizeId === size.id && itemColorSize.stock) ?
-                            <option value={size.id} key={size.id}>{size.symbol.toUpperCase()}</option> :
-                            <option value={size.id} key={size.id} disabled>{size.symbol.toUpperCase()} Out of Stock</option>
-                    })
-                    :
-                    null
-            }
-        </select>
+        <div className="order-form-selector mb-3">
+            <label className="text-secondary my-2" htmlFor="size-options">
+                Size: {selectedSize.symbol ? selectedSize.symbol.toUpperCase() : null}
+            </label>
+            <div id="size-options" className="d-flex">
+                {
+                    sizes.length && itemColor.sizes ?
+                        sizes.map(size => {
+                            return (
+                                itemColor.sizes.find(itemColorSize => itemColorSize.sizeId === size.id && itemColorSize.stock) ?
+                                    <div
+                                        className={`order-form-option size available d-flex align-items-center justify-content-center ${size.id === selectedSize.id ? "selected" : ""}`}
+                                        key={size.id}
+                                        onClick={() => setSelectedSize(size)}
+                                    >
+                                        {size.symbol.toUpperCase()}
+                                    </div>
+                                    :
+                                    <div
+                                        className={`order-form-option size disabled d-flex align-items-center justify-content-center ${size.id === selectedSize.id ? "selected" : ""}`}
+                                        key={size.id}
+                                    >
+                                        {size.symbol.toUpperCase()}
+                                    </div>
+                            )
+                        })
+                        :
+                        null
+                }
+            </div>
+        </div>
     );
 };
 

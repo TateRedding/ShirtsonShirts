@@ -133,6 +133,35 @@ header {
     min-width: 47%
 }
 
+.order-form-option {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-right: .5rem;
+}
+
+.order-form-option.available {
+    cursor: pointer;
+}
+
+.order-form-option.selected {
+    border-width: 2px;
+}
+
+.order-form-option.size {
+    font-size: .8rem;
+}
+
+.order-form-option.size.disabled {
+    background-color: lightgray;
+    color: gray
+}
+
+.order-form-selector>label {
+    font-size: .8rem;
+}
+
 .product-image {
     width: 100%;
     aspect-ratio: 1/1;

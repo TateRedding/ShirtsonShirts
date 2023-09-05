@@ -8,11 +8,12 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
     const itemName = useParams().itemName.split("_").join(" ");
     const [item, setItem] = useState({});
     const [selectedItemColor, setSelectedItemColor] = useState({});
-    const [selectedSizeId, setSelectedSizeId] = useState("");
+    const [selectedSize, setSelectedSize] = useState({});
     const [selectedItemColorSize, setSelectedItemColorSize] = useState({});
     const [quantity, setQuantity] = useState("");
     const [showQuantityError, setShowQuantityError] = useState(false);
     const [showItemInCartError, setShowItemInCartError] = useState(false);
+    const [showSizeSelectError, setShowSizeSelectError] = useState(false);
 
     const navigate = useNavigate();
 
@@ -28,7 +29,6 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
     const getItem = async () => {
         try {
             const response = await axios.get(`/api/items/name/${itemName}`);
-            console.log(response.data.item);
             setItem(response.data.item);
         } catch (err) {
             console.error(err);
@@ -53,22 +53,25 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
         if (sizeQuery && selectedItemColor.sizes) {
             const iss = selectedItemColor.sizes.find(iss => iss.symbol === sizeQuery);
             if (iss && iss.stock) {
-                setSelectedSizeId(iss.sizeId);
+                setSelectedSize(sizes.find(size => size.id === iss.sizeId));
             };
         };
     }, [selectedItemColor]);
 
     useEffect(() => {
-        if (selectedItemColor.sizes && selectedSizeId) {
-            setSelectedItemColorSize(selectedItemColor.sizes.find(itemColorSize => itemColorSize.sizeId === Number(selectedSizeId)));
+        if (selectedItemColor.sizes && selectedSize.id) {
+            setSelectedItemColorSize(selectedItemColor.sizes.find(itemColorSize => itemColorSize.sizeId === Number(selectedSize.id)));
         };
-    }, [selectedItemColor, selectedSizeId]);
+    }, [selectedItemColor, selectedSize]);
 
     const addToCart = async (event) => {
         event.preventDefault();
         setShowQuantityError(false);
         setShowItemInCartError(false);
-        if (selectedItemColorSize.stock < quantity) {
+        setShowSizeSelectError(false);
+        if (!Object.keys(selectedSize).length) {
+            setShowSizeSelectError(true);
+        } else if (selectedItemColorSize.stock < quantity) {
             setShowQuantityError(true);
         } else {
             try {
@@ -170,9 +173,17 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                             <SizeSelect
                                 itemColor={selectedItemColor}
                                 sizes={sizes}
-                                selectedSizeId={selectedSizeId}
-                                setSelectedSizeId={setSelectedSizeId}
+                                selectedSize={selectedSize}
+                                setSelectedSize={setSelectedSize}
                             />
+                            {
+                                showSizeSelectError ?
+                                    <div className="form-text text-danger mb-2" id="size-select-error">
+                                        Please select a size.
+                                    </div>
+                                    :
+                                    null
+                            }
                             {
                                 item.colors && item.colors.length > 1 ?
                                     <select
@@ -181,7 +192,7 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                                         value={selectedItemColor.id}
                                         required
                                         onChange={(event) => {
-                                            setSelectedSizeId("");
+                                            setSelectedSize({});
                                             setSelectedItemColor(item.colors.find(color => color.id.toString() === event.target.value))
                                         }}>
                                         {
