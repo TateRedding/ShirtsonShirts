@@ -28,6 +28,7 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
     const getItem = async () => {
         try {
             const response = await axios.get(`/api/items/name/${itemName}`);
+            console.log(response.data.item);
             setItem(response.data.item);
         } catch (err) {
             console.error(err);
@@ -134,24 +135,20 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
     };
 
     return (
-        <div className="item-detail-container">
-
-            <h1>{item.name}</h1>
-            {
-                !item.isActive ?
-                    <h2 className="text-danger">This shirt is no longer for sale.</h2>
-                    :
-                    null
-            }
-            <div className="item-detail-child">
-                <div className="item-detail-image-container">
-                    <img className="item-detail-image" src={selectedItemColor.imageURL} alt={`${item.name} in color ${selectedItemColor.name}`} />
+        <div className="product-view d-flex">
+            <div className="image-wrapper">
+                <div className="product-image d-flex align-items-center justify-content-center">
+                    <img src={selectedItemColor.imageURL} alt={`${item.name} in color ${selectedItemColor.name}`} />
                 </div>
-
-                <div className="item-detail-description">
-                    <li>{item.price}$</li>
-                    <li>{item.description}</li>
-                </div>
+            </div>
+            <div className="product-details">
+                <h1>{item.name}</h1>
+                {
+                    !item.isActive ?
+                        <h2 className="text-danger">This shirt is no longer for sale.</h2>
+                        :
+                        null
+                }
                 {
                     (user.isAdmin) ?
                         <div>
@@ -166,9 +163,16 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                         :
                         null
                 }
+                <p>${item.price ? item.price.toFixed(2) : null}</p>
                 {
                     item.isActive ?
-                        <form className="item-selection-form" onSubmit={addToCart}>
+                        <form onSubmit={addToCart}>
+                            <SizeSelect
+                                itemColor={selectedItemColor}
+                                sizes={sizes}
+                                selectedSizeId={selectedSizeId}
+                                setSelectedSizeId={setSelectedSizeId}
+                            />
                             {
                                 item.colors && item.colors.length > 1 ?
                                     <select
@@ -187,12 +191,6 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                                     :
                                     null
                             }
-                            <SizeSelect
-                                itemColor={selectedItemColor}
-                                sizes={sizes}
-                                selectedSizeId={selectedSizeId}
-                                setSelectedSizeId={setSelectedSizeId}
-                            />
                             {
                                 isLoggedIn ?
                                     <>
@@ -240,6 +238,7 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                         :
                         null
                 }
+                <p>{item.description}</p>
             </div>
         </div >
     );
