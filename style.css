@@ -207,6 +207,14 @@ ul {
     cursor: pointer;
 }
 
+.sort-select {
+    border: none;
+}
+
+.sort-select:focus {
+    box-shadow: none;
+}
+
 .tool-bar {
     margin-bottom: 1rem;
     align-self: flex-end;

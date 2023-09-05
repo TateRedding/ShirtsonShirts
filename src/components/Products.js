@@ -11,6 +11,30 @@ const Products = ({ items, setItems, getItems, categories, user, userToken }) =>
     const [showFilters, setShowFilters] = useState(true);
     const [priceMin, setPriceMin] = useState("");
     const [priceMax, setPriceMax] = useState("");
+    const [selectedSortIdx, setSelectedSortIdx] = useState(0);
+
+    const sortingFunctions = [
+        {
+            name: "Newest",
+            func: (a, b) => a.id < b.id
+        },
+        {
+            name: "Name: A to Z",
+            func: (a, b) => a.name.toLowerCase() > b.name.toLowerCase()
+        },
+        {
+            name: "Name: Z to A",
+            func: (a, b) => a.name.toLowerCase() < b.name.toLowerCase()
+        },
+        {
+            name: "Price: Low to High",
+            func: (a, b) => a.price > b.price
+        },
+        {
+            name: "Price: High to Low",
+            func: (a, b) => a.price < b.price
+        }
+    ];
 
     return (
         <div className="d-flex flex-column align-items-center">
@@ -25,11 +49,15 @@ const Products = ({ items, setItems, getItems, categories, user, userToken }) =>
                     :
                     null
             }
-            <div className="d-flex px-3 tool-bar">
+            <div className="d-flex px-3 align-items-center tool-bar">
                 <div className="hide-filters me-3" onClick={() => setShowFilters(!showFilters)}>
                     Hide Filters <i className="bi bi-funnel-fill"></i>
                 </div>
-                <SortSelect />
+                <SortSelect
+                    sortingFunctions={sortingFunctions}
+                    selectedSortIdx={selectedSortIdx}
+                    setSelectedSortIdx={setSelectedSortIdx}
+                />
             </div>
             <div className="d-flex product-container w-100">
                 {
@@ -61,10 +89,10 @@ const Products = ({ items, setItems, getItems, categories, user, userToken }) =>
                         items.filter(
                             item => item.name.toLowerCase().includes(searchTerm.toLowerCase())
                                 && ((priceMin ? item.price >= priceMin : true) && (priceMax ? item.price <= priceMax : true))
+                        ).sort(
+                            sortingFunctions[selectedSortIdx].func
                         ).map(
-                            (item, index) => {
-                                return <ProductCard item={item} key={index} />
-                            }
+                            (item, index) => <ProductCard item={item} key={index} />
                         )
                     }
                 </div>
