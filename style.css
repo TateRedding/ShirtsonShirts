@@ -130,7 +130,7 @@ header {
 /* --- PRODUCT DETAILS PAGE --- */
 
 .image-wrapper {
-    min-width: 47%
+    min-width: 55%
 }
 
 .order-form-option {
@@ -179,7 +179,8 @@ header {
     color: gray
 }
 
-.order-form-selector>label {
+.order-form-selector>label,
+.quantity-label {
     font-size: .8rem;
 }
 
@@ -199,7 +200,7 @@ header {
 }
 
 .product-view {
-    width: 85%;
+    width: 75%;
     margin: 3rem auto 0 auto;
 }
 

@@ -199,18 +199,20 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                             {
                                 isLoggedIn ?
                                     <>
-                                        <div className="form-floating mb-3" id="quantity-input">
-                                            <input
-                                                type="number"
-                                                className="form-control"
-                                                id="floatingInput"
-                                                onChange={(event) => setQuantity(event.target.value)}
-                                                required
-                                                placeholder="0"
-                                                name="quantity"
-                                                value={quantity}
-                                            />
-                                            <label htmlFor="floatingInput">Quantity</label>
+                                        <div className="mb-3">
+                                            <div className="d-flex">
+                                                <label className="quantity-label me-3 text-secondary" htmlFor="quantity-input">Quantity:</label>
+                                                <input
+                                                    type="number"
+                                                    className="form-control"
+                                                    id="quantity-input"
+                                                    aria-describedby="quantity-error-message"
+                                                    onChange={(event) => setQuantity(event.target.value)}
+                                                    required
+                                                    name="quantity"
+                                                    value={quantity}
+                                                />
+                                            </div>
                                             {
                                                 showQuantityError ?
                                                     <div id="quantity-error-message" className="form-text">
@@ -222,9 +224,9 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                                         </div>
                                         <button
                                             type="submit"
-                                            className="btn btn-primary"
+                                            className="btn btn-dark btn-lg w-100"
                                         >
-                                            Add To Cart
+                                            Add to Cart
                                         </button>
                                     </>
                                     :
