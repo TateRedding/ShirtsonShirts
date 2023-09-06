@@ -141,8 +141,29 @@ header {
     margin-right: .5rem;
 }
 
-.order-form-option.available {
+.order-form-option.available,
+.order-form-option.color {
     cursor: pointer;
+}
+
+.order-form-option.color.blue {
+    background-color: #2b17ff;
+}
+
+.order-form-option.color.green {
+    background-color: #005f01;
+}
+
+.order-form-option.color.red {
+    background-color: #ba0000;
+}
+
+.order-form-option.color.white {
+    background-color: white;
+}
+
+.order-form-option.color.yellow {
+    background-color: #423d00;
 }
 
 .order-form-option.selected {

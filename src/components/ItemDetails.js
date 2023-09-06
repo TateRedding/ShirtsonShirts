@@ -3,6 +3,7 @@ import axios from "axios";
 import SizeSelect from "./tools/SizeSelect"
 import { useNavigate, useParams } from "react-router-dom";
 import { Link, useLocation } from "react-router-dom";
+import ColorSelect from "./tools/ColorSelect";
 
 const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
     const itemName = useParams().itemName.split("_").join(" ");
@@ -186,19 +187,12 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                             }
                             {
                                 item.colors && item.colors.length > 1 ?
-                                    <select
-                                        className="form-select"
-                                        aria-label="color-select"
-                                        value={selectedItemColor.id}
-                                        required
-                                        onChange={(event) => {
-                                            setSelectedSize({});
-                                            setSelectedItemColor(item.colors.find(color => color.id.toString() === event.target.value))
-                                        }}>
-                                        {
-                                            item.colors.map((color) => <option value={color.id} key={color.id}>{color.name}</option>)
-                                        }
-                                    </select>
+                                    <ColorSelect
+                                        colors={item.colors}
+                                        selectedItemColor={selectedItemColor}
+                                        setSelectedItemColor={setSelectedItemColor}
+                                        setSelectedSize={setSelectedSize}
+                                    />
                                     :
                                     null
                             }

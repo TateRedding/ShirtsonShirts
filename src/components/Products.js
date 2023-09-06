@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 import Search from "./tools/Search";
-import SelectCategory from "./tools/SelectCategory";
+import CategorySelect from "./tools/CategorySelect";
 import { Link } from "react-router-dom";
 import PriceRangeSelect from "./tools/PriceRangeSelect";
 import SortSelect from "./tools/SortSelect";
@@ -67,7 +67,7 @@ const Products = ({ items, setItems, getItems, categories, user, userToken }) =>
                                 searchTerm={searchTerm}
                                 setSearchTerm={setSearchTerm}
                             />
-                            <SelectCategory
+                            <CategorySelect
                                 setItems={setItems}
                                 getItems={getItems}
                                 categories={categories}

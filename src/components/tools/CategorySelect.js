@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-const SelectCategory = ({ categories, setItems, getItems, setSearchTerm, userToken }) => {
+const CategorySelect = ({ categories, setItems, getItems, setSearchTerm, userToken }) => {
     const [categoryId, setCategoryId] = useState(0);
     const [selectedCategoryIdx, setSelectedCategoryIdx] = useState(0);
     const [showContents, setShowContents] = useState(false);
@@ -70,4 +70,4 @@ const SelectCategory = ({ categories, setItems, getItems, setSearchTerm, userTok
     );
 };
 
-export default SelectCategory;
+export default CategorySelect;
