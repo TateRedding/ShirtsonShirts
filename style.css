@@ -98,7 +98,24 @@ header {
     letter-spacing: .125em;
 }
 
-/* ---ORDER HISTORY & CART CSS--- */
+/* --- CART CSS--- */
+
+.cart-content {
+    width: 60vw;
+    margin: 0 auto;
+}
+
+.cart-header:first-of-type {
+    flex-grow: 10;
+}
+
+.cart-header:last-of-type {
+    flex-grow: 1;
+}
+
+.cart-header:not(:first-of-type):not(:last-of-type) {
+    flex-grow: 2;
+}
 
 .product-thumbnail {
     max-width: 200px;
