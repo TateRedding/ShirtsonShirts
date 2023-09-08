@@ -60,7 +60,7 @@ const Header = ({ setUserToken, isLoggedIn, setIsLoggedIn, cart }) => {
                                             {
                                                 cart.items ?
                                                     <span className="cart-pill position-absolute top-25 start-75 translate-middle badge rounded-pill bg-danger">
-                                                        {cart.items.length}
+                                                        {cart.items.reduce((total, item) => total + item.quantity, 0)}
                                                         <span className="visually-hidden">unpurchased items</span>
                                                     </span>
 

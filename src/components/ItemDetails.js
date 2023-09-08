@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Link, useLocation } from "react-router-dom";
 import ColorSelect from "./tools/ColorSelect";
 
-const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
+const ItemDetails = ({ userToken, user, sizes, isLoggedIn, getCart }) => {
     const itemName = useParams().itemName.split("_").join(" ");
     const [item, setItem] = useState({});
     const [selectedItemColor, setSelectedItemColor] = useState({});
@@ -89,6 +89,7 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                     }
                 );
                 if (response.data.success) {
+                    getCart();
                     navigate("/cart");
                 } else {
                     if (response.data.error && response.data.error === "ItemAlreadyInCart") setShowItemInCartError(true);

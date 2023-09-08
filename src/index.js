@@ -156,6 +156,7 @@ const App = () => {
                         user={user}
                         isLoggedIn={isLoggedIn}
                         sizes={sizes}
+                        getCart={getCart}
                     />}
                 />
                 <Route path="/shirts/new" element={
