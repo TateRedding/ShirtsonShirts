@@ -11,6 +11,10 @@ header {
     margin-bottom: .5rem;
 }
 
+.cart-pill {
+    font-size: .7rem;
+}
+
 .navbar-nav {
     align-items: center;
     justify-content: space-between;

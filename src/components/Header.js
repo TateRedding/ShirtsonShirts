@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 
-const Header = ({ setUserToken, isLoggedIn, setIsLoggedIn }) => {
+const Header = ({ setUserToken, isLoggedIn, setIsLoggedIn, cart }) => {
 
     const logout = () => {
         window.localStorage.removeItem("token");
@@ -53,9 +53,21 @@ const Header = ({ setUserToken, isLoggedIn, setIsLoggedIn }) => {
                                         :
                                         null
                                 }
-                                <li className="nav-item nav-icon">
+                                <li className="nav-item nav-icon position-relative">
                                     <Link className="nav-link" to={isLoggedIn ? "/cart" : "/login"}>
-                                        <span data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show"><i className="bi bi-cart"></i></span>
+                                        <span data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
+                                            <i className="bi bi-cart"></i>
+                                            {
+                                                cart.items ?
+                                                    <span className="cart-pill position-absolute top-25 start-75 translate-middle badge rounded-pill bg-danger">
+                                                        {cart.items.length}
+                                                        <span className="visually-hidden">unpurchased items</span>
+                                                    </span>
+
+                                                    :
+                                                    null
+                                            }
+                                        </span>
                                     </Link>
                                 </li>
                             </div>

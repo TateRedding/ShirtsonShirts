@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import SingleCartItem from "./SingleCartItem";
 
-const Cart = ({ userToken, user }) => {
-    const [cart, setCart] = useState({});
+const Cart = ({ cart, getCart, userToken }) => {
     const [total, setTotal] = useState(0);
 
     const calcTotal = () => {
@@ -11,30 +10,6 @@ const Cart = ({ userToken, user }) => {
             setTotal(
                 cart.items.reduce((acc, curr) => acc + curr.price * curr.quantity, 0)
             );
-        };
-    };
-
-    const getCart = async () => {
-        try {
-            if (user.id) {
-                const response = await axios.get(
-                    `/api/carts/${user.id}/current`,
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${userToken}`,
-                        },
-                    }
-                );
-
-                if (response.data.success) {
-                    setCart(response.data.cart);
-                } else {
-                    setCart({});
-                };
-            };
-        } catch (err) {
-            console.error(err);
         };
     };
 
@@ -60,10 +35,6 @@ const Cart = ({ userToken, user }) => {
     useEffect(() => {
         calcTotal();
     }, [cart]);
-
-    useEffect(() => {
-        getCart();
-    }, [user]);
 
     return (
         <>

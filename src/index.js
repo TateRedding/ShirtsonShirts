@@ -16,6 +16,7 @@ const App = () => {
     const [user, setUser] = useState({});
     const [userToken, setUserToken] = useState(window.localStorage.getItem("token"));
     const [isLoggedIn, setIsLoggedIn] = useState(Boolean(window.localStorage.getItem("token")));
+    const [cart, setCart] = useState({});
     const [categories, setCategories] = useState([]);
     const [items, setItems] = useState([]);
     const [sizes, setSizes] = useState([]);
@@ -70,6 +71,30 @@ const App = () => {
         };
     };
 
+    const getCart = async () => {
+        try {
+            if (user.id) {
+                const response = await axios.get(
+                    `/api/carts/${user.id}/current`,
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${userToken}`,
+                        },
+                    }
+                );
+
+                if (response.data.success) {
+                    setCart(response.data.cart);
+                } else {
+                    setCart({});
+                };
+            };
+        } catch (err) {
+            console.error(err);
+        };
+    };
+
     useEffect(() => {
         getItems();
         getCategories();
@@ -80,12 +105,17 @@ const App = () => {
         getUserData();
     }, [userToken]);
 
+    useEffect(() => {
+        getCart();
+    }, [user]);
+
     return (
         <>
             <Header
                 isLoggedIn={isLoggedIn}
                 setIsLoggedIn={setIsLoggedIn}
                 setUserToken={setUserToken}
+                cart={cart}
             />
             <Routes>
                 <Route path="/" element={<Home />} />
@@ -115,8 +145,9 @@ const App = () => {
                 />
                 <Route path="/cart" element={
                     <Cart
+                        cart={cart}
+                        getCart={getCart}
                         userToken={userToken}
-                        user={user}
                     />}
                 />
                 <Route path="/shirts/:itemName" element={

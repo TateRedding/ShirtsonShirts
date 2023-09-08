@@ -224,7 +224,7 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn }) => {
                                         </div>
                                         <button
                                             type="submit"
-                                            className="btn btn-dark btn-lg w-100"
+                                            className="btn btn-dark btn-lg w-100 mb-2"
                                         >
                                             Add to Cart
                                         </button>
