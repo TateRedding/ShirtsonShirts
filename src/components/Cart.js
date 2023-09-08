@@ -39,11 +39,16 @@ const Cart = ({ cart, getCart, userToken }) => {
     }, [cart]);
 
     return (
-        <>
+        <div className="cart-content d-flex flex-column align-items-center">
+            <h2 className="my-3"><b>Your Cart {
+                cart.items ?
+                    `(${cart.items.reduce((total, item) => total + item.quantity, 0)} items)`
+                    :
+                    0
+            }</b></h2>
             {
                 cart.items && cart.items.length ?
-                    <div className="cart-content d-flex flex-column align-items-center">
-                        <h2 className="my-3"><b>Your Cart {`(${cart.items.reduce((total, item) => total + item.quantity, 0)} items)`}</b></h2>
+                    <>
                         <div className="d-flex border-bottom border-secondary pb-3 mb-3 w-100">
                             <span className="cart-header">Item</span>
                             <span className="cart-header">Price</span>
@@ -87,12 +92,11 @@ const Cart = ({ cart, getCart, userToken }) => {
                                 Proceed to Checkout
                             </button>
                         </div>
-                    </div>
+                    </>
                     :
-                    <h5 className="text-center mt-3">Your cart is empty. Go buy some shirts!</h5>
-
+                    <h5 className="text-center">Your cart is empty. Go buy some shirts!</h5>
             }
-        </>
+        </div>
     );
 };
 

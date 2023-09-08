@@ -181,6 +181,7 @@ const App = () => {
                     <Orders
                         userToken={userToken}
                         user={user}
+                        getCart={getCart}
                     />}
                 />
             </Routes >

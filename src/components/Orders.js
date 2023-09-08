@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import PreviousOrderCard from "./PreviousOrderCard";
 
-const Orders = ({ userToken, user }) => {
+const Orders = ({ userToken, user, getCart }) => {
     const [orders, setOrders] = useState([]);
 
     const getOrders = async () => {
@@ -40,6 +40,7 @@ const Orders = ({ userToken, user }) => {
                                     cartItem={cartItem}
                                     userToken={userToken}
                                     purchaseTime={order.purchaseTime}
+                                    getCart={getCart}
                                     key={cartItem.cartItemColorSizeId}
                                 />
                             );

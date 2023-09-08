@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const PreviousOrderCard = ({ cartItem, userToken, purchaseTime }) => {
+const PreviousOrderCard = ({ cartItem, userToken, purchaseTime, getCart }) => {
     const [showItemInCartWarning, setShowItemInCartWarning] = useState(false);
 
     const navigate = useNavigate();
@@ -22,6 +22,7 @@ const PreviousOrderCard = ({ cartItem, userToken, purchaseTime }) => {
                     }
                 });
                 if (response.data.success) {
+                    getCart();
                     navigate("/cart");
                 } else if (response.data.error === "ItemAlreadyInCart") {
                     setShowItemInCartWarning(true);

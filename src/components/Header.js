@@ -58,12 +58,11 @@ const Header = ({ setUserToken, isLoggedIn, setIsLoggedIn, cart }) => {
                                         <span data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
                                             <i className="bi bi-cart"></i>
                                             {
-                                                cart.items ?
+                                                cart.items && cart.items.length ?
                                                     <span className="cart-pill position-absolute top-25 start-75 translate-middle badge rounded-pill bg-danger">
                                                         {cart.items.reduce((total, item) => total + item.quantity, 0)}
                                                         <span className="visually-hidden">unpurchased items</span>
                                                     </span>
-
                                                     :
                                                     null
                                             }
