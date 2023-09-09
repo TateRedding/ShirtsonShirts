@@ -52,9 +52,11 @@ const SingleCartItem = ({ cartItem, userToken, getCart, calcTotal }) => {
                     />
                 </div>
                 <div className="cart-item-details d-flex flex-column flex-grow-1">
-                    <a className="cart-link" href={`#/shirts/${cartItem.item.split(" ").join("_")}?color=${cartItem.color}&size=${cartItem.size}`}>
-                        <h3 className="fw-bold">{cartItem.item}</h3>
-                    </a>
+                    <div className="d-flex">
+                        <a className="cart-link" href={`#/shirts/${cartItem.item.split(" ").join("_")}?color=${cartItem.color}&size=${cartItem.size}`}>
+                            <h3 className="fw-bold">{cartItem.item}</h3>
+                        </a>
+                    </div>
                     <div className="w-100 d-flex">
                         <dt className="description-key fw-bold">Size:</dt>
                         <dd>{cartItem.size.toUpperCase()}</dd>
