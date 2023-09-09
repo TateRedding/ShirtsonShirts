@@ -4,7 +4,7 @@ const SizeSelect = ({ itemColor, sizes, selectedSize, setSelectedSize }) => {
     return (
         <div className="order-form-selector mb-3">
             <label className="text-secondary my-2" htmlFor="size-options">
-                Size: {selectedSize.symbol ? selectedSize.symbol.toUpperCase() : null}
+                Size: {selectedSize && selectedSize.symbol ? selectedSize.symbol.toUpperCase() : null}
             </label>
             <div id="size-options" className="d-flex">
                 {

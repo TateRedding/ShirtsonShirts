@@ -1,34 +1,28 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SingleCartItem = ({ cartItem, userToken, getCart, calcTotal }) => {
-    const [quantity, setQuantity] = useState(cartItem.quantity);
     const [showStockWarning, setShowStockWarning] = useState(false);
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (cartItem) {
-            (quantity > cartItem.stock) ? setShowStockWarning(true) : setShowStockWarning(false);
+            (cartItem.quantity === cartItem.stock) ? setShowStockWarning(true) : setShowStockWarning(false);
         };
-    }, [quantity]);
+    }, [cartItem, cartItem.quantity]);
 
-    const updateQuantity = async (event) => {
-        event.preventDefault();
-        if (cartItem.quantity !== quantity) {
-            try {
-                const response = await axios.patch(`/api/cartItemColorSizes/${cartItem.cartItemColorSizeId}`, { quantity }, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${userToken}`
-                    }
-                });
-                if (response.data.success) cartItem.quantity = response.data.updatedCartItemColorSize.quantity;
-                calcTotal();
-            } catch (error) {
-                console.error(error);
-            };
+    const changeQuantity = async (amount) => {
+        try {
+            const response = await axios.patch(`/api/cartItemColorSizes/${cartItem.cartItemColorSizeId}`, { quantity: cartItem.quantity + amount }, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${userToken}`
+                }
+            });
+            if (response.data.success) cartItem.quantity = response.data.updatedCartItemColorSize.quantity;
+            calcTotal();
+        } catch (error) {
+            console.error(error);
         };
     };
 
@@ -48,70 +42,67 @@ const SingleCartItem = ({ cartItem, userToken, getCart, calcTotal }) => {
     };
 
     return (
-        <div className="card mb-3 cart-item-card">
-            <div className="cart-item-details d-flex align-items-center">
-                <div className="flex-grow-2 d-flex justify-content-center">
-                    <button className="btn btn-outline-secondary" onClick={() => {
-                        navigate(`/shirts/${cartItem.item.split(" ").join("_")}?color=${cartItem.color}&size=${cartItem.size}`)
-                    }}>
-                        <img
-                            className="product-thumbnail"
-                            src={cartItem.imageURL}
-                            alt={cartItem.item}
-                        />
-                    </button>
+        <div className="cart-item-container w-100 d-flex border-bottom py-3">
+            <div className="cart-item-column d-flex">
+                <div className="cart-thumbnail-wrapper d-flex align-items-center justify-content-center">
+                    <img
+                        className="cart-thumbnail"
+                        src={cartItem.imageURL}
+                        alt={`${cartItem.item} in ${cartItem.color}`}
+                    />
                 </div>
-                <div className="flex-grow-1">
-                    <div className="card-body">
-                        <a className="nav-link" href={
-                            `/#/shirts/${cartItem.item.split(" ").join("_")}?color=${cartItem.color}&size=${cartItem.size}`
-                        }>
-                            <h5 className="card-title">{cartItem.item}</h5>
-                        </a>
-                        <p className="card-text">Size: {cartItem.size.toUpperCase()}</p>
-                        <p className="card-text">Color: {cartItem.color}</p>
-                        <form onSubmit={updateQuantity}>
-                            <div className="mb-3 row align-items-center">
-                                <div className="col-auto">
-                                    <label htmlFor="cart-item-quantity" className="form-label card-text">Quantity</label>
-                                </div>
-                                <div className="col-auto">
-                                    <input
-                                        type="number"
-                                        className="form-control quantity-selection"
-                                        aria-describedby="stock-warning"
-                                        id="cart-item-quantity"
-                                        value={quantity}
-                                        onChange={(event) => setQuantity(event.target.value)}
-                                    />
-                                </div>
-                                {
-                                    showStockWarning ?
-                                        <div className="form-text col-auto text-danger" id="stock-warning">
-                                            Only {cartItem.stock} left in stock!
-                                        </div>
-                                        :
-                                        null
-                                }
-                            </div>
-                            <button
-                                type="submit"
-                                className="btn btn-primary"
-                                disabled={
-                                    (!quantity || Number(quantity) === cartItem.quantity || quantity > cartItem.stock) ?
-                                        true
-                                        :
-                                        false
-                                }
-                            >
-                                Update Quantity
-                            </button>
-                        </form>
+                <div className="cart-item-details d-flex flex-column flex-grow-1">
+                    <a className="cart-link" href={`#/shirts/${cartItem.item.split(" ").join("_")}?color=${cartItem.color}&size=${cartItem.size}`}>
+                        <h3 className="fw-bold">{cartItem.item}</h3>
+                    </a>
+                    <div className="w-100 d-flex">
+                        <dt className="description-key fw-bold">Size:</dt>
+                        <dd>{cartItem.size.toUpperCase()}</dd>
+                    </div>
+                    <div className="w-100 d-flex">
+                        <dt className="description-key fw-bold">Color:</dt>
+                        <dd>{cartItem.color[0].toUpperCase() + cartItem.color.slice(1)}</dd>
                     </div>
                 </div>
-                <div className="flex-grow-2 d-flex flex-column align-items-center">
-                    <button className="btn btn-danger" onClick={removeItem}>Remove Item</button>
+            </div>
+            <div className="cart-item-column">
+                ${cartItem.price.toFixed(2)}
+            </div>
+            <div className="cart-item-column">
+                <div className="d-flex align-items-center">
+                    {
+                        cartItem.quantity === 1 ?
+                            <i className="bi bi-dash-circle me-2 text-danger"></i>
+                            :
+                            <i
+                                className="quantity-button bi bi-dash-circle me-2"
+                                onClick={() => changeQuantity(-1)}
+                            ></i>
+
+                    }
+                    {cartItem.quantity}
+                    {
+                        cartItem.quantity === cartItem.stock ?
+                            <i className="bi bi-plus-circle ms-2 text-danger"></i>
+                            :
+                            <i
+                                className="quantity-button bi bi-plus-circle ms-2"
+                                onClick={() => changeQuantity(1)}
+                            ></i>
+                    }
                 </div>
+                {
+                    showStockWarning ?
+                        <p className="text-danger stock-warning">Can't add more, only {cartItem.stock} left in stock!</p>
+                        :
+                        null
+                }
+            </div>
+            <div className="cart-item-column">
+                ${(cartItem.price * cartItem.quantity).toFixed(2)}
+            </div>
+            <div className="cart-item-column">
+                <i className="remove-item bi bi-x-circle" onClick={removeItem}></i>
             </div>
         </div>
     );

@@ -11,8 +11,6 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn, getCart }) => {
     const [selectedItemColor, setSelectedItemColor] = useState({});
     const [selectedSize, setSelectedSize] = useState({});
     const [selectedItemColorSize, setSelectedItemColorSize] = useState({});
-    const [quantity, setQuantity] = useState("");
-    const [showQuantityError, setShowQuantityError] = useState(false);
     const [showItemInCartError, setShowItemInCartError] = useState(false);
     const [showSizeSelectError, setShowSizeSelectError] = useState(false);
 
@@ -53,7 +51,7 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn, getCart }) => {
     useEffect(() => {
         if (sizeQuery && selectedItemColor.sizes) {
             const iss = selectedItemColor.sizes.find(iss => iss.symbol === sizeQuery);
-            if (iss && iss.stock) {
+            if (sizes.length && iss && iss.stock) {
                 setSelectedSize(sizes.find(size => size.id === iss.sizeId));
             };
         };
@@ -67,19 +65,16 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn, getCart }) => {
 
     const addToCart = async (event) => {
         event.preventDefault();
-        setShowQuantityError(false);
         setShowItemInCartError(false);
         setShowSizeSelectError(false);
         if (!Object.keys(selectedSize).length) {
             setShowSizeSelectError(true);
-        } else if (selectedItemColorSize.stock < quantity) {
-            setShowQuantityError(true);
         } else {
             try {
                 const response = await axios.post("/api/cartItemColorSizes/",
                     {
                         itemColorSizeId: selectedItemColorSize.id,
-                        quantity
+                        quantity: 1
                     },
                     {
                         headers: {
@@ -199,37 +194,12 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn, getCart }) => {
                             }
                             {
                                 isLoggedIn ?
-                                    <>
-                                        <div className="mb-3">
-                                            <div className="d-flex">
-                                                <label className="quantity-label me-3 text-secondary" htmlFor="quantity-input">Quantity:</label>
-                                                <input
-                                                    type="number"
-                                                    className="form-control"
-                                                    id="quantity-input"
-                                                    aria-describedby="quantity-error-message"
-                                                    onChange={(event) => setQuantity(event.target.value)}
-                                                    required
-                                                    name="quantity"
-                                                    value={quantity}
-                                                />
-                                            </div>
-                                            {
-                                                showQuantityError ?
-                                                    <div id="quantity-error-message" className="form-text">
-                                                        Sorry, there are only {selectedItemColorSize.stock} left in stock.
-                                                    </div>
-                                                    :
-                                                    null
-                                            }
-                                        </div>
-                                        <button
-                                            type="submit"
-                                            className="btn btn-dark btn-lg w-100 mb-2"
-                                        >
-                                            Add to Cart
-                                        </button>
-                                    </>
+                                    <button
+                                        type="submit"
+                                        className="btn btn-dark btn-lg w-100 mb-2"
+                                    >
+                                        Add to Cart
+                                    </button>
                                     :
                                     null
                             }

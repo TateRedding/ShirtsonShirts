@@ -49,14 +49,14 @@ const Cart = ({ cart, getCart, userToken }) => {
             {
                 cart.items && cart.items.length ?
                     <>
-                        <div className="d-flex border-bottom border-secondary pb-3 mb-3 w-100">
+                        <div className="cart-header-container border-bottom border-secondary pb-3 mb-3 w-100">
                             <span className="cart-header">Item</span>
                             <span className="cart-header">Price</span>
                             <span className="cart-header">Quantity</span>
                             <span className="cart-header">Total</span>
                             <span className="cart-header">Remove</span>
                         </div>
-                        <div>
+                        <div className="w-100">
                             {
                                 cart.items.map((item) => {
                                     return (
@@ -71,7 +71,7 @@ const Cart = ({ cart, getCart, userToken }) => {
                                 })
                             }
                         </div>
-                        <div className="cart-total w-25 align-self-end d-flex flex-column align-items-end">
+                        <div className="cart-total d-flex flex-column">
                             <div className="d-flex w-100 justify-content-between mb-3">
                                 <b>Subtotal:</b>
                                 <span>${total}</span>
