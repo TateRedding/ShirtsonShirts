@@ -113,7 +113,7 @@ header {
     margin-left: 2rem;
 }
 
-.cart-item-details > * {
+.cart-item-details>* {
     margin-bottom: 1rem;
 }
 
@@ -122,13 +122,8 @@ header {
     flex-basis: 60%;
 }
 
-.cart-header:last-of-type,
-.cart-item-column:last-of-type {
-    flex-basis: 5%;
-}
-
-.cart-header:not(:first-of-type):not(:last-of-type),
-.cart-item-column:not(:first-of-type):not(:last-of-type) {
+.cart-header:not(:first-of-type),
+.cart-item-column:not(:first-of-type) {
     flex-basis: 10%;
 }
 
@@ -159,7 +154,8 @@ header {
 }
 
 .remove-item,
-.quantity-button {
+.quantity-button,
+.reorder-button {
     cursor: pointer;
 }
 
@@ -386,7 +382,7 @@ header {
         margin-left: 0;
     }
 
-    .cart-item-details > * {
+    .cart-item-details>* {
         margin-bottom: 0;
     }
 

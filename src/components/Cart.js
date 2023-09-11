@@ -65,6 +65,7 @@ const Cart = ({ cart, getCart, userToken }) => {
                                             userToken={userToken}
                                             getCart={getCart}
                                             calcTotal={calcTotal}
+                                            isPurchased={cart.isPurchased}
                                             key={item.cartItemColorSizeId}
                                         />
                                     );
