@@ -34,7 +34,7 @@ const Orders = ({ userToken, user, getCart }) => {
             <h2 className="mt-3"><b>Orders</b></h2>
             {
                 orders.length ?
-                    orders.sort((a, b) => a.purchaseTime > b.purchaseTime).map(order => (
+                    orders.sort((a, b) => a.purchaseTime < b.purchaseTime).map(order => (
                         <div key={order.id}>
                             <div className="pb-3 mt-3 d-flex justify-content-between">
                                 <h4><b>{new Date(Date.parse(order.purchaseTime)).toString().split(" ").slice(0, 4).join(" ")}</b></h4>
