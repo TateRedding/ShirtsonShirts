@@ -35,7 +35,7 @@ const SizeStockSelector = ({ size, itemColor, itemColorIndex, itemColorSizes, se
 
     return (
         <div className="d-flex">
-            <div>
+            <div className="size-checkbox">
                 <input
                     className="form-check-input"
                     type="checkbox"
@@ -43,7 +43,7 @@ const SizeStockSelector = ({ size, itemColor, itemColorIndex, itemColorSizes, se
                     onChange={(event) => setSelected(event.target.checked)}
                     id={`${size.name}-checkbox-iss-${itemColorIndex}`}
                 />
-                <label className="form-check-label" htmlFor={`${size.name}-checkbox-iss-${itemColorIndex}`}>
+                <label className="form-check-label ms-1 me-3" htmlFor={`${size.name}-checkbox-iss-${itemColorIndex}`}>
                     {size.symbol.toUpperCase()}
                 </label>
             </div>

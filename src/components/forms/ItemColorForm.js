@@ -17,22 +17,29 @@ const ItemColorForm = ({ itemColor, itemColors, setItemColors, index, sizes }) =
     }, [name, imageURL, itemColorSizes]);
 
     return (
-        <div>
-            <input
-                className="form-control"
-                value={name}
-                placeholder="Color Name"
-                required
-                onChange={(event) => setName(event.target.value)}
-            />
+        <div className="item-color-form me-3">
+            <div className="mb-3">
+                <label htmlFor={`color-name-${index}`}>Color: *</label>
+                <input
+                    className="form-control"
+                    id={`color-name-${index}`}
+                    value={name}
+                    required
+                    onChange={(event) => setName(event.target.value)}
+                />
+            </div>
 
-            <input
-                className="form-control"
-                value={imageURL}
-                onChange={(event) => setImageURL(event.target.value)}
-            />
+            <div className="mb-3">
+                <label htmlFor={`color-path-${index}`}>Image Path: *</label>
+                <input
+                    className="form-control"
+                    id={`color-name-${index}`}
+                    value={imageURL}
+                    onChange={(event) => setImageURL(event.target.value)}
+                />
+            </div>
 
-            <div>
+            <div className="size-stock-selector">
                 {
                     sizes.map((size, idx) => (
                         <SizeStockSelector

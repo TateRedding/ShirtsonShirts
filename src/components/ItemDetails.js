@@ -115,7 +115,7 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn, getCart }) => {
 
     const reactivateItem = async () => {
         try {
-            const response = await axios.patch(`api/items/${item.id}`,
+            const response = await axios.patch(`api/items/reactivate/${item.id}`,
                 {
                     isActive: true
                 },
@@ -151,13 +151,13 @@ const ItemDetails = ({ userToken, user, sizes, isLoggedIn, getCart }) => {
                 }
                 {
                     (user.isAdmin) ?
-                        <div>
-                            <Link to={`/shirts/edit/${item.id}`}><button className="btn btn-primary">Edit Item</button></Link>
+                        <div className="mb-3">
+                            <Link to={`/shirts/edit/${item.id}`}><button className="btn btn-dark me-3">Edit Item</button></Link>
                             {
                                 item.isActive ?
-                                    <button className="btn btn-danger" onClick={deactivateItem}>Deactivate Item</button>
+                                    <button className="btn btn-dark" onClick={deactivateItem}>Deactivate Item</button>
                                     :
-                                    <button className="btn btn-success" onClick={reactivateItem}>Reactivate Item</button>
+                                    <button className="btn btn-dark" onClick={reactivateItem}>Reactivate Item</button>
                             }
                         </div>
                         :

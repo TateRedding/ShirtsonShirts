@@ -43,7 +43,7 @@ const Products = ({ items, setItems, getItems, categories, user, userToken }) =>
                 (user.isAdmin) ?
                     <div className="mb-3">
                         <Link to="/shirts/new">
-                            <button className="btn btn-lg btn-primary mt-3">Add New Shirt</button>
+                            <button className="btn btn-lg btn-dark mt-3">Add New Shirt</button>
                         </Link>
                     </div>
                     :

@@ -84,18 +84,33 @@ header {
     align-items: end;
 }
 
-/* --- ITEM FORM --- */
+/* --- NEW / EDIT PRODUCT PAGE --- */
 
 .admin-warning {
     text-align: center;
 }
 
 .admin-warning>h2 {
-    color: red;
-    font-size: 3em;
-    font-weight: bold;
+    font-size: 3rem;
     text-transform: uppercase;
-    letter-spacing: .125em;
+    letter-spacing: .125rem;
+}
+
+.item-color-form {
+    width: 23%;
+}
+
+.item-form {
+    width: 65vw;
+    margin: 0 auto;
+}
+
+.size-stock-selector {
+    margin-right: 1rem;
+}
+
+.size-checkbox {
+    width: 7rem;
 }
 
 /* --- CART --- */
@@ -286,6 +301,22 @@ header {
 .tool-bar {
     margin-bottom: 1rem;
     align-self: flex-end;
+}
+
+@media (max-width: 992px) {
+    /* --- NEW / EDIT PRODUCT PAGE --- */
+
+    .item-color-form {
+        width: 100%;
+    }
+
+    .item-form {
+        width: 90vw;
+    }
+
+    .size-stock-selector {
+        margin-right: 0;
+    }
 }
 
 @media (max-width: 768px) {

@@ -237,6 +237,25 @@ router.patch("/:id", requireUser, requireAdmin, async (req, res) => {
     };
 });
 
+//PATCH /api/items/reactivate/:id
+router.patch("/reactivate/:id", requireUser, requireAdmin, async (req, res) => {
+    const { id } = req.params;
+    const { isActive } = req.body;
+    try {
+        const item = await updateItem(id, { isActive });
+        if (item) {
+            res.send({
+                success: true,
+                item
+            });
+        } else {
+            res.send({ success: false })
+        }
+    } catch (error) {
+        console.error(error);
+    };
+});
+
 // GET /api/items/:id
 router.get("/:id", async (req, res) => {
     const { id } = req.params;

@@ -38,9 +38,9 @@ const SelectOrAddCategory = ({ categories, getCategories, categoryId, setCategor
     };
 
     return (
-        <div className="d-flex">
+        <div className="d-flex mb-3">
             <select
-                className="form-select mb-3"
+                className="form-select"
                 onChange={(event) => setCategoryId(event.target.value)}
                 value={categoryId}
             >
@@ -60,8 +60,9 @@ const SelectOrAddCategory = ({ categories, getCategories, categoryId, setCategor
                 addingNewCategory ?
                     <>
                         <input
-                            className="form-control"
+                            className="form-control mx-3"
                             value={newCategory}
+                            placeholder="Category Name"
                             onChange={(event) => setNewCategory(event.target.value)}
                         />
                         {

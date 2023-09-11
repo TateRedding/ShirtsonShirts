@@ -12,6 +12,7 @@ const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState(0);
     const [itemColors, setItemColors] = useState([]);
+    const [showColorWarning, setShowColorWarning] = useState(false);
 
     const { itemId } = useParams();
 
@@ -51,6 +52,11 @@ const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
 
     const createNewItem = async (event) => {
         event.preventDefault();
+        setShowColorWarning(false);
+        if (!itemColors.length) {
+            setShowColorWarning(true);
+            return;
+        };
 
         const response = await axios.post("/api/items", {
             name,
@@ -103,16 +109,15 @@ const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
                         <form onSubmit={(event) => editing ? updateItem(event) : createNewItem(event)} className="item-form" autoComplete="off">
                             <h1>{editing ? "Edit Product" : "New Product"}</h1>
 
-                            <div className="form-floating mb-3 item-field">
+                            <label htmlFor="item-name">Name: *</label>
+                            <div className="mb-3">
                                 <input
                                     className="form-control"
                                     id="item-name"
                                     value={name}
                                     required
-                                    placeholder="Name"
                                     onChange={(event) => setName(event.target.value)}
                                 />
-                                <label htmlFor="item-name">Item Name *</label>
                             </div>
 
                             <SelectOrAddCategory
@@ -123,23 +128,23 @@ const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
                                 userToken={userToken}
                             />
 
-                            <div className="form-floating mb-3">
+                            <label htmlFor="item-description">Description: *</label>
+                            <div className="mb-3">
                                 <textarea
                                     className="form-control"
                                     id="item-description"
                                     value={description}
                                     required
                                     rows={5}
-                                    placeholder="Description"
                                     style={{
                                         height: "100px"
                                     }}
                                     onChange={(event) => setDescription(event.target.value)}
                                 />
-                                <label htmlFor="item-description">Description *</label>
                             </div>
 
-                            <div className="form-floating mb-3">
+                            <label htmlFor="item-price">Price: *</label>
+                            <div className="mb-3">
                                 <input
                                     type="number"
                                     className="form-control"
@@ -148,10 +153,9 @@ const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
                                     required
                                     onChange={(event) => setPrice(event.target.value)}
                                 />
-                                <label htmlFor="item-price">Price *</label>
                             </div>
 
-                            <div className="d-flex">
+                            <div className="d-flex flex-wrap w-100 mb-3">
                                 {
                                     itemColors.map((itemColor, idx) => (
                                         <ItemColorForm
@@ -164,33 +168,41 @@ const NewItemForm = ({ userToken, categories, getCategories, user, sizes }) => {
                                         />
                                     ))
                                 }
+                                <div className="d-flex flex-column justify-content-center">
+                                    <button
+                                        type="button"
+                                        className="btn btn-lg btn-dark"
+                                        onClick={() => {
+                                            setShowColorWarning(false);
+                                            setItemColors([...itemColors, {
+                                                name: "",
+                                                imageURL: "./images/default_shirt.png",
+                                                sizes: []
+                                            }]);
+                                        }}
+                                    >
+                                        Add Color
+                                    </button>
+                                    {
+                                        showColorWarning ?
+                                            <p className="text-danger mt-3 fw-bold">Shirt must have at least one color!</p>
+                                            :
+                                            null
+                                    }
+                                </div>
                             </div>
 
                             <button
-                                type="button"
-                                className="btn btn-success"
-                                onClick={() => {
-                                    setItemColors([...itemColors, {
-                                        name: "",
-                                        imageURL: "./images/default_shirt.png",
-                                        sizes: []
-                                    }]);
-                                }}
-                            >
-                                Add Color
-                            </button>
-
-                            <button
                                 type="submit"
-                                className="btn btn-primary"
+                                className="btn btn-lg btn-dark"
                             >
                                 {editing ? "Update Product" : "Create Product"}
                             </button>
-                        </form >
+                        </form>
                     </div >
                     :
-                    <div className="admin-warning">
-                        <h2>Access Denied</h2>
+                    <div className="admin-warning text-center">
+                        <h2 className="text-danger fw-bold">Access Denied</h2>
                         <h3>You must be an administrator to view this page!</h3>
                     </div>
             }
