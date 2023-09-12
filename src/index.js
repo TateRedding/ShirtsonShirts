@@ -11,6 +11,7 @@ import Cart from "./components/Cart.js";
 import ItemDetails from "./components/ItemDetails.js";
 import ItemForm from "./components/forms/ItemForm.js";
 import Orders from "./components/Orders.js";
+import Footer from "./components/Footer.js";
 
 const App = () => {
     const [user, setUser] = useState({});
@@ -185,9 +186,10 @@ const App = () => {
                     />}
                 />
             </Routes >
+            <Footer />
         </>
-    )
-}
+    );
+};
 
 const root = createRoot(document.getElementById("root"));
 
@@ -195,4 +197,4 @@ root.render(
     <HashRouter>
         <App />
     </HashRouter>
-)
+);

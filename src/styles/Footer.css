@@ -1,0 +1,34 @@
+.footer-container {
+    padding: 1rem;
+}
+
+.footer-col {
+    list-style-type: none;
+    margin-right: 5rem;
+}
+
+.footer-container p {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.footer-container li {
+    padding: .5rem 0;
+}
+
+.footer-container a {
+    text-decoration: none;
+    color: var(--bs-light);
+}
+
+@media (max-width: 576px) {
+
+    .footer-container {
+        justify-content: space-between;
+    }
+
+    .footer-col {
+        margin: .5rem;
+        padding: 0;
+    }
+}
