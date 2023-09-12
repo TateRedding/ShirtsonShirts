@@ -97,7 +97,7 @@ header {
 }
 
 .item-color-form {
-    width: 23%;
+    flex: 0 0 18rem;
 }
 
 .item-form {
@@ -303,22 +303,6 @@ header {
     align-self: flex-end;
 }
 
-@media (max-width: 992px) {
-    /* --- NEW / EDIT PRODUCT PAGE --- */
-
-    .item-color-form {
-        width: 100%;
-    }
-
-    .item-form {
-        width: 90vw;
-    }
-
-    .size-stock-selector {
-        margin-right: 0;
-    }
-}
-
 @media (max-width: 768px) {
 
     /* --- LOGIN PAGE --- */
@@ -425,6 +409,20 @@ header {
 
     .stock-warning {
         margin-bottom: 0;
+    }
+
+    /* --- NEW / EDIT PRODUCT PAGE --- */
+
+    .item-color-form {
+        flex-basis: 100%;
+    }
+
+    .item-form {
+        width: 90vw;
+    }
+
+    .size-stock-selector {
+        margin-right: 0;
     }
 }
 

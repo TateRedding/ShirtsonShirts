@@ -17,7 +17,7 @@ const ItemColorForm = ({ itemColor, itemColors, setItemColors, index, sizes }) =
     }, [name, imageURL, itemColorSizes]);
 
     return (
-        <div className="item-color-form me-3">
+        <div className="item-color-form me-3 mb-3">
             <div className="mb-3">
                 <label htmlFor={`color-name-${index}`}>Color: *</label>
                 <input
