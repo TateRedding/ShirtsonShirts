@@ -1,0 +1,63 @@
+.login-button,
+.register-link {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.login-container-main {
+    margin: 3rem auto 0 auto;
+}
+
+.login-form {
+    padding-right: 4rem;
+    border-right: 1px solid lightgrey;
+    border-bottom: none;
+}
+
+.login-form,
+.new-customer {
+    width: 26rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.new-customer {
+    padding-left: 4rem;
+}
+
+.new-customer>ul {
+    list-style-type: circle;
+    font-size: .9rem;
+}
+
+@media (max-width: 768px) {
+
+    .login-button,
+    .register-link {
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    .login-container-bottom {
+        flex-direction: column;
+    }
+
+    .login-form {
+        padding-right: 0;
+        border-right: none;
+        border-bottom: 1px solid lightgrey;
+        padding-bottom: 2rem;
+    }
+
+    .login-form,
+    .new-customer {
+        width: 90vw;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .new-customer {
+        padding-left: 0;
+        padding-top: 2rem;
+    }
+}

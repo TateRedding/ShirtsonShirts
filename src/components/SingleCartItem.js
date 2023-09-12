@@ -129,7 +129,7 @@ const SingleCartItem = ({ cartItem, userToken, getCart, calcTotal, isPurchased }
                     }
                 </div>
                 {
-                    showStockWarning ?
+                    showStockWarning && !isPurchased ?
                         <p className="text-danger stock-warning">Can't add more, only {cartItem.stock} left in stock!</p>
                         :
                         null
@@ -141,11 +141,11 @@ const SingleCartItem = ({ cartItem, userToken, getCart, calcTotal, isPurchased }
             <div className="cart-item-column">
                 {
                     isPurchased ?
-                        cartItem.stock ?
+                        cartItem.stock >= 0 ?
                             <>
                                 <i className="reorder-button bi bi-arrow-repeat" onClick={orderAgain}></i>
                                 {
-                                    cartItem.stock && cartItem.stock < cartItem.quantity ?
+                                    cartItem.stock < cartItem.quantity ?
                                         <p className="card-text text-danger">
                                             Only {cartItem.stock} left in stock!
                                         </p>

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ProductCard from "./ProductCard";
 import Search from "./tools/Search";
 import CategorySelect from "./tools/CategorySelect";
 import { Link } from "react-router-dom";
 import PriceRangeSelect from "./tools/PriceRangeSelect";
 import SortSelect from "./tools/SortSelect";
+import "../styles/Products.css";
 
 const Products = ({ items, setItems, getItems, categories, user, userToken }) => {
     const [searchTerm, setSearchTerm] = useState("");

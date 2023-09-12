@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import SingleCartItem from "./SingleCartItem";
+import "../styles/Cart.css"
 
 const Cart = ({ cart, getCart, userToken }) => {
     const [total, setTotal] = useState(0);

@@ -4,6 +4,7 @@ import SizeSelect from "./tools/SizeSelect"
 import { useNavigate, useParams } from "react-router-dom";
 import { Link, useLocation } from "react-router-dom";
 import ColorSelect from "./tools/ColorSelect";
+import "../styles/ItemDetails.css";
 
 const ItemDetails = ({ userToken, user, sizes, isLoggedIn, getCart }) => {
     const itemName = useParams().itemName.split("_").join(" ");
