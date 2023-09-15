@@ -5,7 +5,9 @@
 }
 
 .login-container-main {
-    margin: 3rem auto 0 auto;
+    margin: 0 auto;
+    padding-top: 3rem;
+    min-height: calc(100dvh - 345px);
 }
 
 .login-form {

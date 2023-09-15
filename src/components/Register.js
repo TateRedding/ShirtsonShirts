@@ -82,7 +82,7 @@ const Register = ({ isLoggedIn, setIsLoggedIn, setUserToken }) => {
     };
 
     return (
-        <div>
+        <div className="register-container">
             <h1 className="text-center">New Account</h1>
             <form className="container register-form" onSubmit={accountRegister}>
                 <div className="row">

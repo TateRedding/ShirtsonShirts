@@ -53,8 +53,7 @@ const Home = () => {
 
     return (
         <div className="d-flex flex-column align-items-center">
-            <h1>Welcome to Shirts on Shirts</h1>
-            <div className="shirt-carousel carousel slide my-5" data-bs-ride="carousel">
+            <div className="shirt-carousel carousel slide my-5 border-bottom border-top border-secondary" data-bs-ride="carousel">
                 <div className="carousel-inner">
                     {
                         featuredImages.map((imageArr, idx) => (
@@ -73,6 +72,7 @@ const Home = () => {
                     }
                 </div>
             </div>
+            <h1 className="text-center">Your new favorite shirt is here!</h1>
             <button className="btn btn-lg btn-dark" onClick={() => navigate("/shirts")}>Shop Now!</button>
         </div>
     );

@@ -1,3 +1,7 @@
+.register-container {
+    min-height: calc(100dvh - 345px);
+}
+
 .register-form {
     max-width: 55rem;
 }
